@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forge/services/auth.dart';
+import 'package:forge/services/error_message.dart';
 import 'package:forge/services/utils.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -79,26 +80,6 @@ class ForgeGoogleSignIn extends StatefulWidget {
 class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
   bool isLoading = false;
 
-
-  void showMessage(String message) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Error"),
-            content: Text(message),
-            actions: [
-              TextButton(
-                child: const Text("Ok"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -122,7 +103,8 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
 
             }catch(e) {
               if(e is FirebaseAuthException){
-                showMessage(e.message!);
+                final err = ErrorMessage();
+                err.showMessage(e.message!, context);
               }
             }
 

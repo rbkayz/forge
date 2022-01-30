@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'all_contacts.dart';
+
 class RelationshipsPage extends StatefulWidget {
   const RelationshipsPage({Key? key}) : super(key: key);
 
@@ -10,8 +12,6 @@ class RelationshipsPage extends StatefulWidget {
 class _RelationshipsPageState extends State<RelationshipsPage> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Relationships'),
-    );
+    return AllContacts();
   }
 }

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 class Navigate{
   static Map<String, Widget Function(BuildContext)> routes = {
     '/': (context) => LoginScreen(),
-    '/signin': (context) => LoginScreen(),
+    '/sign-in': (context) => LoginScreen(),
     '/home': (context) => Home()
   };
 }

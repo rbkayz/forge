@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forge/screens/relationships.dart';
+import 'package:forge/screens/settings.dart';
 import 'package:forge/screens/timeline.dart';
 
 enum TabName {Timeline, Relationships, Settings}
@@ -19,5 +20,5 @@ const Map<TabName, IconData> tabIcon = {
 const Map<TabName, Widget> tabPage = {
   TabName.Timeline: TimelinePage(),
   TabName.Relationships: RelationshipsPage(),
-  TabName.Settings: Icon(Icons.settings),
+  TabName.Settings: SettingsPage(),
 };

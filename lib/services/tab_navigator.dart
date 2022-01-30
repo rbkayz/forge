@@ -1,4 +1,4 @@
-/*
+
 import 'package:flutter/material.dart';
 import 'package:forge/models/bottom_navigation_items.dart';
 import 'package:forge/screens/relationships.dart';
@@ -38,4 +38,3 @@ class TabNavigator extends StatelessWidget {
     );
   }
 }
-*/
