@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge/utilities/constants.dart';
 
 class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ForgeAppBar({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 20),
           child: GestureDetector(
             onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, Constants.signInNavigate, (route) => false);
             },
             child: const Icon(
               Icons.search,

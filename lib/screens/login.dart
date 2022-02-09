@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/services/error_message.dart';
-import 'package:forge/services/utils.dart';
+import 'package:forge/utilities/constants.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -99,7 +99,7 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
             FirebaseAuthService auth = FirebaseAuthService();
             try{
               await auth.signInWithGoogle();
-              Navigator.pushNamedAndRemoveUntil(context, Constants.homeNavigate, (route) => false);
+              //Navigator.pushReplacementNamed(context, Constants.homeNavigate);
 
             }catch(e) {
               if(e is FirebaseAuthException){

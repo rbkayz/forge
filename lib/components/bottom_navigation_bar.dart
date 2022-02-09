@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forge/models/bottom_navigation_items.dart';
+import 'package:forge/utilities/bottom_navigation_items.dart';
 
 class ForgeBottomNavigationBar extends StatelessWidget {
   const ForgeBottomNavigationBar({Key? key, required this.currentTab, required this.onSelectTab}) : super(key: key);

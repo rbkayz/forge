@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:forge/components/bottom_navigation_bar.dart';
-import 'package:forge/screens/all_contacts.dart';
-import 'package:forge/screens/relationships.dart';
-import 'package:forge/screens/timeline.dart';
-import 'package:forge/services/tab_navigator.dart';
-import 'models/bottom_navigation_items.dart';
+import 'utilities/bottom_navigation_items.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

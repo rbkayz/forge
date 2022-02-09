@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:forge/components/themedata.dart';
-import 'package:forge/home.dart';
-import 'package:forge/screens/login.dart';
+import 'package:forge/services/auth.dart';
+import 'package:forge/services/wrapper.dart';
+import 'package:provider/provider.dart';
+import 'package:forge/services/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,20 +19,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Forge',
-      theme: ForgeTheme.lightTheme,
-      initialRoute: '/',
-      routes: Navigate.routes,
-      );
+    return StreamProvider<User?>.value(
+      value: FirebaseAuthService().currentUser,
+      initialData: null,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Forge',
+        theme: ForgeTheme.lightTheme,
+        home: Wrapper(),
+        onGenerateRoute: RouteGenerator.generateRoute,
+        ),
+    );
   }
-}
-
-class Navigate{
-  static Map<String, Widget Function(BuildContext)> routes = {
-    '/': (context) => LoginScreen(),
-    '/sign-in': (context) => LoginScreen(),
-    '/home': (context) => Home()
-  };
 }

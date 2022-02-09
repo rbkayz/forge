@@ -13,6 +13,7 @@ class Constants {
   //navigate
   static const signInNavigate = '/sign-in';
   static const homeNavigate = '/home';
+  static const wrapperNavigate = '/wrapper';
 
   static const statusBarColor = SystemUiOverlayStyle(
       statusBarColor: Constants.kWhiteColor,
