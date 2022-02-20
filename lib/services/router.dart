@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:forge/screens/login.dart';
+import 'package:flutter_contacts/contact.dart';
+import 'package:forge/screens/relationships_tab/contact_detail_tabs/contact_detail.dart';
+import 'package:forge/screens/onboarding/login.dart';
 
-import 'package:forge/home.dart';
+import 'package:forge/screens/home.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:forge/services/wrapper.dart';
@@ -20,6 +22,9 @@ class RouteGenerator {
           return MaterialPageRoute(builder: (context) => const Home());
         case Constants.signInNavigate:
           return MaterialPageRoute(builder: (context) => const LoginScreen());
+        case Constants.contactdetailNavigate:
+          var currentContact = settings.arguments as Contact;
+          return MaterialPageRoute(builder: (context) => ContactDetail(currentContact: currentContact));
         default:
           return MaterialPageRoute(
               builder: (context) => UndefinedView(name: settings.name!,));

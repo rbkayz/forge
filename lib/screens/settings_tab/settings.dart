@@ -28,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
               }
             }
           },
-          child: Text('Logout from Google')),
+          child: const Text('Logout from Google')),
     );
   }
 }

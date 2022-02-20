@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:forge/utilities/bottom_navigation_items.dart';
-import 'package:forge/screens/relationships.dart';
-import 'package:forge/screens/timeline.dart';
+import 'package:forge/screens/relationships_tab/relationships.dart';
+import 'package:forge/screens/timeline_tab/timeline.dart';
 
 class TabNavigatorRoutes {
   static const String timeline = '/timeline';

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:forge/components/loader.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/services/error_message.dart';
 import 'package:forge/utilities/constants.dart';
@@ -11,7 +12,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    User? currUser = FirebaseAuth.instance.currentUser;
+    //User? currUser = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: Constants.kWhiteColor,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -20,7 +21,18 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("assets/images/login_image.png"),
+              SizedBox(
+                height: size.height * 0.04,
+              ),
+              SizedBox(
+                height: size.height*0.25,
+                child: Image.asset(
+                  Constants.forgeHeaderLogo,
+                ),
+              ),
+              SizedBox(
+                height: size.height*0.1
+              ),
               RichText(
                 textAlign: TextAlign.center,
                 text: const TextSpan(children: <TextSpan>[
@@ -83,53 +95,56 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return isLoading ? const CircularProgressIndicator() : SizedBox(
-      width: size.width*0.5,
-      height: 40,
-      child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Constants.kWhiteColor),
-          ),
+    return isLoading
+        ? const ForgeSpinKitRipple(size: 50, color: Constants.kPrimaryColor,)
+        : SizedBox(
+            width: size.width * 0.5,
+            height: 40,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Constants.kWhiteColor),
+              ),
+              onPressed: () async {
+                setState(() {
+                  isLoading = true;
+                });
 
-        onPressed: () async {
-            setState(() {
-              isLoading = true;
-            });
+                FirebaseAuthService auth = FirebaseAuthService();
+                try {
+                  await auth.signInWithGoogle();
+                  //Navigator.pushReplacementNamed(context, Constants.homeNavigate);
 
-            FirebaseAuthService auth = FirebaseAuthService();
-            try{
-              await auth.signInWithGoogle();
-              //Navigator.pushReplacementNamed(context, Constants.homeNavigate);
+                } catch (e) {
+                  if (e is FirebaseAuthException) {
+                    final err = ErrorMessage();
+                    err.showMessage(e.message!, context);
+                  }
+                }
 
-            }catch(e) {
-              if(e is FirebaseAuthException){
-                final err = ErrorMessage();
-                err.showMessage(e.message!, context);
-              }
-            }
-
-            setState(() {
-              isLoading = false;
-            });
-
-          },
-
-        child: Padding(
-            padding: EdgeInsets.zero,
-            child:Row(
-              children: <Widget>[
-               Container(
-                 padding: EdgeInsets.zero,
-                 width: 20,
-                 height: 20,
-                 child: Image.asset('assets/images/google-logo.png'),
-               ),
-                const SizedBox(width: 20,),
-                Text('Sign in with Google',style: TextStyle(fontSize: 14, color: Colors.grey.shade600),),
-              ]
+                setState(() {
+                  isLoading = false;
+                });
+              },
+              child: Padding(
+                padding: EdgeInsets.zero,
+                child: Row(children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.zero,
+                    width: 20,
+                    height: 20,
+                    child: Image.asset(Constants.googleLogo),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    'Sign in with Google',
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                  ),
+                ]),
+              ),
             ),
-      ),
-      ),
-    );
+          );
   }
 }

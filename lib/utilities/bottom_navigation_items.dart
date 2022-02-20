@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:forge/screens/relationships.dart';
-import 'package:forge/screens/settings.dart';
-import 'package:forge/screens/timeline.dart';
+import 'package:forge/screens/relationships_tab/relationships.dart';
+import 'package:forge/screens/settings_tab/settings.dart';
+import 'package:forge/screens/timeline_tab/timeline.dart';
 
 enum TabName {Timeline, Relationships, Settings}
 
