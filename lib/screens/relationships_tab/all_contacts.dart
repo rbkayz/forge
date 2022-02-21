@@ -16,28 +16,11 @@ class AllContacts extends StatefulWidget {
 class _AllContactsState extends State<AllContacts> {
 
   @override
-  void initState() {
-    super.initState();
-    //getAllContacts();
-  }
-
-  // getAllContacts() async {
-  //   if (await FlutterContacts.requestPermission()) {
-  //     List<Contact> _contacts = await FlutterContacts.getContacts(
-  //         withProperties: true, withPhoto: true);
-  //     setState(() {
-  //       contacts = _contacts;
-  //     });
-  //   }
-  // }
-
-
-  @override
   Widget build(BuildContext context) {
 
     List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
-    return (contacts == null) ? const Center(child: ForgeSpinKitRipple(size: 50, color: Constants.kPrimaryColor,)) : Container(
+    return (contacts == null || contacts.isEmpty) ? const Center(child: ForgeSpinKitRipple(size: 50, color: Constants.kPrimaryColor,)) : Container(
       padding: const EdgeInsets.fromLTRB(5, 0, 5, 20),
       child: ContactListBuilder(contacts: contacts,)
       );

@@ -9,31 +9,36 @@ import 'package:forge/utilities/constants.dart';
 import 'package:forge/services/wrapper.dart';
 
 class RouteGenerator {
-
   Future<bool?> loginStatus() async {
     await FirebaseAuthService().isLogged();
   }
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-      switch (settings.name) {
-        case Constants.wrapperNavigate:
-          return MaterialPageRoute(builder: (context) => const Wrapper());
-        case Constants.homeNavigate:
-          return MaterialPageRoute(builder: (context) => const Home());
-        case Constants.signInNavigate:
-          return MaterialPageRoute(builder: (context) => const LoginScreen());
-        case Constants.contactdetailNavigate:
-          var currentContact = settings.arguments as Contact;
-          return MaterialPageRoute(builder: (context) => ContactDetail(currentContact: currentContact));
-        default:
-          return MaterialPageRoute(
-              builder: (context) => UndefinedView(name: settings.name!,));
-      }
+    switch (settings.name) {
+      case Constants.wrapperNavigate:
+        return MaterialPageRoute(builder: (context) => const Wrapper());
+      case Constants.homeNavigate:
+        return MaterialPageRoute(builder: (context) => const Home());
+      case Constants.signInNavigate:
+        return MaterialPageRoute(builder: (context) => const LoginScreen());
+
+      case Constants.contactdetailNavigate:
+        var currentContact = settings.arguments as Contact;
+        return MaterialPageRoute(
+            builder: (context) =>
+                ContactDetail(currentContact: currentContact));
+      default:
+        return MaterialPageRoute(
+            builder: (context) => UndefinedView(
+                  name: settings.name!,
+                ));
     }
   }
+}
 
 class UndefinedView extends StatelessWidget {
   final String name;
+
   const UndefinedView({Key? key, required this.name}) : super(key: key);
 
   @override

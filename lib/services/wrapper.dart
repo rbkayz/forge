@@ -5,6 +5,8 @@ import 'package:forge/screens/home.dart';
 import 'package:forge/screens/onboarding/login.dart';
 import 'package:provider/provider.dart';
 
+import 'contacts_provider.dart';
+
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
 
@@ -14,30 +16,19 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
 
-  List<Contact>? contacts = [];
-
-  getAllContacts() async {
-    if (await FlutterContacts.requestPermission()) {
-      List<Contact> _contacts = await FlutterContacts.getContacts(
-          withProperties: true, withPhoto: true);
-      setState(() {
-        contacts = _contacts;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+
     final currentuser = Provider.of<User?>(context);
 
-    if(currentuser == null) {
+    if (currentuser == null) {
       return const LoginScreen();
     } else {
-      getAllContacts();
-      return Provider<List<Contact>?>.value(
-          value: contacts,
-          child: const Home(),);
+      return FutureProvider<List<Contact>?>(
+        create: (context) => AllContactsProvider().getAllContacts(),
+        initialData: [],
+        child: const Home(),
+      );
     }
-
-}
+  }
 }

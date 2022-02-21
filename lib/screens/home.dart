@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: ForgeAppBar(),
+        appBar: const ForgeAppBar(),
         body: IndexedStack(
           index: activeTab.index,
           children: tabPage.entries.map((e) => e.value).toList(),

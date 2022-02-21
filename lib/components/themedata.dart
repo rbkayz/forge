@@ -7,6 +7,7 @@ class ForgeTheme{
     return ThemeData(
       primaryColor: Constants.kPrimaryColor,
       primarySwatch: Palette.forgePurple,
+      indicatorColor: Constants.kPrimaryColor,
       scaffoldBackgroundColor: Constants.kWhiteColor,
       fontFamily: 'Roboto',
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(

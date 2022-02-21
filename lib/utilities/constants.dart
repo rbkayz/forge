@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class Constants {
   //colors
-  static const Color kPrimaryColor = Color.fromRGBO(103, 80, 164, 1);
+  static const Color kPrimaryColor = Color(Palette.forgePurplePrimaryValue); //Color.fromRGBO(103, 80, 164, 1);
   static const Color kBlackColor = Colors.black;
   static const Color kSecondaryColor = Colors.grey;
   static const Color kGreyColor = Colors.black12;
@@ -36,11 +36,13 @@ class Palette {
       200: Color(0x666750a4),//30%
       300: Color(0x996750a4),//40%
       400: Color(0xcc6750a4),//50%
-      500: Color(0xff6750a4),//60%
-      600: Color(0xff6750a4),//70%
-      700: Color(0xff6750a4),//80%
-      800: Color(0xff6750a4),//90%
-      900: Color(0xff6750a4),//100%
+      500: Color(forgePurplePrimaryValue),//60%
+      600: Color(forgePurplePrimaryValue),//70%
+      700: Color(forgePurplePrimaryValue),//80%
+      800: Color(forgePurplePrimaryValue),//90%
+      900: Color(forgePurplePrimaryValue),//100%
     },
   );
+
+  static const int forgePurplePrimaryValue = 0xff6750a4;
 }
