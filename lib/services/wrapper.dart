@@ -16,12 +16,21 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
 
+  /*
+  Manages the overall navigation between LoginScreen and Home based on the
+  login status of the user (receives via the StreamProvider in the root widget)
+
+  Wrapper uses the AllContactsProvider class to receive a result from a
+  future function (getAllContacts). Passes this into a FutureProvider which
+  is then available across the widget tree.
+   */
+
   @override
   Widget build(BuildContext context) {
 
-    final currentuser = Provider.of<User?>(context);
+    final currentUser = Provider.of<User?>(context);
 
-    if (currentuser == null) {
+    if (currentUser == null) {
       return const LoginScreen();
     } else {
       return FutureProvider<List<Contact>?>(

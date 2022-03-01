@@ -31,5 +31,5 @@ class _TimelinePageState extends State<TimelinePage> {
         child: Text(_count.toString()),
       ),
     );
-  }
+  } 
 }

@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/services/auth.dart';
-import 'package:forge/services/error_message.dart';
 import 'package:forge/utilities/constants.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
+  /*
+  Class creates the login screen. Returned when currentUser is null by the
+  provider
+   */
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //User? currUser = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       backgroundColor: Constants.kWhiteColor,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -21,18 +25,25 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              //Spacing of 4%, 4% total
               SizedBox(
                 height: size.height * 0.04,
               ),
+
+              //Image size of 25%, 29% total
               SizedBox(
                 height: size.height*0.25,
                 child: Image.asset(
-                  Constants.forgeHeaderLogo,
+                    Constants.forgeHeaderLogo,
                 ),
               ),
+
+              //Spacing of 10%, 39% total
               SizedBox(
                 height: size.height*0.1
               ),
+
+              //Formatted main text
               RichText(
                 textAlign: TextAlign.center,
                 text: const TextSpan(children: <TextSpan>[
@@ -62,7 +73,11 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ]),
               ),
+
+              //Spacing of 3%, in total
               SizedBox(height: size.height * 0.03),
+
+              //Subtitle box
               SizedBox(
                 width: size.width * 0.6,
                 child: const Text(
@@ -72,7 +87,11 @@ class LoginScreen extends StatelessWidget {
                       TextStyle(color: Constants.kSecondaryColor, fontSize: 14),
                 ),
               ),
+
+              //Spacing of 10%, in total
               SizedBox(height: size.height * 0.1),
+
+              //GoogleSignIn button
               const ForgeGoogleSignIn(),
             ],
           ),
@@ -105,6 +124,9 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
                 backgroundColor:
                     MaterialStateProperty.all(Constants.kWhiteColor),
               ),
+
+
+              //onPressed functionality sets loading and signs into Firebase
               onPressed: () async {
                 setState(() {
                   isLoading = true;
@@ -117,8 +139,7 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
 
                 } catch (e) {
                   if (e is FirebaseAuthException) {
-                    final err = ErrorMessage();
-                    err.showMessage(e.message!, context);
+                    print(e.toString());
                   }
                 }
 
@@ -126,6 +147,8 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
                   isLoading = false;
                 });
               },
+
+              //GoogleSignInLogo in accordance to google guidelines
               child: Padding(
                 padding: EdgeInsets.zero,
                 child: Row(children: <Widget>[

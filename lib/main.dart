@@ -8,6 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:forge/services/router.dart';
 
 void main() async {
+
+  /*
+  Invoking the main function. Important to initialize firebase at the start
+   */
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -16,9 +21,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    /*
+    The StreamProvider calls a function in the FirebaseAuthService class
+    (in auth.dart) that returns a stream of the current active user (based on
+    listens to auth state changes)
+
+    Streamprovider is available to all widgets in the entire tree, and
+    navigates to the Splash screen
+   */
 
     return StreamProvider<User?>.value(
       value: FirebaseAuthService().currentUser,

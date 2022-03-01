@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/components/search.dart';
+import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
 class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -17,7 +18,7 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Padding(
         padding: const EdgeInsets.fromLTRB(4, 0, 0, 8),
-        child: Image.asset('assets/images/forge-header-logo.png', height: 60,),
+        child: Image.asset(Constants.forgeHeaderLogo, height: 60,),
       ),
       actions: <Widget>[
         Padding(
@@ -59,8 +60,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          fontWeight: FontWeight.normal,
         ),
       ),
       backgroundColor: Colors.white,

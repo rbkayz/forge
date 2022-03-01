@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:math' as math show pow;
 import 'package:forge/utilities/constants.dart';
 
 class ForgeLoader extends StatelessWidget {
@@ -11,7 +10,9 @@ class ForgeLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: ForgeSpinKitRipple(size: loaderSize)),
+      body: Center(
+          child: ForgeSpinKitRipple(size: loaderSize)
+      ),
     );
   }
 }
@@ -96,14 +97,20 @@ class _ForgeSpinKitRippleState extends State<ForgeSpinKitRipple> with SingleTick
   }
 }
 
+/*
+ForgeSpinKitDoubleBounce
 
-class ForgeSpinKitPumpingHeart extends StatefulWidget {
-  const ForgeSpinKitPumpingHeart({
+Source is: https://github.com/jogboms/flutter_spinkit/blob/master/lib/src/double_bounce.dart;
+ */
+
+
+class ForgeSpinKitDoubleBounce extends StatefulWidget {
+  const ForgeSpinKitDoubleBounce({
     Key? key,
-    this.color = Constants.kPrimaryColor,
-    required this.size,
+    this.color = Constants.kWhiteColor,
+    this.size = 50.0,
     this.itemBuilder,
-    this.duration = const Duration(milliseconds: 2400),
+    this.duration = const Duration(milliseconds: 2000),
     this.controller,
   })  : assert(!(itemBuilder is IndexedWidgetBuilder && color is Color) && !(itemBuilder == null && color == null),
   'You should specify either a itemBuilder or a color'),
@@ -116,10 +123,10 @@ class ForgeSpinKitPumpingHeart extends StatefulWidget {
   final AnimationController? controller;
 
   @override
-  _ForgeSpinKitPumpingHeartState createState() => _ForgeSpinKitPumpingHeartState();
+  _ForgeSpinKitDoubleBounceState createState() => _ForgeSpinKitDoubleBounceState();
 }
 
-class _ForgeSpinKitPumpingHeartState extends State<ForgeSpinKitPumpingHeart> with SingleTickerProviderStateMixin {
+class _ForgeSpinKitDoubleBounceState extends State<ForgeSpinKitDoubleBounce> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -127,9 +134,10 @@ class _ForgeSpinKitPumpingHeartState extends State<ForgeSpinKitPumpingHeart> wit
   void initState() {
     super.initState();
 
-    _controller = (widget.controller ?? AnimationController(vsync: this, duration: widget.duration))..repeat();
-    _animation = Tween(begin: 1.0, end: 1.25)
-        .animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 1.0, curve: SpinKitPumpCurve())));
+    _controller = (widget.controller ?? AnimationController(vsync: this, duration: widget.duration))
+      ..addListener(() => setState(() {}))
+      ..repeat(reverse: true);
+    _animation = Tween(begin: -1.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -142,33 +150,19 @@ class _ForgeSpinKitPumpingHeartState extends State<ForgeSpinKitPumpingHeart> wit
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(scale: _animation, child: _itemBuilder(0));
+    return Center(
+      child: Stack(
+        children: List.generate(2, (i) {
+          return Transform.scale(
+            scale: (1.0 - i - _animation.value.abs()).abs(),
+            child: SizedBox.fromSize(size: Size.square(widget.size), child: _itemBuilder(i)),
+          );
+        }),
+      ),
+    );
   }
 
   Widget _itemBuilder(int index) => widget.itemBuilder != null
       ? widget.itemBuilder!(context, index)
-      : SizedBox(width: widget.size, height: widget.size, child: Image.asset(Constants.forgeLogo));
-//Icon(Icons.favorite, color: widget.color, size: widget.size);
-}
-
-class SpinKitPumpCurve extends Curve {
-  const SpinKitPumpCurve();
-
-  static const magicNumber = 4.54545454;
-
-  @override
-  double transform(double t) {
-    if (t >= 0.0 && t < 0.22) {
-      return math.pow(t, 1.0) * magicNumber;
-    } else if (t >= 0.22 && t < 0.44) {
-      return 1.0 - (math.pow(t - 0.22, 1.0) * magicNumber);
-    } else if (t >= 0.44 && t < 0.5) {
-      return 0.0;
-    } else if (t >= 0.5 && t < 0.72) {
-      return math.pow(t - 0.5, 1.0) * (magicNumber / 2);
-    } else if (t >= 0.72 && t < 0.94) {
-      return 0.5 - (math.pow(t - 0.72, 1.0) * (magicNumber / 2));
-    }
-    return 0.0;
-  }
+      : DecoratedBox(decoration: BoxDecoration(image: const DecorationImage(image: AssetImage(Constants.forgeLogo)), color: widget.color!.withOpacity(0.6)));
 }

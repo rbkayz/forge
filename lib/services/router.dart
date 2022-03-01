@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
-import 'package:forge/screens/relationships_tab/contact_detail_tabs/contact_detail.dart';
+import 'package:forge/screens/relationships_tab/contact_detail_tabs/contact_detail_all.dart';
 import 'package:forge/screens/onboarding/login.dart';
 
 import 'package:forge/screens/home.dart';
@@ -22,7 +22,7 @@ class RouteGenerator {
       case Constants.signInNavigate:
         return MaterialPageRoute(builder: (context) => const LoginScreen());
 
-      case Constants.contactdetailNavigate:
+      case Constants.contactDetailNavigate:
         var currentContact = settings.arguments as Contact;
         return MaterialPageRoute(
             builder: (context) =>

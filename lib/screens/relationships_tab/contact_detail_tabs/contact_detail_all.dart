@@ -23,8 +23,6 @@ class _ContactDetailState extends State<ContactDetail> {
   @override
   Widget build(BuildContext context) {
 
-    print(widget.currentContact.displayName);
-
     return Scaffold(
       appBar: CustomAppBar(title: widget.currentContact.displayName),
       body: DefaultTabController(
@@ -42,8 +40,8 @@ class _ContactDetailState extends State<ContactDetail> {
               ];
             },
             body: Column(
-              children: const <Widget>[
-                TabBar(
+              children: <Widget>[
+                const TabBar(
                   labelColor: Constants.kPrimaryColor,
                     unselectedLabelColor: Constants.kSecondaryColor,
                     tabs: [
@@ -53,9 +51,9 @@ class _ContactDetailState extends State<ContactDetail> {
                     ]),
                 Expanded(
                   child: TabBarView(children: [
-                    ContactDetailsTab(),
-                    ContactHistoryTab(),
-                    ContactNotesTab(),
+                    ContactDetailsTab(currentContact: widget.currentContact,),
+                    const ContactHistoryTab(),
+                    const ContactNotesTab(),
                   ]),
                 )
               ],

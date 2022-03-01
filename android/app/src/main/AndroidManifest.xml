@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
    <application
         android:label="forge"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/forge_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -21,7 +21,7 @@ class _AllContactsState extends State<AllContacts> {
     List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
     return (contacts == null || contacts.isEmpty) ? const Center(child: ForgeSpinKitRipple(size: 50, color: Constants.kPrimaryColor,)) : Container(
-      padding: const EdgeInsets.fromLTRB(5, 0, 5, 20),
+      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
       child: ContactListBuilder(contacts: contacts,)
       );
   }
@@ -64,7 +64,7 @@ class ContactListBuilder extends StatelessWidget {
         String initials = getInitials(nameparts);
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, 'contact-detail', arguments: currentContact);
+            Navigator.pushNamed(context, Constants.contactDetailNavigate, arguments: currentContact);
           },
           child: ListTile(
             leading: (currentContactImage == null) ? CircleAvatar(child: Text(initials),) : CircleAvatar(backgroundImage: MemoryImage(currentContactImage)),
