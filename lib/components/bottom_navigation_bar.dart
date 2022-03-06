@@ -12,9 +12,9 @@ class ForgeBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: [
-          _buildItem(TabName.Timeline),
-          _buildItem(TabName.Relationships),
-          _buildItem(TabName.Settings),
+          _buildItem(TabName.timeline),
+          _buildItem(TabName.links),
+          _buildItem(TabName.settings),
         ],
       onTap: (index) {
           return onSelectTab(TabName.values[index]);},

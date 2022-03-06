@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:forge/screens/relationships_tab/relationships.dart';
-import 'package:forge/screens/settings_tab/settings.dart';
-import 'package:forge/screens/timeline_tab/timeline.dart';
+import 'package:forge/screens/tab_links/links.dart';
+import 'package:forge/screens/tab_settings/settings.dart';
+import 'package:forge/screens/tab_timeline/timeline.dart';
 
-enum TabName {Timeline, Relationships, Settings}
+enum TabName {timeline, links, settings}
 
 const Map<TabName, String> tabLabel = {
-  TabName.Timeline: 'Timeline',
-  TabName.Relationships: 'Relationships',
-  TabName.Settings: 'Settings',
+  TabName.timeline: 'Timeline',
+  TabName.links: 'Links',
+  TabName.settings: 'Settings',
 };
 
 const Map<TabName, IconData> tabIcon = {
-  TabName.Timeline: Icons.ballot,
-  TabName.Relationships: Icons.person,
-  TabName.Settings: Icons.settings,
+  TabName.timeline: Icons.ballot,
+  TabName.links: Icons.people,
+  TabName.settings: Icons.settings,
 };
 
 const Map<TabName, Widget> tabPage = {
-  TabName.Timeline: TimelinePage(),
-  TabName.Relationships: RelationshipsPage(),
-  TabName.Settings: SettingsPage(),
+  TabName.timeline: TimelinePage(),
+  TabName.links: LinksPage(),
+  TabName.settings: SettingsPage(),
 };

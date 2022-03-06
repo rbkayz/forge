@@ -1,9 +1,9 @@
 //
 // import 'package:flutter/material.dart';
-// import 'package:forge/screens/settings_tab/settings.dart';
+// import 'package:forge/screens/tab_settings/settings.dart';
 // import 'package:forge/utilities/bottom_navigation_items.dart';
-// import 'package:forge/screens/relationships_tab/relationships.dart';
-// import 'package:forge/screens/timeline_tab/timeline.dart';
+// import 'package:forge/screens/tab_links/links.dart';
+// import 'package:forge/screens/tab_timeline/timeline.dart';
 //
 // class TabNavigatorRoutes {
 //   static const String timeline = '/timeline';

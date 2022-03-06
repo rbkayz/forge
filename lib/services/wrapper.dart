@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:forge/components/loader.dart';
 import 'package:forge/screens/home.dart';
-import 'package:forge/screens/onboarding/login.dart';
+import 'package:forge/screens/standalone/error.dart';
+import 'package:forge/screens/standalone/login.dart';
+import 'package:forge/utilities/constants.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import 'contacts_provider.dart';
@@ -30,14 +34,47 @@ class _WrapperState extends State<Wrapper> {
 
     final currentUser = Provider.of<User?>(context);
 
+    /*
+    Check if currentUser is null. If null, then return the login screen
+     */
+
     if (currentUser == null) {
       return const LoginScreen();
-    } else {
+    }
+
+    /*
+      If current user is not null, then open the box and get all contacts
+     */
+
+    else {
+
       return FutureProvider<List<Contact>?>(
         create: (context) => AllContactsProvider().getAllContacts(),
         initialData: [],
-        child: const Home(),
+        child: FutureBuilder(
+          future: Hive.openBox(Constants.linksBox),
+          builder: (BuildContext context, AsyncSnapshot<Box<dynamic>> snapshot) {
+
+            if(snapshot.connectionState == ConnectionState.done) {
+
+              if (snapshot.hasError) {
+                return const ForgeError();
+              }
+
+              else {
+                return const Home();
+              }
+
+            }
+
+            else {
+              return const ForgeLoader();
+            }
+
+          },
+        ),
       );
     }
   }
+
 }

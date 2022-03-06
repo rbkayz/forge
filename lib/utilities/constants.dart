@@ -9,6 +9,7 @@ class Constants {
   static const Color kSecondaryColor = Colors.grey;
   static const Color kGreyColor = Colors.black12;
   static const Color kWhiteColor = Colors.white;
+  static const Color kErrorColor = Color(0xffb3261e);
 
   //fonts
   static const headerFont = 'Redressed';
@@ -17,12 +18,17 @@ class Constants {
   static const forgeLogo = 'assets/images/forge-logo.png';
   static const googleLogo = 'assets/images/google-logo.png';
   static const forgeHeaderLogo = 'assets/images/forge-header-logo.png';
+  static const errorImage = 'assets/images/error.png';
 
   //navigate
   static const signInNavigate = '/sign-in';
   static const homeNavigate = '/home';
   static const wrapperNavigate = '/wrapper';
   static const contactDetailNavigate = 'contact-detail-navigate';
+  static const errorNavigate = '/error';
+  static const allContactsNavigate = '/home/all-contacts';
+
+  static const linksBox = 'links';
 
   //statusBarColor
   static const statusBarColor = SystemUiOverlayStyle(

@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:forge/screens/relationships_tab/contact_detail_tabs/contact_history.dart';
-import 'package:forge/screens/relationships_tab/contact_detail_tabs/contact_notes.dart';
+import 'package:forge/screens/contacts_screens/contact_body_history.dart';
+import 'package:forge/screens/contacts_screens/contact_body_notes.dart';
 import 'package:forge/utilities/constants.dart';
 
-import 'contact_details.dart';
+import 'contact_body_details.dart';
 
 class ContactDetail extends StatefulWidget {
 
@@ -24,7 +24,7 @@ class _ContactDetailState extends State<ContactDetail> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: CustomAppBar(title: widget.currentContact.displayName),
+      appBar: CustomAppBar(currentContact: widget.currentContact),
       body: DefaultTabController(
           length: 3,
           child: NestedScrollView(
@@ -215,12 +215,12 @@ Widget actions(BuildContext context) {
       Expanded(
         child: OutlinedButton(
           child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
+            padding: EdgeInsets.symmetric(horizontal: 0),
             child: Text("Edit Profile", style: TextStyle(color: Constants.kBlackColor)),
           ),
           style: OutlinedButton.styleFrom(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              minimumSize: Size(0, 30),
+              minimumSize: const Size(0, 30),
               side: const BorderSide(
                 color: Constants.kSecondaryColor,
               )),

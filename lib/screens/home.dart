@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   var list = <Widget>[];
-  TabName activeTab = TabName.Timeline;
+  TabName activeTab = TabName.timeline;
 
   void _selectTab(TabName tab){
     setState(() {
@@ -32,5 +32,6 @@ class _HomeState extends State<Home> {
         bottomNavigationBar: ForgeBottomNavigationBar(currentTab: activeTab, onSelectTab: _selectTab),
     );
   }
+
 
 }

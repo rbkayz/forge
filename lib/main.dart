@@ -1,25 +1,39 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:forge/components/themedata.dart';
-import 'package:forge/screens/onboarding/splash.dart';
+import 'package:forge/utilities/themedata.dart';
+import 'package:forge/models/links_model.dart';
+import 'package:forge/screens/standalone/splash.dart';
 import 'package:forge/services/auth.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:forge/services/router.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 void main() async {
 
-  /*
-  Invoking the main function. Important to initialize firebase at the start
-   */
-
   WidgetsFlutterBinding.ensureInitialized();
+
+  /*
+  Initialize hive and open box;
+  */
+
+  final forgeDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(forgeDocumentDirectory.path);
+  Hive.registerAdapter(ForgeLinksAdapter());
+  Hive.registerAdapter(ContactAdapter());
+
+  /*
+  Initialize firebase and run app;
+  */
+
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

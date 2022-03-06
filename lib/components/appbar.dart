@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/components/search.dart';
+import 'package:forge/components/toggle_links.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -47,9 +48,9 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key, required this.title}) : super(key: key);
+  const CustomAppBar({Key? key, required this.currentContact}) : super(key: key);
 
-  final String title;
+  final Contact currentContact;
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -57,8 +58,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          size: 20,
+          color: Constants.kPrimaryColor,
+        ), 
+        onPressed: () {
+          Navigator.pop(context,true);
+        },
+      ),
       title: Text(
-        title,
+        currentContact.displayName,
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.normal,
@@ -67,6 +78,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       foregroundColor: Theme.of(context).primaryColor,
       elevation: 0,
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: ToggleLinks(currentContact: currentContact),
+        )
+      ],
     );
   }
 }

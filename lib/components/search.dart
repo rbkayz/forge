@@ -1,6 +1,6 @@
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter/material.dart';
-import 'package:forge/screens/relationships_tab/all_contacts.dart';
+import 'package:forge/screens/contacts_screens/all_contacts.dart';
 import 'package:forge/utilities/constants.dart';
 
 class DataSearch extends SearchDelegate<String> {
