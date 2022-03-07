@@ -14,19 +14,19 @@ class RouteGenerator {
     await FirebaseAuthService().isLogged();
   }
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  static Route<dynamic> generateRouteMain(RouteSettings settings) {
     switch (settings.name) {
       case Constants.wrapperNavigate:
         return MaterialPageRoute(builder: (context) => const Wrapper());
-
-      case Constants.homeNavigate:
-        return MaterialPageRoute(builder: (context) => const Home());
 
       case Constants.signInNavigate:
         return MaterialPageRoute(builder: (context) => const LoginScreen());
 
       case Constants.errorNavigate:
         return MaterialPageRoute(builder: (context) => const ForgeError());
+
+      case Constants.homeNavigate:
+        return MaterialPageRoute(builder: (context) => const Home());
 
       case Constants.allContactsNavigate:
         return MaterialPageRoute(builder: (context) => const AllContactsPage());
@@ -44,6 +44,31 @@ class RouteGenerator {
                 ));
     }
   }
+
+  static Route<dynamic> generateRouteHome(RouteSettings settings) {
+
+    switch (settings.name) {
+
+      case '/':
+        return MaterialPageRoute(builder: (context) => const Home());
+
+      case Constants.allContactsNavigate:
+        return MaterialPageRoute(builder: (context) => const AllContactsPage());
+
+      case Constants.contactDetailNavigate:
+        var currentContact = settings.arguments as Contact;
+        return MaterialPageRoute(
+            builder: (context) =>
+                ContactDetail(currentContact: currentContact));
+
+      default:
+        return MaterialPageRoute(
+            builder: (_) => UndefinedView(
+              name: 'boo',
+            ));
+    }
+  }
+
 }
 
 class UndefinedView extends StatelessWidget {
@@ -59,4 +84,10 @@ class UndefinedView extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class NavigatorKeys {
+  static final GlobalKey<NavigatorState> mainKey = GlobalKey();
+  static final GlobalKey<NavigatorState> homeKey = GlobalKey();
 }

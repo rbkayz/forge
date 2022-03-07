@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:forge/screens/contacts_screens/all_contacts.dart';
+import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 
 class LinksPage extends StatefulWidget {
@@ -14,7 +16,7 @@ class _LinksPageState extends State<LinksPage> {
   Widget build(BuildContext context) {
     return FloatingActionButton(
         onPressed: () {
-          Navigator.of(context, rootNavigator: false).pushNamed(Constants.allContactsNavigate);
+          NavigatorKeys.homeKey.currentState!.pushNamed(Constants.allContactsNavigate);
         }
     );
   }

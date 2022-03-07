@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:forge/components/bottom_navigation_bar.dart';
+import 'package:forge/services/router.dart';
 import '../utilities/bottom_navigation_items.dart';
 
 class Home extends StatefulWidget {
@@ -24,12 +25,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const ForgeAppBar(),
-        body: IndexedStack(
-          index: activeTab.index,
-          children: tabPage.entries.map((e) => e.value).toList(),
-        ),
-        bottomNavigationBar: ForgeBottomNavigationBar(currentTab: activeTab, onSelectTab: _selectTab),
+            appBar: const ForgeAppBar(),
+            body: IndexedStack(
+              index: activeTab.index,
+              children: tabPage.entries.map((e) => e.value).toList(),
+            ),
+            bottomNavigationBar: ForgeBottomNavigationBar(currentTab: activeTab, onSelectTab: _selectTab),
     );
   }
 

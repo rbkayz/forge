@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -5,9 +7,11 @@ import 'package:forge/components/loader.dart';
 import 'package:forge/screens/home.dart';
 import 'package:forge/screens/standalone/error.dart';
 import 'package:forge/screens/standalone/login.dart';
+import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:forge/services/auth.dart';
 
 import 'contacts_provider.dart';
 
@@ -29,52 +33,46 @@ class _WrapperState extends State<Wrapper> {
   is then available across the widget tree.
    */
 
+
   @override
   Widget build(BuildContext context) {
-
     final currentUser = Provider.of<User?>(context);
-
-    /*
-    Check if currentUser is null. If null, then return the login screen
-     */
 
     if (currentUser == null) {
       return const LoginScreen();
     }
 
-    /*
-      If current user is not null, then open the box and get all contacts
-     */
-
     else {
-
       return FutureProvider<List<Contact>?>(
         create: (context) => AllContactsProvider().getAllContacts(),
         initialData: [],
-        child: FutureBuilder(
-          future: Hive.openBox(Constants.linksBox),
-          builder: (BuildContext context, AsyncSnapshot<Box<dynamic>> snapshot) {
+        child: WillPopScope(
+          onWillPop: () async {return false;},
 
-            if(snapshot.connectionState == ConnectionState.done) {
+          child: FutureBuilder(
+            future: Hive.openBox(Constants.linksBox),
 
-              if (snapshot.hasError) {
-                return const ForgeError();
+            builder: (BuildContext context,
+                AsyncSnapshot<Box<dynamic>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return const ForgeError();
+                } else {
+
+                  return Navigator(
+                    key: NavigatorKeys.homeKey,
+                    onGenerateRoute: RouteGenerator.generateRouteHome,
+                  );
+                }
               }
 
               else {
-                return const Home();
+                return const ForgeLoader();
               }
-
-            }
-
-            else {
-              return const ForgeLoader();
-            }
-
-          },
+            },
+          ),
         ),
       );
     }
   }
-
 }

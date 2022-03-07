@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:forge/services/wrapper.dart';
 import 'package:forge/utilities/themedata.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/standalone/splash.dart';
@@ -35,6 +36,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
+  Future<bool> _onWillPop() async {
+    print('called it');
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -50,12 +56,16 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User?>.value(
       value: FirebaseAuthService().currentUser,
       initialData: null,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Forge',
-        theme: ForgeTheme.lightTheme,
-        home: const ForgeSplash(),
-        onGenerateRoute: RouteGenerator.generateRoute,
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: MaterialApp(
+          navigatorKey: NavigatorKeys.mainKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Forge',
+          theme: ForgeTheme.lightTheme,
+          home: const ForgeSplash(),
+          onGenerateRoute: RouteGenerator.generateRouteMain,
+        ),
       ),
     );
   }
