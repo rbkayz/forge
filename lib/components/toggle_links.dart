@@ -21,13 +21,13 @@ class _ToggleLinksState extends State<ToggleLinks> {
   Widget build(BuildContext context) {
 
     bool isActiveLink = linksBox.containsKey(widget.currentContact.id);
-    ForgeLinks currentLink = ForgeLinks(contact: widget.currentContact, id: widget.currentContact.id);
+    ForgeLinks currentLink = ForgeLinks(displayName: widget.currentContact.displayName, id: widget.currentContact.id);
 
     //Add link and Delete link functions
 
     void _deleteLink() async {
       await linksBox.delete(currentLink.linkKey);
-      print('successfully deleted ${currentLink.contact.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+      print('successfully deleted ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
 
       setState(() {
         isActiveLink = !isActiveLink;
@@ -36,7 +36,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
     void _addLink() async {
       await linksBox.put(currentLink.linkKey, currentLink);
-      print('successfully added ${currentLink.contact.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+      print('successfully added ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
 
       setState(() {
         isActiveLink = !isActiveLink;

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:forge/services/wrapper.dart';
 import 'package:forge/utilities/themedata.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/standalone/splash.dart';
@@ -22,7 +21,6 @@ void main() async {
   final forgeDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(forgeDocumentDirectory.path);
   Hive.registerAdapter(ForgeLinksAdapter());
-  Hive.registerAdapter(ContactAdapter());
 
   /*
   Initialize firebase and run app;

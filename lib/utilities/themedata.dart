@@ -21,6 +21,11 @@ class ForgeTheme{
         backgroundColor: Constants.kWhiteColor,
         foregroundColor: Constants.kPrimaryColor,
         elevation: 0.2,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: Constants.kPrimaryColor,
+        foregroundColor: Constants.kWhiteColor,
+        splashColor: Palette.forgePurple.shade800,
       )
     );
   }

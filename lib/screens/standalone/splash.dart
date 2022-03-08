@@ -19,7 +19,7 @@ class _ForgeSplashState extends State<ForgeSplash> {
   }
 
   startTimer() async {
-    var duration = const Duration(seconds: 2);
+    var duration = const Duration(milliseconds: 1800);
     return Timer(duration, route);
   }
 

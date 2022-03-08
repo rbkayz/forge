@@ -1,4 +1,3 @@
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:hive/hive.dart';
 
 part 'links_model.g.dart';
@@ -6,24 +5,21 @@ part 'links_model.g.dart';
 @HiveType(typeId: 0)
 class ForgeLinks extends HiveObject {
 
-  ForgeLinks({required this.contact, required this.id});
+  ForgeLinks({required this.id, required this.displayName});
 
   @HiveField(0)
   String id;
 
   @HiveField(1)
-  Contact contact;
-
-  bool isActiveLink = false;
+  String displayName;
 
   String get linkKey {
-    return contact.id;
+    return id;
   }
 
-  Contact get linkContact {
-    return contact;
+  String get linkName {
+    return displayName;
   }
-
-
 
 }
+

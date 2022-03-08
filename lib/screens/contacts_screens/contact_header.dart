@@ -24,7 +24,7 @@ class _ContactDetailState extends State<ContactDetail> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: CustomAppBar(currentContact: widget.currentContact),
+      appBar: ContactAppBar(currentContact: widget.currentContact),
       body: DefaultTabController(
           length: 3,
           child: NestedScrollView(

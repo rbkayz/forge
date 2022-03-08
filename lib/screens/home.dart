@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
       onWillPop: _onPop,
 
       child: Scaffold(
-              appBar: const ForgeAppBar(),
+              appBar: const ForgeAppBar(showOptions: true,showSearch: true),
               body: IndexedStack(
                 index: activeTab.index,
                 children: tabPage.entries.map((e) => e.value).toList(),

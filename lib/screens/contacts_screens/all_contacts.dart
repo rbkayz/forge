@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:forge/components/appbar.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/components/toggle_links.dart';
-import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-
 
 class AllContactsPage extends StatelessWidget {
   const AllContactsPage({Key? key}) : super(key: key);
@@ -15,11 +14,10 @@ class AllContactsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: AllContacts(),
+      body: AllContacts(),
     );
   }
 }
-
 
 class AllContacts extends StatefulWidget {
   const AllContacts({Key? key}) : super(key: key);
@@ -39,11 +37,14 @@ class _AllContactsState extends State<AllContacts> {
             size: 50,
             color: Constants.kPrimaryColor,
           ))
-        : Container(
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-            child: ContactListBuilder(
-              contacts: contacts,
-            ));
+        : Scaffold(
+            appBar: const ForgeAppBar(title: 'Add / remove links', showSearch: true,),
+            body: Container(
+                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                child: ContactListBuilder(
+                  contacts: contacts,
+                )),
+          );
   }
 }
 

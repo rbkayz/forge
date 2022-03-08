@@ -17,8 +17,8 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ForgeLinks(
-      contact: fields[1] as Contact,
       id: fields[0] as String,
+      displayName: fields[1] as String,
     );
   }
 
@@ -27,9 +27,9 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.linkKey)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.contact);
+      ..write(obj.displayName);
   }
 
   @override
@@ -41,37 +41,4 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
       other is ForgeLinksAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
-}
-
-
-
-
-class ContactAdapter extends TypeAdapter<Contact> {
-  @override
-  final int typeId = 1;
-
-  @override
-  Contact read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return Contact();
-  }
-
-  @override
-  void write(BinaryWriter writer, Contact obj) {
-    writer
-      ..writeByte(0);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is ForgeLinksAdapter &&
-              runtimeType == other.runtimeType &&
-              typeId == other.typeId;
 }
