@@ -38,39 +38,45 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final currentUser = Provider.of<User?>(context);
 
+    /*
+    Returns login screen if current user is null
+     */
+
     if (currentUser == null) {
       return const LoginScreen();
     }
+
+    /*
+    Returns Futurebuilder and navigates to main screen if not null
+     */
 
     else {
       return FutureProvider<List<Contact>?>(
         create: (context) => AllContactsProvider().getAllContacts(),
         initialData: [],
-        child: WillPopScope(
-          onWillPop: () async {return false;},
+        child: FutureBuilder(
+          future: Hive.openBox(Constants.linksBox),
 
-          child: FutureBuilder(
-            future: Hive.openBox(Constants.linksBox),
+          builder: (BuildContext context,
+              AsyncSnapshot<Box<dynamic>> snapshot) {
 
-            builder: (BuildContext context,
-                AsyncSnapshot<Box<dynamic>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return const ForgeError();
-                } else {
+            if (snapshot.connectionState == ConnectionState.done) {
 
-                  return Navigator(
-                    key: NavigatorKeys.homeKey,
-                    onGenerateRoute: RouteGenerator.generateRouteHome,
-                  );
-                }
+              if (snapshot.hasError) {
+                return const ForgeError();
               }
 
               else {
-                return const ForgeLoader();
+                return const Home();
               }
-            },
-          ),
+
+            }
+
+            else {
+              return const ForgeLoader();
+            }
+
+          },
         ),
       );
     }

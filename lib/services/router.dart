@@ -45,29 +45,32 @@ class RouteGenerator {
     }
   }
 
-  static Route<dynamic> generateRouteHome(RouteSettings settings) {
-
-    switch (settings.name) {
-
-      case '/':
-        return MaterialPageRoute(builder: (context) => const Home());
-
-      case Constants.allContactsNavigate:
-        return MaterialPageRoute(builder: (context) => const AllContactsPage());
-
-      case Constants.contactDetailNavigate:
-        var currentContact = settings.arguments as Contact;
-        return MaterialPageRoute(
-            builder: (context) =>
-                ContactDetail(currentContact: currentContact));
-
-      default:
-        return MaterialPageRoute(
-            builder: (_) => UndefinedView(
-              name: 'boo',
-            ));
-    }
-  }
+  // static Route<dynamic> generateRouteHome(RouteSettings settings) {
+  //
+  //   switch (settings.name) {
+  //
+  //     case '/':
+  //       return MaterialPageRoute(builder: (context) => const Home());
+  //
+  //     case Constants.homeNavigate:
+  //       return MaterialPageRoute(builder: (context) => const Home());
+  //
+  //     case Constants.allContactsNavigate:
+  //       return MaterialPageRoute(builder: (context) => const AllContactsPage());
+  //
+  //     case Constants.contactDetailNavigate:
+  //       var currentContact = settings.arguments as Contact;
+  //       return MaterialPageRoute(
+  //           builder: (context) =>
+  //               ContactDetail(currentContact: currentContact));
+  //
+  //     default:
+  //       return MaterialPageRoute(
+  //           builder: (_) => UndefinedView(
+  //             name: settings.name!,
+  //           ));
+  //   }
+  // }
 
 }
 
@@ -90,4 +93,6 @@ class UndefinedView extends StatelessWidget {
 class NavigatorKeys {
   static final GlobalKey<NavigatorState> mainKey = GlobalKey();
   static final GlobalKey<NavigatorState> homeKey = GlobalKey();
+
+
 }

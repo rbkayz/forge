@@ -22,3 +22,9 @@ const Map<TabName, Widget> tabPage = {
   TabName.links: LinksPage(),
   TabName.settings: SettingsPage(),
 };
+
+Map<TabName, GlobalKey> navHomeKeys = {
+  TabName.timeline: GlobalKey(),
+  TabName.links: GlobalKey(),
+  TabName.settings: GlobalKey(),
+};

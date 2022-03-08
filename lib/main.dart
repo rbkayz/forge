@@ -36,11 +36,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  Future<bool> _onWillPop() async {
-    print('called it');
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -56,16 +51,13 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User?>.value(
       value: FirebaseAuthService().currentUser,
       initialData: null,
-      child: WillPopScope(
-        onWillPop: _onWillPop,
-        child: MaterialApp(
-          navigatorKey: NavigatorKeys.mainKey,
-          debugShowCheckedModeBanner: false,
-          title: 'Forge',
-          theme: ForgeTheme.lightTheme,
-          home: const ForgeSplash(),
-          onGenerateRoute: RouteGenerator.generateRouteMain,
-        ),
+      child: MaterialApp(
+        navigatorKey: NavigatorKeys.mainKey,
+        debugShowCheckedModeBanner: false,
+        title: 'Forge',
+        theme: ForgeTheme.lightTheme,
+        home: const ForgeSplash(),
+        onGenerateRoute: RouteGenerator.generateRouteMain,
       ),
     );
   }
