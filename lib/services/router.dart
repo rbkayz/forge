@@ -25,6 +25,21 @@ class RouteGenerator {
       case Constants.errorNavigate:
         return MaterialPageRoute(builder: (context) => const ForgeError());
 
+      default:
+        return MaterialPageRoute(
+            builder: (context) => UndefinedView(
+                  name: settings.name!,
+                ));
+    }
+  }
+
+  static Route<dynamic> generateRouteHome(RouteSettings settings) {
+
+    switch (settings.name) {
+
+      case '/':
+        return MaterialPageRoute(builder: (context) => const Home());
+
       case Constants.homeNavigate:
         return MaterialPageRoute(builder: (context) => const Home());
 
@@ -39,38 +54,11 @@ class RouteGenerator {
 
       default:
         return MaterialPageRoute(
-            builder: (context) => UndefinedView(
-                  name: settings.name!,
-                ));
+            builder: (_) => UndefinedView(
+              name: settings.name!,
+            ));
     }
   }
-
-  // static Route<dynamic> generateRouteHome(RouteSettings settings) {
-  //
-  //   switch (settings.name) {
-  //
-  //     case '/':
-  //       return MaterialPageRoute(builder: (context) => const Home());
-  //
-  //     case Constants.homeNavigate:
-  //       return MaterialPageRoute(builder: (context) => const Home());
-  //
-  //     case Constants.allContactsNavigate:
-  //       return MaterialPageRoute(builder: (context) => const AllContactsPage());
-  //
-  //     case Constants.contactDetailNavigate:
-  //       var currentContact = settings.arguments as Contact;
-  //       return MaterialPageRoute(
-  //           builder: (context) =>
-  //               ContactDetail(currentContact: currentContact));
-  //
-  //     default:
-  //       return MaterialPageRoute(
-  //           builder: (_) => UndefinedView(
-  //             name: settings.name!,
-  //           ));
-  //   }
-  // }
 
 }
 

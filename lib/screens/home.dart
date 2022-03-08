@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:forge/components/bottom_navigation_bar.dart';
-import 'package:forge/services/navigator.dart';
-
-import 'package:forge/services/router.dart';
 import '../utilities/bottom_navigation_items.dart';
 
 class Home extends StatefulWidget {
@@ -26,7 +23,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<bool> _onPop() async {
-    return !await Navigator.maybePop(navHomeKeys.values.elementAt(activeTab.index).currentState!.context);
+    return false;
+      //!await Navigator.maybePop(NavigatorKeys.homeKey.currentState!.context);
   }
 
 
@@ -40,11 +38,7 @@ class _HomeState extends State<Home> {
               appBar: const ForgeAppBar(),
               body: IndexedStack(
                 index: activeTab.index,
-                children: <Widget>[
-                  NavigatorPage(navigatorKey:navHomeKeys.values.elementAt(0), child: tabPage.values.elementAt(0)),
-                  NavigatorPage(navigatorKey:navHomeKeys.values.elementAt(1), child: tabPage.values.elementAt(1)),
-                  NavigatorPage(navigatorKey:navHomeKeys.values.elementAt(2),child: tabPage.values.elementAt(2)),
-                ],
+                children: tabPage.entries.map((e) => e.value).toList(),
               ),
               bottomNavigationBar: ForgeBottomNavigationBar(currentTab: activeTab, onSelectTab: _selectTab),
       ),

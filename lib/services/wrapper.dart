@@ -1,17 +1,14 @@
-import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:forge/components/loader.dart';
-import 'package:forge/screens/home.dart';
 import 'package:forge/screens/standalone/error.dart';
 import 'package:forge/screens/standalone/login.dart';
-import 'package:forge/services/router.dart';
+import 'package:forge/services/navigator_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:forge/services/auth.dart';
 
 import 'contacts_provider.dart';
 
@@ -67,7 +64,7 @@ class _WrapperState extends State<Wrapper> {
               }
 
               else {
-                return const Home();
+                return const NavigatorPage();
               }
 
             }
