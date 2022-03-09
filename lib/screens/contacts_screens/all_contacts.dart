@@ -1,9 +1,9 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/components/toggle_links.dart';
+import 'package:forge/services/contact_methods.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -60,21 +60,6 @@ class ContactListBuilder extends StatefulWidget {
 class _ContactListBuilderState extends State<ContactListBuilder> {
   final linksBox = Hive.box(Constants.linksBox);
 
-  String getInitials(List<String> nameParts) {
-    try {
-      if (nameParts.length > 1) {
-        return nameParts[0].characters.first.toUpperCase() +
-            nameParts[1].characters.first.toUpperCase();
-      } else if (nameParts.length == 1) {
-        return nameParts[0].characters.first.toUpperCase();
-      } else {
-        return '-';
-      }
-    } on Exception catch (e) {
-      print(e.toString());
-      return '-';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,12 +68,9 @@ class _ContactListBuilderState extends State<ContactListBuilder> {
       itemCount: widget.contacts!.length,
       itemBuilder: (context, index) {
         Contact currentContact = widget.contacts![index];
-        Uint8List? currentContactImage = currentContact.photoOrThumbnail;
         String currentContactPhone = currentContact.phones.isNotEmpty
             ? currentContact.phones.first.number
             : '----------';
-        List<String> nameParts = currentContact.displayName.split(" ");
-        String initials = getInitials(nameParts);
 
         return GestureDetector(
           onTap: () {
@@ -97,12 +79,7 @@ class _ContactListBuilderState extends State<ContactListBuilder> {
                 .then((value) => setState(() {}));
           },
           child: ListTile(
-            leading: (currentContactImage == null)
-                ? CircleAvatar(
-                    child: Text(initials),
-                  )
-                : CircleAvatar(
-                    backgroundImage: MemoryImage(currentContactImage)),
+            leading: ContactCircleAvatar(currentContact: currentContact,),
             title: Text(currentContact.displayName),
             subtitle: Text(currentContactPhone),
             trailing: ToggleLinks(

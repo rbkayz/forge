@@ -20,6 +20,7 @@ void main() async {
 
   final forgeDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(forgeDocumentDirectory.path);
+
   Hive.registerAdapter(ForgeLinksAdapter());
 
   /*
