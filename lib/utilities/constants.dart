@@ -19,6 +19,7 @@ class Constants {
   static const googleLogo = 'assets/images/google-logo.png';
   static const forgeHeaderLogo = 'assets/images/forge-header-logo.png';
   static const errorImage = 'assets/images/error.png';
+  static const repeatImage = 'assets/images/RepeatIcon.png';
 
   //navigate
   static const signInNavigate = '/sign-in';
@@ -84,5 +85,13 @@ class Palette {
   );
 
   static const int forgePurplePrimaryValue = 0xff6750a4;
+}
+
+
+class Months {
+  static const List intToMonths = <String>[
+    'JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'
+
+  ];
 }
 

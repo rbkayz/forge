@@ -5,8 +5,8 @@ import 'package:forge/utilities/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
 
-class ContactDetailsTab extends StatelessWidget {
-  ContactDetailsTab({Key? key, required this.currentContact}) : super(key: key);
+class ContactInfoTab extends StatelessWidget {
+  ContactInfoTab({Key? key, required this.currentContact}) : super(key: key);
 
   final Contact currentContact;
   final relationshipsBox = Hive.box(Constants.linksBox);

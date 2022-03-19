@@ -1,6 +1,6 @@
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter/material.dart';
-import 'package:forge/screens/contacts_screens/all_contacts.dart';
+import 'package:forge/screens/tab_links/contacts_screens/all_contacts.dart';
 import 'package:forge/utilities/constants.dart';
 
 class DataSearch extends SearchDelegate<String> {
@@ -58,6 +58,6 @@ class DataSearch extends SearchDelegate<String> {
 
     final filteredcontacts = contacts == null ? contacts : contacts!.where((element) => element.displayName.toLowerCase().contains(query.toLowerCase())).toList();
     return query.isEmpty ?
-    const Center(child:Text('Enter a string')) : ContactListBuilder(contacts: filteredcontacts);
+    const Center(child:Text('Enter a name')) : ContactListBuilder(contacts: filteredcontacts);
   }
 }

@@ -14,7 +14,7 @@ class _HomeState extends State<Home> {
 
 
   var list = <Widget>[];
-  TabName activeTab = TabName.timeline;
+  TabName activeTab = TabName.links;
 
   void _selectTab(TabName tab){
     setState(() {

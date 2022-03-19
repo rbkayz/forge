@@ -37,9 +37,10 @@ AppBar for Contacts
 
 
 class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ContactAppBar({Key? key, required this.currentContact}) : super(key: key);
+  ContactAppBar({Key? key, required this.currentContact, this.isScrolled = false}) : super(key: key);
 
   final Contact currentContact;
+  bool isScrolled;
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -48,7 +49,7 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: const AppBarBackButton(),
-      title: AppBarTitle(title: currentContact.displayName),
+      title: isScrolled ? AppBarTitle(title: currentContact.displayName) : const SizedBox.shrink(),
       backgroundColor: Colors.white,
       foregroundColor: Theme.of(context).primaryColor,
       elevation: 0,
@@ -107,9 +108,9 @@ class AppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      title,
+      title.toUpperCase(),
       style: const TextStyle(
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: FontWeight.normal,
       ),
     );
@@ -202,7 +203,7 @@ class AppBarForgeLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 0, 0, 8),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
       child: Image.asset(Constants.forgeHeaderLogo, height: 60,),
     );
   }

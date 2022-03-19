@@ -75,8 +75,7 @@ class _ContactListBuilderState extends State<ContactListBuilder> {
         return GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, Constants.contactDetailNavigate,
-                    arguments: currentContact)
-                .then((value) => setState(() {}));
+                    arguments: currentContact).then((value) => setState(() {}));
           },
           child: ListTile(
             leading: ContactCircleAvatar(currentContact: currentContact,),

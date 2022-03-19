@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/services/contact_methods.dart';
 import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
+import 'package:forge/utilities/widget_styles.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
@@ -17,25 +20,30 @@ class LinksPage extends StatefulWidget {
 
 class _LinksPageState extends State<LinksPage> {
   final linksBox = Hive.box(Constants.linksBox);
-  List<dynamic> linksValues = [];
 
   @override
   Widget build(BuildContext context) {
-    linksValues = linksBox.toMap().values.toList();
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.person_add_alt_outlined),
         onPressed: () {
           NavigatorKeys.homeKey.currentState!
-              .pushNamed(Constants.allContactsNavigate)
-              .then((value) => setState(() {}));
+              .pushNamed(Constants.allContactsNavigate);
         },
       ),
-      body: LinkListView(linksValues: linksValues),
+      body: ValueListenableBuilder(
+        valueListenable: linksBox.listenable(),
+        builder: (BuildContext context, Box value, Widget? child) {
+          return LinkListView(linksValues: value.toMap().values.toList());
+        },
+      ),
     );
   }
 }
+
+/*
+List view for all the active links
+ */
 
 class LinkListView extends StatelessWidget {
   LinkListView({
@@ -75,7 +83,11 @@ class LinkListView extends StatelessWidget {
   }
 }
 
-class LinkCard extends StatelessWidget {
+/*
+Card Widget
+ */
+
+class LinkCard extends StatefulWidget {
   LinkCard({
     Key? key,
     required this.currentLink,
@@ -84,51 +96,74 @@ class LinkCard extends StatelessWidget {
 
   final ForgeLinks currentLink;
   Contact currentContact;
+
+  @override
+  State<LinkCard> createState() => _LinkCardState();
+}
+
+class _LinkCardState extends State<LinkCard> {
   bool isLongPressed = false;
 
-  double cardHeight = 60;
+  double cardHeight = 80;
 
   @override
   Widget build(BuildContext context) {
-    return currentContact.displayName == ''
+    return widget.currentContact.displayName == ''
         ? const SizedBox.shrink()
-        : Card(
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            shadowColor: Constants.kPrimaryColor,
-            elevation: 0.6,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: SizedBox(
+        : GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, Constants.contactDetailNavigate,
+                      arguments: widget.currentContact);
+            },
+            child: Container(
+                margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 height: cardHeight,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child:
-                          ContactCircleAvatar(currentContact: currentContact),
-                    ),
-                    Expanded(
-                      flex: 6,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            currentContact.displayName,
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            currentContact.phones.first.number,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
+                decoration: forgeBoxDecoration(),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ContactCircleAvatar(
+                              currentContact: widget.currentContact,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.currentContact.displayName,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Constants.kBlackColor,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                const Text(
+                                  'Last connected 3 months ago',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Constants.kSecondaryColor),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ));
+                      const SizedBox(),
+                    ],
+                  ),
+                )),
+          );
   }
 }

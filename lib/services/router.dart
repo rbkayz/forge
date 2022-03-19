@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
-import 'package:forge/screens/contacts_screens/all_contacts.dart';
+import 'package:forge/screens/tab_links/contacts_screens/all_contacts.dart';
 import 'package:forge/screens/standalone/error.dart';
-import 'package:forge/screens/contacts_screens/contact_header.dart';
+import 'package:forge/screens/tab_links/contacts_screens/contact_header.dart';
 import 'package:forge/screens/standalone/login.dart';
 import 'package:forge/screens/home.dart';
 import 'package:forge/services/auth.dart';

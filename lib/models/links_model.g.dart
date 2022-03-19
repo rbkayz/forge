@@ -19,17 +19,20 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
     return ForgeLinks(
       id: fields[0] as String,
       displayName: fields[1] as String,
+      isActive: fields[2] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, ForgeLinks obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.displayName);
+      ..write(obj.displayName)
+      ..writeByte(2)
+      ..write(obj.isActive);
   }
 
   @override
