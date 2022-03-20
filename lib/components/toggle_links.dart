@@ -14,51 +14,65 @@ class ToggleLinks extends StatefulWidget {
 }
 
 class _ToggleLinksState extends State<ToggleLinks> {
-
   final linksBox = Hive.box(Constants.linksBox);
 
   @override
   Widget build(BuildContext context) {
+    bool isStored = linksBox.containsKey(widget.currentContact.id);
 
-    bool isActiveLink = linksBox.containsKey(widget.currentContact.id);
-    ForgeLinks currentLink = ForgeLinks(displayName: widget.currentContact.displayName, id: widget.currentContact.id);
+    void _deActivateLink() async {
+      ForgeLinks currentLink = ForgeLinks(
+        displayName: widget.currentContact.displayName,
+        id: widget.currentContact.id,
+        isActive: false,
+      );
 
-    //Add link and Delete link functions
+      print(
+          'successfully deactivated ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
 
-    void _deleteLink() async {
-      await linksBox.delete(currentLink.linkKey);
-      print('successfully deleted ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+      await linksBox.put(currentLink.linkKey, currentLink);
 
-      setState(() {
-        isActiveLink = !isActiveLink;
-      });
+      setState(() {});
     }
 
     void _addLink() async {
+      ForgeLinks currentLink = ForgeLinks(
+        displayName: widget.currentContact.displayName,
+        id: widget.currentContact.id,
+        isActive: true,
+      );
+
       await linksBox.put(currentLink.linkKey, currentLink);
-      print('successfully added ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
 
-      setState(() {
-        isActiveLink = !isActiveLink;
-      });
+      print(
+          'successfully added ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+
+      setState(() {});
     }
-
 
     //Widget returns
 
-    if(isActiveLink) {
+    if (isStored) {
+      ForgeLinks currentLink = linksBox.get(widget.currentContact.id);
 
-      return GestureDetector(
-        onTap: _deleteLink,
-        child: const Icon(
-          Icons.person,
-          color: Constants.kPrimaryColor,
-        ),
-      );
-    }
-
-    else {
-
+      if (currentLink.isActive) {
+        return GestureDetector(
+          onTap: _deActivateLink,
+          child: const Icon(
+            Icons.person,
+            color: Constants.kPrimaryColor,
+          ),
+        );
+      } else {
+        return GestureDetector(
+          onTap: _addLink,
+          child: const Icon(
+            Icons.person_outline,
+            color: Constants.kSecondaryColor,
+          ),
+        );
+      }
+    } else {
       return GestureDetector(
         onTap: _addLink,
         child: const Icon(

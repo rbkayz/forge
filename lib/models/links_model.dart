@@ -5,7 +5,7 @@ part 'links_model.g.dart';
 @HiveType(typeId: 0)
 class ForgeLinks extends HiveObject {
 
-  ForgeLinks({required this.id, required this.displayName, this.isActive=false});
+  ForgeLinks({required this.id, required this.displayName, this.isActive = false});
 
   @HiveField(0)
   String id;
@@ -15,6 +15,10 @@ class ForgeLinks extends HiveObject {
 
   @HiveField(2)
   bool isActive;
+
+  // toggleActive () {
+  //   isActive = !isActive;
+  // }
 
   String get linkKey {
     return id;

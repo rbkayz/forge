@@ -23,6 +23,7 @@ class _LinksPageState extends State<LinksPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.person_add_alt_outlined),
@@ -76,8 +77,8 @@ class LinkListView extends StatelessWidget {
                       .where((element) => element.id == currentLink.id)
                       .single;
 
-              return LinkCard(
-                  currentLink: currentLink, currentContact: currentContact);
+              return currentLink.isActive ? LinkCard(
+                  currentLink: currentLink, currentContact: currentContact) : SizedBox.shrink();
             },
           );
   }
