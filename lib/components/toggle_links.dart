@@ -4,6 +4,8 @@ import 'package:forge/models/links_model.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 
+
+
 class ToggleLinks extends StatefulWidget {
   const ToggleLinks({Key? key, required this.currentContact}) : super(key: key);
 
@@ -20,27 +22,29 @@ class _ToggleLinksState extends State<ToggleLinks> {
   Widget build(BuildContext context) {
     bool isStored = linksBox.containsKey(widget.currentContact.id);
 
-    void _deActivateLink() async {
-      ForgeLinks currentLink = ForgeLinks(
-        displayName: widget.currentContact.displayName,
-        id: widget.currentContact.id,
-        isActive: false,
-      );
+    ///--------------------------------------------------------------
+    /// Deactivate the link
+    ///--------------------------------------------------------------
 
-      print(
-          'successfully deactivated ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+    void _deActivateLink() async {
+
+      ForgeLinks currentLink = linksBox.get(widget.currentContact.id);
+
+      currentLink.isActive = false;
 
       await linksBox.put(currentLink.linkKey, currentLink);
+      print('successfully deactivated ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
 
       setState(() {});
     }
 
     void _addLink() async {
-      ForgeLinks currentLink = ForgeLinks(
+      ForgeLinks currentLink = isStored ? linksBox.get(widget.currentContact.id) : ForgeLinks(
         displayName: widget.currentContact.displayName,
         id: widget.currentContact.id,
-        isActive: true,
       );
+
+      currentLink.isActive = true;
 
       await linksBox.put(currentLink.linkKey, currentLink);
 

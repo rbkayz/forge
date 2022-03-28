@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forge/utilities/constants.dart';
-import 'package:intl/intl.dart';
+import 'package:forge/utilities/widget_styles.dart';
 
 class LinksTag extends StatelessWidget {
   const LinksTag({Key? key}) : super(key: key);
@@ -21,33 +21,47 @@ class LinksTag extends StatelessWidget {
   }
 }
 
-class FrequencyWidget extends StatelessWidget {
+///--------------------------------------------------------------
+/// Calendar Widget for the next meeting
+///--------------------------------------------------------------
 
-  const FrequencyWidget({
-    Key? key,
-  }) : super(key: key);
+class NextConnectDateWidget extends StatelessWidget {
+  const NextConnectDateWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(children: <Widget>[
+      Container(
+          alignment: Alignment.center,
+          decoration: forgeBoxDecoration(),
+          height: 60,
+          width: 50,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              Text(
-                    '3 MONTHS',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  ),
-              Text(
-                'Frequency',
-                style: TextStyle(fontSize: 10, color: Constants.kSecondaryColor, fontWeight: FontWeight.w400),
+              SizedBox(
+                width: 30,
+                child: FittedBox(
+                  child: Text('23'),
+                ),
+              ),
+              SizedBox(
+                width: 30,
+                child: FittedBox(
+                  child: Text('MAR'),
+                ),
               ),
             ],
-          ),
-    );
+          )),
+    ]);
   }
 }
+
+///--------------------------------------------------------------
+/// The Link Progress bar
+///--------------------------------------------------------------
+
 
 class LinkProgressBar extends StatefulWidget {
   const LinkProgressBar(
@@ -70,43 +84,42 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
         Expanded(
           flex: 1,
           child: Column(
-              children: [
-                Text(
-                    DateFormat('dd-MMM').format(widget.start).toUpperCase(),
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                const Text(
-                  'Last connected',
-                  style: TextStyle(fontSize: 10, color: Constants.kSecondaryColor,fontWeight: FontWeight.w400),),
-              ],
-            ),
-          ),
-        Expanded(
-          flex: 3,
-          child: Center(
-            child: Text(
-              'Next connect in ${widget.end.difference(widget.current).inDays} days',
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          )
-        ),
-        Expanded(
-          flex: 1,
-          child: Column(
-            children: [
-              Text(
-                DateFormat('dd-MMM').format(widget.end).toUpperCase(),
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                'Next connect',
-                style: TextStyle(fontSize: 10, color: Constants.kSecondaryColor, fontWeight: FontWeight.w400),),
+            children: const [
+              LinkHeaderRowWidget(icon: Icons.event_outlined, text: 'Last connected on 31 Mar 2022 (81 days ago)'),
+              SizedBox(height:12),
+              LinkHeaderRowWidget(icon: Icons.repeat, text: 'Repeats every 3 months'),
+              SizedBox(height:12),
+              LinkHeaderRowWidget(icon: Icons.upcoming_outlined, text: 'Next connect in 20 days'),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class LinkHeaderRowWidget extends StatelessWidget {
+  const LinkHeaderRowWidget({
+    Key? key,
+    required this.icon,
+    required this.text,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 14,color: Colors.grey.shade700,),
+        const SizedBox(width: 4,),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+              color: Colors.grey.shade700,
+          )
         ),
       ],
     );

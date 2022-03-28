@@ -20,6 +20,7 @@ class Constants {
   static const forgeHeaderLogo = 'assets/images/forge-header-logo.png';
   static const errorImage = 'assets/images/error.png';
   static const repeatImage = 'assets/images/RepeatIcon.png';
+  static const calendarImage = 'assets/images/calendar_container.png';
 
   //navigate
   static const signInNavigate = '/sign-in';

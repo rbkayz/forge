@@ -133,9 +133,9 @@ Widget profileHeader(BuildContext context, Contact currentContact) {
 
                 ],
               ),
-              Expanded(child: const SizedBox.shrink()),
+              const Expanded(child: SizedBox.shrink()),
               
-              const FrequencyWidget(),
+              const NextConnectDateWidget(),
               
             ],
           ),

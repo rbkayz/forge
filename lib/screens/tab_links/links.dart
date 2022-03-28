@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
+
 class LinksPage extends StatefulWidget {
   const LinksPage({Key? key}) : super(key: key);
 
@@ -44,7 +45,8 @@ class _LinksPageState extends State<LinksPage> {
 
 /*
 List view for all the active links
- */
+
+*/
 
 class LinkListView extends StatelessWidget {
   LinkListView({
