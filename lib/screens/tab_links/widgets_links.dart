@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:forge/utilities/widget_styles.dart';
 
+
+///--------------------------------------------------------------
+/// Links tag
+///--------------------------------------------------------------
+
 class LinksTag extends StatelessWidget {
   const LinksTag({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(3),
+      padding: const EdgeInsets.all(3),
       child: const Text(
         '# PLACEHOLDER',
-        style: TextStyle(fontSize: 12, color: Constants.kWhiteColor),
+        style: TextStyle(fontSize: 12, color: Constants.kBlackColor),
       ),
       decoration: BoxDecoration(
-        color: Constants.kPrimaryColor,
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(5),
       ),
     );
@@ -113,7 +118,7 @@ class LinkHeaderRowWidget extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 14,color: Colors.grey.shade700,),
-        const SizedBox(width: 4,),
+        const SizedBox(width: 5,),
         Text(
           text,
           style: TextStyle(
