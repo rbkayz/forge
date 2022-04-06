@@ -5,6 +5,7 @@ import 'package:forge/screens/standalone/error.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_header.dart';
 import 'package:forge/screens/standalone/login.dart';
 import 'package:forge/screens/home.dart';
+import 'package:forge/screens/tab_settings/help_center.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:forge/services/wrapper.dart';
@@ -51,6 +52,9 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (context) =>
                 ContactDetail(currentContact: currentContact));
+
+      case Constants.helpCenterNavigate:
+        return MaterialPageRoute(builder: (context) => const HelpCenter());
 
       default:
         return MaterialPageRoute(

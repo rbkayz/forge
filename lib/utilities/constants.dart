@@ -29,6 +29,7 @@ class Constants {
   static const contactDetailNavigate = 'contact-detail-navigate';
   static const errorNavigate = '/error';
   static const allContactsNavigate = '/home/all-contacts';
+  static const helpCenterNavigate = '/home/settings/help-center';
 
   static const linksBox = 'links';
 

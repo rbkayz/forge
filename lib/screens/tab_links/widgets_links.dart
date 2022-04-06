@@ -69,12 +69,12 @@ class NextConnectDateWidget extends StatelessWidget {
 
 
 class LinkProgressBar extends StatefulWidget {
-  const LinkProgressBar(
-      {Key? key, required this.start, required this.current, required this.end})
+  LinkProgressBar(
+      {Key? key, required this.start, required this.end})
       : super(key: key);
 
   final DateTime start;
-  final DateTime current;
+  final DateTime current = DateTime.now();
   final DateTime end;
 
   @override

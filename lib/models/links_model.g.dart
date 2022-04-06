@@ -20,19 +20,25 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
       id: fields[0] as String,
       displayName: fields[1] as String,
       isActive: fields[2] as bool,
-    );
+    )
+      ..nextConnect = fields[3] as DateTime
+      ..repeatDays = fields[4] as int;
   }
 
   @override
   void write(BinaryWriter writer, ForgeLinks obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.displayName)
       ..writeByte(2)
-      ..write(obj.isActive);
+      ..write(obj.isActive)
+      ..writeByte(3)
+      ..write(obj.nextConnect)
+      ..writeByte(4)
+      ..write(obj.repeatDays);
   }
 
   @override

@@ -144,7 +144,7 @@ Widget profileHeader(BuildContext context, Contact currentContact) {
             height: 20,
           ),
 
-          LinkProgressBar(start: DateTime(2022,3,1), current: DateTime(2022,3,10), end: DateTime(2022,3,31)),
+          LinkProgressBar(start: DateTime(2022,3,1), end: DateTime(2022,3,31)),
 
           const SizedBox(
             height: 10,
