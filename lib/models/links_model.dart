@@ -16,12 +16,6 @@ class ForgeLinks extends HiveObject {
   @HiveField(2)
   bool isActive;
 
-  @HiveField(3)
-  DateTime nextConnect = DateTime.now().add(Duration(days: 7));
-
-  @HiveField(4)
-  int repeatDays = 90;
-
   String get linkKey {
     return id;
   }
