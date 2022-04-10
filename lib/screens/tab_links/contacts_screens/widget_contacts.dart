@@ -2,6 +2,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 
+///--------------------------------------------------------------
+/// Get two initials of the name. If not return a -
+///--------------------------------------------------------------
+
 String getInitials(List<String> nameParts) {
   try {
     if (nameParts.length > 1) {
@@ -17,6 +21,11 @@ String getInitials(List<String> nameParts) {
     return '-';
   }
 }
+
+///--------------------------------------------------------------
+/// Builds the circle avatar for the contact
+///--------------------------------------------------------------
+
 
 class ContactCircleAvatar extends StatefulWidget {
   const ContactCircleAvatar(

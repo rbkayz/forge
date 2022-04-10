@@ -16,33 +16,33 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        //Edit notifications
-        WidgetNotifications(),
+        children: const [
+          //Edit notifications
+          WidgetNotifications(),
 
-        //Edit tags
-        WidgetEditTags(),
+          //Edit tags
+          WidgetEditTags(),
 
-        //Feature Request
-        WidgetFeatureRequest(),
+          //Feature Request
+          WidgetFeatureRequest(),
 
-        //Review Us
-        WidgetReviewUs(),
+          //Review Us
+          WidgetReviewUs(),
 
-        //Share with a friend
-        WidgetShare(),
+          //Share with a friend
+          WidgetShare(),
 
-        //Help Center
-        WidgetHelpCenter(),
+          //Help Center
+          WidgetHelpCenter(),
 
-        //Logout
-        WidgetLogout(),
+          //Logout
+          WidgetLogout(),
 
-        // Center(
-        //   child: Image.asset(Constants.forgeHeaderLogo,width: 50,)
-        // ),
+          // Center(
+          //   child: Image.asset(Constants.forgeHeaderLogo,width: 50,)
+          // ),
 
-      ],
+        ],
     );
   }
 

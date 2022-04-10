@@ -4,10 +4,10 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
-import 'package:forge/services/contact_methods.dart';
+import 'package:forge/screens/tab_links/contacts_screens/widget_contacts.dart';
 import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
-import 'package:forge/utilities/widget_styles.dart';
+import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -117,6 +117,10 @@ class _LinkCardState extends State<LinkCard> {
 
   @override
   Widget build(BuildContext context) {
+
+    DateTime? lastDate = widget.currentLink.linkDates.isEmpty ? DateTime.now() : widget.currentLink.linkDates.first.meetingDate;
+    String formatlastDate = DateFormat('dd-MMM-yyyy').format(lastDate!);
+
     return widget.currentContact.displayName == ''
         ? const SizedBox.shrink()
         : GestureDetector(
@@ -155,10 +159,10 @@ class _LinkCardState extends State<LinkCard> {
                                 const SizedBox(
                                   height: 3,
                                 ),
-                                const Text(
-                                  'Last connected 3 months ago',
+                                Text(
+                                  'Last connected on ${formatlastDate}',
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14,
                                       color: Constants.kSecondaryColor),
                                 ),

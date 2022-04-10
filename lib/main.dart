@@ -22,6 +22,7 @@ void main() async {
   Hive.init(forgeDocumentDirectory.path);
 
   Hive.registerAdapter(ForgeLinksAdapter());
+  Hive.registerAdapter(ForgeDatesAdapter());
 
   /*
   Initialize firebase and run app;

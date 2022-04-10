@@ -5,7 +5,7 @@ part 'links_model.g.dart';
 @HiveType(typeId: 0)
 class ForgeLinks extends HiveObject {
 
-  ForgeLinks({required this.id, required this.displayName, this.isActive = false});
+  ForgeLinks({required this.id, required this.displayName, this.isActive = false, this.linkDates = const []});
 
   @HiveField(0)
   String id;
@@ -15,6 +15,9 @@ class ForgeLinks extends HiveObject {
 
   @HiveField(2)
   bool isActive;
+
+  @HiveField(3)
+  List<ForgeDates> linkDates;
 
   String get linkKey {
     return id;
@@ -26,3 +29,21 @@ class ForgeLinks extends HiveObject {
 
 }
 
+@HiveType(typeId: 1)
+class ForgeDates extends HiveObject {
+
+  ForgeDates({this.meetingDate, this.meetingType, this.isComplete, this.linkid});
+
+  @HiveField(0)
+  DateTime? meetingDate;
+
+  @HiveField(1)
+  String? meetingType;
+
+  @HiveField(2)
+  bool? isComplete;
+
+  @HiveField(3)
+  String? linkid;
+
+}

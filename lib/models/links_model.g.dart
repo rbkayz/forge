@@ -20,19 +20,22 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
       id: fields[0] as String,
       displayName: fields[1] as String,
       isActive: fields[2] as bool,
+      linkDates: (fields[3] as List).cast<ForgeDates>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ForgeLinks obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.displayName)
       ..writeByte(2)
-      ..write(obj.isActive);
+      ..write(obj.isActive)
+      ..writeByte(3)
+      ..write(obj.linkDates);
   }
 
   @override
@@ -42,6 +45,49 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is ForgeLinksAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class ForgeDatesAdapter extends TypeAdapter<ForgeDates> {
+  @override
+  final int typeId = 1;
+
+  @override
+  ForgeDates read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ForgeDates(
+      meetingDate: fields[0] as DateTime?,
+      meetingType: fields[1] as String?,
+      isComplete: fields[2] as bool?,
+      linkid: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ForgeDates obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.meetingDate)
+      ..writeByte(1)
+      ..write(obj.meetingType)
+      ..writeByte(2)
+      ..write(obj.isComplete)
+      ..writeByte(3)
+      ..write(obj.linkid);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ForgeDatesAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

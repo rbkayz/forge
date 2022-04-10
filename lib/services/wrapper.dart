@@ -10,7 +10,7 @@ import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
-import 'contacts_provider.dart';
+import 'contacts_service.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -49,7 +49,7 @@ class _WrapperState extends State<Wrapper> {
 
     else {
       return FutureProvider<List<Contact>?>(
-        create: (context) => AllContactsProvider().getAllContacts(),
+        create: (context) => AllContactsServices().getAllContacts(),
         initialData: [],
         child: FutureBuilder(
           future: Hive.openBox(Constants.linksBox),

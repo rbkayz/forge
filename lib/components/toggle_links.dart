@@ -38,6 +38,10 @@ class _ToggleLinksState extends State<ToggleLinks> {
       setState(() {});
     }
 
+    ///--------------------------------------------------------------
+    /// Activate the Link
+    ///--------------------------------------------------------------
+
     void _addLink() async {
       ForgeLinks currentLink = isStored ? linksBox.get(widget.currentContact.id) : ForgeLinks(
         displayName: widget.currentContact.displayName,
@@ -46,15 +50,39 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
       currentLink.isActive = true;
 
+      //Setting the linkDates to an empty list if it is null
+      if (currentLink.linkDates.isEmpty) {
+        print('activated');
+        currentLink.linkDates = [];
+      }
+
+      ///--------------------------------------------------------------
+      /// TEST CODE
+      ///--------------------------------------------------------------
+
+      currentLink.linkDates = [];
+      currentLink.linkDates.add(
+          ForgeDates(
+              meetingDate: DateUtils.dateOnly(DateTime.now().add(Duration(days: int.parse(currentLink.id)))),
+              meetingType: 'Default',
+              isComplete: false,
+            linkid: currentLink.id,
+          ));
+
+      ///--------------------------------------------------------------
+      /// TEST CODE
+      ///--------------------------------------------------------------
+
       await linksBox.put(currentLink.linkKey, currentLink);
 
-      print(
-          'successfully added ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+      print('successfully added ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
 
       setState(() {});
     }
 
-    //Widget returns
+    ///--------------------------------------------------------------
+    /// Widget Return statements
+    ///--------------------------------------------------------------
 
     if (isStored) {
       ForgeLinks currentLink = linksBox.get(widget.currentContact.id);

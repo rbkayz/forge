@@ -3,7 +3,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/components/toggle_links.dart';
-import 'package:forge/services/contact_methods.dart';
+import 'package:forge/screens/tab_links/contacts_screens/widget_contacts.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
