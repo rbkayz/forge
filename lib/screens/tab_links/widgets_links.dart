@@ -33,6 +33,8 @@ class LinksTag extends StatelessWidget {
 class NextConnectDateWidget extends StatelessWidget {
   const NextConnectDateWidget({Key? key}) : super(key: key);
 
+  //final ForgeDates nextConnectDate;
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[

@@ -46,4 +46,15 @@ class ForgeDates extends HiveObject {
   @HiveField(3)
   String? linkid;
 
+  Map<String, dynamic> toMap(){
+    return {
+      "meetingDate": meetingDate,
+      "meetingType": meetingType,
+      "isComplete": isComplete,
+      "linkid": linkid,
+      // and so on
+    };
+  }
+
+
 }

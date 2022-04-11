@@ -7,7 +7,7 @@ import 'package:forge/screens/tab_links/contacts_screens/contact_body_notes.dart
 import 'package:forge/screens/tab_links/widgets_links.dart';
 import 'package:forge/screens/tab_links/contacts_screens/widget_contacts.dart';
 import 'package:forge/utilities/constants.dart';
-
+import 'package:provider/provider.dart';
 import 'contact_body_info.dart';
 
 class ContactDetail extends StatefulWidget {
@@ -49,45 +49,47 @@ class _ContactDetailState extends State<ContactDetail> {
   @override
   Widget build(BuildContext context) {
 
-    //print(_controller.offset);
 
-    return Scaffold(
-      appBar: ContactAppBar(currentContact: widget.currentContact, isScrolled: _isScrolled),
-      body: DefaultTabController(
-          length: 3,
-          child: NestedScrollView(
-            controller: _controller,
-            headerSliverBuilder: (context, value) {
-              return [
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                      [
-                        profileHeader(context, widget.currentContact),
-                      ]
+    return Provider(
+      create: (BuildContext context) => widget.currentContact,
+      child: Scaffold(
+        appBar: ContactAppBar(isScrolled: _isScrolled),
+        body: DefaultTabController(
+            length: 3,
+            child: NestedScrollView(
+              controller: _controller,
+              headerSliverBuilder: (context, value) {
+                return [
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                        [
+                          profileHeader(context),
+                        ]
+                    ),
                   ),
-                ),
-              ];
-            },
-            body: Column(
-              children: <Widget>[
-                const TabBar(
-                  labelColor: Constants.kPrimaryColor,
-                    unselectedLabelColor: Constants.kSecondaryColor,
-                    tabs: [
-                      Tab(text: 'Info'),
-                      Tab(text: 'History'),
-                      Tab(text: 'Notes'),
+                ];
+              },
+              body: Column(
+                children: <Widget>[
+                  const TabBar(
+                    labelColor: Constants.kPrimaryColor,
+                      unselectedLabelColor: Constants.kSecondaryColor,
+                      tabs: [
+                        Tab(text: 'Info'),
+                        Tab(text: 'History'),
+                        Tab(text: 'Notes'),
+                      ]),
+                  Expanded(
+                    child: TabBarView(children: [
+                      ContactInfoTab(),
+                      const ContactHistoryTab(),
+                      const ContactNotesTab(),
                     ]),
-                Expanded(
-                  child: TabBarView(children: [
-                    ContactInfoTab(currentContact: widget.currentContact,),
-                    const ContactHistoryTab(),
-                    const ContactNotesTab(),
-                  ]),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
+        ),
       ),
     );
   }
@@ -95,7 +97,9 @@ class _ContactDetailState extends State<ContactDetail> {
 }
 
 
-Widget profileHeader(BuildContext context, Contact currentContact) {
+Widget profileHeader(BuildContext context) {
+
+  Contact currentContact = Provider.of<Contact>(context);
 
   return Container(
     width: double.infinity,
@@ -154,26 +158,3 @@ Widget profileHeader(BuildContext context, Contact currentContact) {
     ),
   );
 }
-//
-// Widget actions(BuildContext context) {
-//   return Row(
-//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//     children: [
-//       Expanded(
-//         child: OutlinedButton(
-//           child: const Padding(
-//             padding: EdgeInsets.symmetric(horizontal: 0),
-//             child: Text("Edit Profile", style: TextStyle(color: Constants.kBlackColor)),
-//           ),
-//           style: OutlinedButton.styleFrom(
-//               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-//               minimumSize: const Size(0, 30),
-//               side: const BorderSide(
-//                 color: Constants.kSecondaryColor,
-//               )),
-//           onPressed: () {},
-//         ),
-//       ),
-//     ],
-//   );
-// }

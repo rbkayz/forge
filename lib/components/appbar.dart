@@ -32,15 +32,15 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/*
-AppBar for Contacts
- */
+
+///--------------------------------------------------------------
+/// AppBar for contacts
+///--------------------------------------------------------------
 
 
 class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
-  ContactAppBar({Key? key, required this.currentContact, this.isScrolled = false}) : super(key: key);
+  ContactAppBar({Key? key, this.isScrolled = false}) : super(key: key);
 
-  final Contact currentContact;
   bool isScrolled;
 
   @override
@@ -48,6 +48,9 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Contact currentContact = Provider.of<Contact>(context);
+
     return AppBar(
       leading: const AppBarBackButton(),
       title: isScrolled ? AppBarTitle(title: currentContact.displayName) : const SizedBox.shrink(),

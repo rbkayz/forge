@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:forge/utilities/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
 
 class ContactInfoTab extends StatelessWidget {
-  ContactInfoTab({Key? key, required this.currentContact}) : super(key: key);
+  ContactInfoTab({Key? key}) : super(key: key);
 
-  final Contact currentContact;
+
   final relationshipsBox = Hive.box(Constants.linksBox);
 
   launchDialer(String currPhone) async {
@@ -41,86 +42,91 @@ class ContactInfoTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: [
 
-          ///--------------------------------------------------------------
-          /// PHONES
-          ///--------------------------------------------------------------
+    Contact currentContact = Provider.of<Contact>(context);
 
-          const InfoDivider(divText: 'CONTACT'),
+    return SingleChildScrollView(
+      child: Column(
+          children: [
 
-          currentContact.phones.isEmpty ? SizedBox.shrink() : ListView.builder(
-            shrinkWrap: true,
-            itemCount: currentContact.phones.isNotEmpty
-                ? currentContact.phones.length
-                : 1,
-            itemBuilder: (context, index) {
-              String currentContactPhone = currentContact.phones[index].number;
-              String? currentContactLabel = Constants
-                  .phoneLabelToString[currentContact.phones[index].label];
-              return CustomListTile(
-                subTitle: (currentContactLabel ?? 'Mobile').toUpperCase(),
-                mainTitle: currentContactPhone,
-                leadingIcon: const Icon(Icons.phone),
-                trailingIcon1: const Icon(
-                  FontAwesomeIcons.whatsapp,
-                  color: Color.fromRGBO(37, 211, 102, 1),
-                ),
-                trailingIcon2: const Icon(Icons.message),
-                onPressedMain: () {
-                  launchDialer(currentContactPhone);
+            ///--------------------------------------------------------------
+            /// PHONES
+            ///--------------------------------------------------------------
+
+            const InfoDivider(divText: 'CONTACT'),
+
+            currentContact.phones.isEmpty ? SizedBox.shrink() : ListView.builder(
+                shrinkWrap: true,
+                itemCount: currentContact.phones.isNotEmpty
+                    ? currentContact.phones.length
+                    : 1,
+                itemBuilder: (context, index) {
+                  String currentContactPhone = currentContact.phones[index].number;
+                  String? currentContactLabel = Constants
+                      .phoneLabelToString[currentContact.phones[index].label];
+                  return CustomListTile(
+                    subTitle: (currentContactLabel ?? 'Mobile').toUpperCase(),
+                    mainTitle: currentContactPhone,
+                    leadingIcon: const Icon(Icons.phone),
+                    trailingIcon1: const Icon(
+                      FontAwesomeIcons.whatsapp,
+                      color: Color.fromRGBO(37, 211, 102, 1),
+                    ),
+                    trailingIcon2: const Icon(Icons.message),
+                    onPressedMain: () {
+                      launchDialer(currentContactPhone);
+                    },
+                    onPressedTrail1: () {
+                      launchWhatsapp(currentContactPhone);
+                    },
+                    onPressedTrail2: () {
+                      launchSMS(currentContactPhone);
+                    },
+                  );
                 },
-                onPressedTrail1: () {
-                  launchWhatsapp(currentContactPhone);
-                },
-                onPressedTrail2: () {
-                  launchSMS(currentContactPhone);
-                },
-              );
-            },
-          ),
+            ),
 
-          ///--------------------------------------------------------------
-          /// EMAIL
-          ///--------------------------------------------------------------
+            ///--------------------------------------------------------------
+            /// EMAIL
+            ///--------------------------------------------------------------
 
-          currentContact.emails.isEmpty ? SizedBox.shrink() : ListView.builder(
-            shrinkWrap: true,
-            itemCount: currentContact.emails.isNotEmpty
-                ? currentContact.emails.length
-                : 1,
-            itemBuilder: (context, index) {
-              String currentContactEmail = currentContact.emails[index].address;
-              String currentContactLabel = currentContact.emails[index].label.toString();
-              return CustomListTile(
-                subTitle: (currentContactLabel).toUpperCase(),
-                mainTitle: currentContactEmail,
-                leadingIcon: const Icon(Icons.email_outlined),
-                trailingIcon1: null,
-                trailingIcon2: null,
-                onPressedMain: () {
+            currentContact.emails.isEmpty ? SizedBox.shrink() : ListView.builder(
+              shrinkWrap: true,
+              itemCount: currentContact.emails.isNotEmpty
+                  ? currentContact.emails.length
+                  : 1,
+              itemBuilder: (context, index) {
+                String currentContactEmail = currentContact.emails[index].address;
+                String? currentContactLabel = Constants.emailLabelToString[currentContact.emails[index].label];
+                return CustomListTile(
+                  subTitle: (currentContactLabel ?? 'Personal').toUpperCase(),
+                  mainTitle: currentContactEmail.toLowerCase(),
+                  leadingIcon: const Icon(Icons.email_outlined),
+                  trailingIcon1: null,
+                  trailingIcon2: null,
+                  onPressedMain: () {
 
-                },
-                onPressedTrail1: () {
+                  },
+                  onPressedTrail1: () {
 
-                },
-                onPressedTrail2: () {
+                  },
+                  onPressedTrail2: () {
 
-                },
-              );
-            },
-          ),
+                  },
+                );
+              },
+            ),
 
-          ///--------------------------------------------------------------
-          /// Key Dates
-          ///--------------------------------------------------------------
+            ///--------------------------------------------------------------
+            /// Key Dates
+            ///--------------------------------------------------------------
 
-          const InfoDivider(divText: 'DATES'),
+            const InfoDivider(divText: 'DATES'),
 
 
 
-        ],
+          ],
+      ),
     );
   }
 }
@@ -161,7 +167,7 @@ class CustomListTile extends StatelessWidget {
       ),
       title: Text(mainTitle),
       subtitle: Text(subTitle),
-      trailing: Row(
+      trailing: (trailingIcon1 == null && trailingIcon2 == null) ? null : Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

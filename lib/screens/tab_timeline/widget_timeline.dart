@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/contact.dart';
 import 'package:forge/services/contacts_service.dart';
 import 'package:forge/services/links_service.dart';
-import 'package:hive/hive.dart';
-
 import '../../models/links_model.dart';
 import '../../utilities/constants.dart';
+
+
+///--------------------------------------------------------------
+/// Link Date Tile (single row for each date)
+///--------------------------------------------------------------
 
 class LinkDateTile extends StatefulWidget {
   LinkDateTile({Key? key, required this.date}) : super(key: key);
@@ -96,5 +98,39 @@ class _LinkDateTileState extends State<LinkDateTile> {
               ),
             ),
           );
+  }
+}
+
+
+///--------------------------------------------------------------
+/// Date Divider
+///--------------------------------------------------------------
+
+class DateDivider extends StatelessWidget {
+  const DateDivider({Key? key, required this.divText}) : super(key: key);
+
+  final String divText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 10, 20, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            divText,
+            style: const TextStyle(
+              color: Constants.kSecondaryColor,
+              fontSize: 14,
+            ),
+          ),
+          Expanded(child: Divider(
+            indent: 10,
+            color: Colors.grey.shade200,
+          ))
+        ],
+      ),
+    );
   }
 }

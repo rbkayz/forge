@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_contacts/properties/phone.dart';
 
 class Constants {
@@ -64,6 +65,17 @@ class Constants {
     PhoneLabel.workPager: 'workPager',
     PhoneLabel.other: 'other',
     PhoneLabel.custom: 'custom',
+  };
+
+
+  static const Map<EmailLabel, String> emailLabelToString = {
+    EmailLabel.home: 'home',
+    EmailLabel.iCloud: 'iCloud',
+    EmailLabel.mobile: 'mobile',
+    EmailLabel.school: 'school',
+    EmailLabel.work: 'work',
+    EmailLabel.other: 'other',
+    EmailLabel.custom: 'custom',
   };
 
 }

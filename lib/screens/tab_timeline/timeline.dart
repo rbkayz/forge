@@ -1,14 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/screens/tab_timeline/widget_timeline.dart';
-import 'package:forge/services/contacts_service.dart';
+import 'package:intl/intl.dart';
 import 'package:forge/services/links_service.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
 import '../../components/loader.dart';
-import '../../models/links_model.dart';
 import '../../utilities/constants.dart';
 
 class TimelinePage extends StatefulWidget {
@@ -19,8 +19,7 @@ class TimelinePage extends StatefulWidget {
 }
 
 class _TimelinePageState extends State<TimelinePage> {
-
-  List<ForgeDates> dates = [];
+  List<Map<String, dynamic>> dates = [];
   final linksBox = Hive.box(Constants.linksBox);
   late Contact currentContact;
   bool isLoaded = false;
@@ -43,26 +42,26 @@ class _TimelinePageState extends State<TimelinePage> {
     return ValueListenableBuilder(
         valueListenable: linksBox.listenable(),
         builder: (BuildContext context, Box value, Widget? child) {
-
           dates = LinkDateServices().sortAllDates(value.values);
 
           List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
           return (contacts == null || contacts.isEmpty)
+
               ? const Center(
                   child: ForgeSpinKitRipple(
                   size: 50,
                   color: Constants.kPrimaryColor,
                 ))
-              : ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: dates.length,
-                  itemBuilder: (context, index) {
-                    // currentContact = AllContactsProvider()
-                    //     .GetContactfromID(context, dates[index].linkid!);
 
-                    return LinkDateTile(date: dates[index]);
+
+              : GroupedListView<dynamic, DateTime>(
+                  elements: dates,
+                  groupBy: (element) => element['meetingDate'],
+                  itemBuilder: (context, element) {
+                    return LinkDateTile(date: LinkDateServices().getDateFromMap(value.values, element));
                   },
+                  groupSeparatorBuilder: (DateTime value) => DateDivider(divText: DateFormat('EEE, d MMM').format(value).toUpperCase()),
                 );
         });
   }
