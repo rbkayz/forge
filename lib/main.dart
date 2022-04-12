@@ -29,12 +29,14 @@ void main() async {
   */
 
   await Firebase.initializeApp();
-  runApp(MyApp());
+
+  runApp(ForgeApp());
 
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+class ForgeApp extends StatelessWidget {
+  ForgeApp({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
 
     return StreamProvider<User?>.value(
       value: FirebaseAuthService().currentUser,
-      initialData: null,
+      initialData: FirebaseAuthService().currentUserState(),
       child: MaterialApp(
         navigatorKey: NavigatorKeys.mainKey,
         debugShowCheckedModeBanner: false,

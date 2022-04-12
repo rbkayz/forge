@@ -112,8 +112,11 @@ Widget profileHeader(BuildContext context) {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
               ContactCircleAvatar(currentContact: currentContact,radius: 30,),
+
               const SizedBox(width: 10,),
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
@@ -137,9 +140,10 @@ Widget profileHeader(BuildContext context) {
 
                 ],
               ),
+
               const Expanded(child: SizedBox.shrink()),
               
-              const NextConnectDateWidget(),
+              NextConnectDateWidget(currentContact: currentContact,),
               
             ],
           ),
@@ -148,7 +152,7 @@ Widget profileHeader(BuildContext context) {
             height: 20,
           ),
 
-          LinkProgressBar(start: DateTime(2022,3,1), end: DateTime(2022,3,31)),
+          LinkProgressBar(),
 
           const SizedBox(
             height: 10,

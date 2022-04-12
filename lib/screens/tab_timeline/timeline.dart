@@ -50,7 +50,7 @@ class _TimelinePageState extends State<TimelinePage> {
 
               ? const Center(
                   child: ForgeSpinKitRipple(
-                  size: 50,
+                  size: 100,
                   color: Constants.kPrimaryColor,
                 ))
 

@@ -135,7 +135,6 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
                 FirebaseAuthService auth = FirebaseAuthService();
                 try {
                   await auth.signInWithGoogle();
-                  //Navigator.pushReplacementNamed(context, Constants.homeNavigate);
 
                 } catch (e) {
                   if (e is FirebaseAuthException) {

@@ -62,7 +62,7 @@ class LinkListView extends StatelessWidget {
     return (contacts == null || contacts.isEmpty)
         ? const Center(
             child: ForgeSpinKitRipple(
-            size: 50,
+            size: 100,
             color: Constants.kPrimaryColor,
           ))
         : ListView.separated(
@@ -176,7 +176,7 @@ class _LinkCardState extends State<LinkCard> {
                         ),
                       ),
                       const SizedBox(),
-                      const NextConnectDateWidget(),
+                      NextConnectDateWidget(currentContact: widget.currentContact,),
                     ],
                   ),
                 )),

@@ -35,6 +35,7 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final currentUser = Provider.of<User?>(context);
 
+
     /*
     Returns login screen if current user is null
      */
