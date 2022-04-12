@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import '../../services/links_service.dart';
 
 class LinksPage extends StatefulWidget {
   const LinksPage({Key? key}) : super(key: key);
@@ -84,8 +85,7 @@ class LinkListView extends StatelessWidget {
                       .single;
 
               return currentLink.isActive
-                  ? LinkCard(
-                      currentLink: currentLink, currentContact: currentContact)
+                  ? LinkCard(currentContact: currentContact)
                   : const SizedBox.shrink();
             },
           );
@@ -99,11 +99,9 @@ class LinkListView extends StatelessWidget {
 class LinkCard extends StatefulWidget {
   LinkCard({
     Key? key,
-    required this.currentLink,
     required this.currentContact,
   }) : super(key: key);
 
-  final ForgeLinks currentLink;
   Contact currentContact;
 
   @override
@@ -118,8 +116,12 @@ class _LinkCardState extends State<LinkCard> {
   @override
   Widget build(BuildContext context) {
 
-    DateTime? lastDate = widget.currentLink.linkDates.isEmpty ? DateTime.now() : widget.currentLink.linkDates.first.meetingDate;
-    String formatlastDate = DateFormat('dd-MMM-yyyy').format(lastDate!);
+    ForgeDates prevDate = LinkDateServices().getPrevDate(widget.currentContact.id);
+
+    //Get last connected date
+    String lastConnected = prevDate.linkid != null
+        ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
+        : 'No previous meetings available';
 
     return widget.currentContact.displayName == ''
         ? const SizedBox.shrink()
@@ -128,58 +130,56 @@ class _LinkCardState extends State<LinkCard> {
               Navigator.pushNamed(context, Constants.contactDetailNavigate,
                   arguments: widget.currentContact);
             },
-            child: Container(
-                //height: cardHeight,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Row(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ContactCircleAvatar(
+                          currentContact: widget.currentContact,
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ContactCircleAvatar(
-                              currentContact: widget.currentContact,
+                            Text(
+                              widget.currentContact.displayName,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Constants.kBlackColor,
+                                  fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(
-                              width: 8,
+                              height: 3,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.currentContact.displayName,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Constants.kBlackColor,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  height: 3,
-                                ),
-                                Text(
-                                  'Last connected on ${formatlastDate}',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Constants.kSecondaryColor),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                const LinksTag(),
-                              ],
+                            Text(
+                              lastConnected,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Constants.kSecondaryColor),
                             ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            const LinksTag(),
                           ],
                         ),
-                      ),
-                      const SizedBox(),
-                      NextConnectDateWidget(currentContact: widget.currentContact,),
-                    ],
+                      ],
+                    ),
                   ),
-                )),
+                  const SizedBox(),
+                  NextConnectDateWidget(currentContact: widget.currentContact,),
+                ],
+              ),
+            ),
           );
   }
 }

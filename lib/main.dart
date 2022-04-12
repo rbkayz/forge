@@ -35,7 +35,7 @@ void main() async {
 }
 
 class ForgeApp extends StatelessWidget {
-  ForgeApp({Key? key}) : super(key: key);
+  const ForgeApp({Key? key}) : super(key: key);
 
 
   @override

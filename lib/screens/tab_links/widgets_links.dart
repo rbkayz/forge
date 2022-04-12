@@ -99,14 +99,17 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
   Widget build(BuildContext context) {
 
     Contact currentContact = Provider.of<Contact>(context);
-    ForgeDates prevDate = LinkDateServices().getNextDate(currentContact.id);
+    ForgeDates prevDate = LinkDateServices().getPrevDate(currentContact.id);
+    ForgeDates nextDate = LinkDateServices().getNextDate(currentContact.id);
 
 
     String first_row = prevDate.linkid != null
         ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
-        : 'No previous meetings available';
+        : 'No previous connects available';
 
-
+    String third_row = nextDate.linkid != null ?
+        'Next connect is in ${nextDate.meetingDate!.difference(DateTime.now()).inDays} days'
+        : 'No connects scheduled';
 
     return Row(
       children: [
@@ -116,16 +119,16 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
             children: [
               LinkHeaderRowWidget(icon: Icons.event_outlined, text: first_row),
 
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-              LinkHeaderRowWidget(
+              const LinkHeaderRowWidget(
                   icon: Icons.repeat, text: 'Repeats every 3 months'),
 
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               LinkHeaderRowWidget(
                   icon: Icons.upcoming_outlined,
-                  text: 'Next connect in 20 days'),
+                  text: third_row),
             ],
           ),
         ),

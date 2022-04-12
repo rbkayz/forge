@@ -75,9 +75,9 @@ class _ContactDetailState extends State<ContactDetail> {
                     labelColor: Constants.kPrimaryColor,
                       unselectedLabelColor: Constants.kSecondaryColor,
                       tabs: [
-                        Tab(text: 'Info'),
-                        Tab(text: 'History'),
-                        Tab(text: 'Notes'),
+                        Tab(text: 'INFO'),
+                        Tab(text: 'TIMELINE'),
+                        Tab(text: 'NOTES'),
                       ]),
                   Expanded(
                     child: TabBarView(children: [

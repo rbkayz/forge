@@ -95,28 +95,47 @@ class LinkDateServices {
   }
 
   ///--------------------------------------------------------------
+  /// Does a link exist
+  ///--------------------------------------------------------------
+
+  bool doesLinkExist(String id) {
+    Iterable<ForgeLinks> foundLink = linksBox.values
+        .cast<ForgeLinks>()
+        .where((element) => element.id == id);
+
+    return (foundLink.isNotEmpty);
+  }
+
+  ///--------------------------------------------------------------
   /// Get Next date that isn't complete
   ///--------------------------------------------------------------
 
   ForgeDates getNextDate(String id) {
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
+    bool linkExists = LinkDateServices().doesLinkExist(id);
 
-    List<ForgeDates> nextDateList = currentLink.linkDates
-        .where((element) =>
-            element.isComplete == false &&
-            element.meetingDate!
-                    .compareTo(DateUtils.dateOnly(DateTime.now())) >=
-                0)
-        .toList();
+    if (linkExists) {
+      ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
 
-    nextDateList.isNotEmpty
-        ? nextDateList.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
-        : null;
+      List<ForgeDates> nextDateList = currentLink.linkDates
+          .where((element) =>
+              element.isComplete == false &&
+              element.meetingDate!
+                      .compareTo(DateUtils.dateOnly(DateTime.now())) >=
+                  0)
+          .toList();
 
-    ForgeDates nextDate =
-        nextDateList.isNotEmpty ? nextDateList.first : ForgeDates();
+      nextDateList.isNotEmpty
+          ? nextDateList
+              .sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
+          : null;
 
-    return nextDate;
+      ForgeDates nextDate =
+          nextDateList.isNotEmpty ? nextDateList.first : ForgeDates();
+
+      return nextDate;
+    } else {
+      return ForgeDates();
+    }
   }
 
   ///--------------------------------------------------------------
@@ -124,25 +143,30 @@ class LinkDateServices {
   ///--------------------------------------------------------------
 
   ForgeDates getPrevDate(String id) {
+    bool linkExists = LinkDateServices().doesLinkExist(id);
 
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
+    if (linkExists) {
+      ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
 
-    List<ForgeDates> prevDateList = currentLink.linkDates
-        .where((element) =>
-            element.isComplete == true &&
-            element.meetingDate!
-                    .compareTo(DateUtils.dateOnly(DateTime.now())) <=
-                0)
-        .toList();
+      List<ForgeDates> prevDateList = currentLink.linkDates
+          .where((element) =>
+              element.isComplete == true &&
+              element.meetingDate!
+                      .compareTo(DateUtils.dateOnly(DateTime.now())) <=
+                  0)
+          .toList();
 
-    prevDateList.isNotEmpty
-        ? prevDateList.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
-        : null;
+      prevDateList.isNotEmpty
+          ? prevDateList
+              .sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
+          : null;
 
-    ForgeDates prevDate =
-        prevDateList.isNotEmpty ? prevDateList.last : ForgeDates();
+      ForgeDates prevDate =
+          prevDateList.isNotEmpty ? prevDateList.last : ForgeDates();
 
-    return prevDate;
+      return prevDate;
+    } else {
+      return ForgeDates();
+    }
   }
-
 }

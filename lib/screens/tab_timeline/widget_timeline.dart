@@ -77,7 +77,12 @@ class _LinkDateTileState extends State<LinkDateTile> {
                         children: [
                           Text(
                             currentContact.displayName,
-                            style: const TextStyle(
+                            style: widget.date.isComplete! ? const TextStyle(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              decoration: TextDecoration.lineThrough
+                            )
+                                : const TextStyle(
                               fontSize: 16,
                             ),
                           ),

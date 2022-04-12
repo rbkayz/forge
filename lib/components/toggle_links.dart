@@ -52,7 +52,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
       //Setting the linkDates to an empty list if it is null
       if (currentLink.linkDates.isEmpty) {
-        print('activated');
+
         currentLink.linkDates = [];
       }
 

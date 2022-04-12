@@ -56,6 +56,7 @@ class ContactInfoTab extends StatelessWidget {
             const InfoDivider(divText: 'CONTACT'),
 
             currentContact.phones.isEmpty ? SizedBox.shrink() : ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: currentContact.phones.isNotEmpty
                     ? currentContact.phones.length
@@ -91,6 +92,7 @@ class ContactInfoTab extends StatelessWidget {
             ///--------------------------------------------------------------
 
             currentContact.emails.isEmpty ? SizedBox.shrink() : ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: currentContact.emails.isNotEmpty
                   ? currentContact.emails.length
