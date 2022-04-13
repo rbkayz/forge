@@ -97,7 +97,9 @@ class WidgetEditTags extends StatelessWidget {
       minLeadingWidth: 30,
       leading: const Icon(Icons.tag),
       title: const Text('Tags'),
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, Constants.editTagsNavigate);
+      },
     );
   }
 }

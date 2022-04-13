@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:forge/models/tags_model.dart';
 import 'package:forge/utilities/themedata.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/standalone/splash.dart';
@@ -23,6 +24,8 @@ void main() async {
 
   Hive.registerAdapter(ForgeLinksAdapter());
   Hive.registerAdapter(ForgeDatesAdapter());
+  Hive.registerAdapter(ForgeTagsAdapter());
+  Hive.registerAdapter(LinkTagAdapter());
 
   /*
   Initialize firebase and run app;

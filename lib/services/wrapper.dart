@@ -30,6 +30,17 @@ class _WrapperState extends State<Wrapper> {
   is then available across the widget tree.
    */
 
+  Future<bool> openLinksBox () async {
+    await Hive.openBox(Constants.linksBox);
+    return true;
+  }
+
+  Future<bool> openPreferencesBox () async {
+    await Hive.openBox(Constants.tagsBox);
+    return true;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +64,10 @@ class _WrapperState extends State<Wrapper> {
         create: (context) => AllContactsServices().getAllContacts(),
         initialData: [],
         child: FutureBuilder(
-          future: Hive.openBox(Constants.linksBox),
+          future: Future.wait([openLinksBox(), openPreferencesBox()]),
 
           builder: (BuildContext context,
-              AsyncSnapshot<Box<dynamic>> snapshot) {
+              AsyncSnapshot<List<bool>> snapshot) {
 
             if (snapshot.connectionState == ConnectionState.done) {
 

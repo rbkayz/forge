@@ -31,8 +31,11 @@ class Constants {
   static const errorNavigate = '/error';
   static const allContactsNavigate = '/home/all-contacts';
   static const helpCenterNavigate = '/home/settings/help-center';
+  static const editTagsNavigate = 'home/settings/edit-tags';
 
+  //boxes
   static const linksBox = 'links';
+  static const tagsBox = 'tags';
 
   //statusBarColor
   static const statusBarColor = SystemUiOverlayStyle(

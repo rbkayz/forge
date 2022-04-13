@@ -6,6 +6,7 @@ import 'package:forge/screens/tab_links/contacts_screens/contact_header.dart';
 import 'package:forge/screens/standalone/login.dart';
 import 'package:forge/screens/home.dart';
 import 'package:forge/screens/tab_settings/help_center.dart';
+import 'package:forge/screens/tab_settings/widget_settings/edit_tags.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:forge/services/wrapper.dart';
@@ -55,6 +56,9 @@ class RouteGenerator {
 
       case Constants.helpCenterNavigate:
         return MaterialPageRoute(builder: (context) => const HelpCenter());
+
+      case Constants.editTagsNavigate:
+        return MaterialPageRoute(builder: (context) => TagsEditor());
 
       default:
         return MaterialPageRoute(
