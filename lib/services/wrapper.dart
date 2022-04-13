@@ -2,18 +2,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:forge/components/loader.dart';
 import 'package:forge/screens/standalone/error.dart';
 import 'package:forge/screens/standalone/login.dart';
 import 'package:forge/services/navigator_service.dart';
+import 'package:forge/utilities/bottom_navigation_items.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
+import '../components/appbar.dart';
+import '../components/bottom_navigation_bar.dart';
 import 'contacts_service.dart';
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({Key? key}) : super(key: key);
+  Wrapper({Key? key}) : super(key: key);
+
+  late Future boxFuture;
 
   @override
   State<Wrapper> createState() => _WrapperState();
@@ -30,6 +34,12 @@ class _WrapperState extends State<Wrapper> {
   is then available across the widget tree.
    */
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
   Future<bool> openLinksBox () async {
     await Hive.openBox(Constants.linksBox);
     return true;
@@ -41,12 +51,10 @@ class _WrapperState extends State<Wrapper> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
+
     final currentUser = Provider.of<User?>(context);
-
-
     /*
     Returns login screen if current user is null
      */
@@ -64,7 +72,7 @@ class _WrapperState extends State<Wrapper> {
         create: (context) => AllContactsServices().getAllContacts(),
         initialData: [],
         child: FutureBuilder(
-          future: Future.wait([openLinksBox(), openPreferencesBox()]),
+          future: Future.wait({openLinksBox(),openPreferencesBox()}),
 
           builder: (BuildContext context,
               AsyncSnapshot<List<bool>> snapshot) {
@@ -82,12 +90,19 @@ class _WrapperState extends State<Wrapper> {
             }
 
             else {
-              return const ForgeLoader();
+
+              return Scaffold(
+                appBar: const ForgeAppBar(showOptions: true,showSearch: true),
+                body: Container(),
+                bottomNavigationBar: ForgeBottomNavigationBar(currentTab: TabName.timeline, onSelectTab: (tab) {}),
+              );
             }
 
-          },
+         },
         ),
       );
     }
   }
+
+
 }

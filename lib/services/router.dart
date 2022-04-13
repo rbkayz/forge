@@ -19,7 +19,7 @@ class RouteGenerator {
   static Route<dynamic> generateRouteMain(RouteSettings settings) {
     switch (settings.name) {
       case Constants.wrapperNavigate:
-        return MaterialPageRoute(builder: (context) => const Wrapper());
+        return MaterialPageRoute(builder: (context) => Wrapper());
 
       case Constants.signInNavigate:
         return MaterialPageRoute(builder: (context) => const LoginScreen());

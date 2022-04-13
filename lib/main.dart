@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:forge/models/tags_model.dart';
+import 'package:forge/services/wrapper.dart';
 import 'package:forge/utilities/themedata.dart';
 import 'package:forge/models/links_model.dart';
-import 'package:forge/screens/standalone/splash.dart';
 import 'package:forge/services/auth.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +61,7 @@ class ForgeApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Forge',
         theme: ForgeTheme.lightTheme,
-        home: const ForgeSplash(),
+        home: Wrapper(),
         onGenerateRoute: RouteGenerator.generateRouteMain,
       ),
     );
