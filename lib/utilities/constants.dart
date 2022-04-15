@@ -84,6 +84,10 @@ class Constants {
 }
 
 
+///--------------------------------------------------------------
+/// Forge Palette
+///--------------------------------------------------------------
+
 class Palette {
   static const MaterialColor forgePurple = MaterialColor(
     forgePurplePrimaryValue, // 0% comes in here, this will be color picked if no shade is selected when defining a Color property which doesn’t require a swatch.
@@ -112,3 +116,26 @@ class Months {
   ];
 }
 
+
+///--------------------------------------------------------------
+///
+///--------------------------------------------------------------
+
+List<Color> tagColors = [
+  Colors.red.shade200,
+  Colors.pink.shade200,
+  Colors.purple.shade200,
+  Colors.deepPurple.shade200,
+  Colors.indigo.shade200,
+  Colors.blue.shade200,
+  Colors.cyan.shade200,
+  Colors.teal.shade200,
+  Colors.green.shade200,
+  Colors.lightGreen.shade200,
+  Colors.lime.shade200,
+  Colors.amber.shade200,
+  Colors.orange.shade200,
+  Colors.deepOrange.shade200,
+  Colors.brown.shade200,
+  Colors.blueGrey.shade200,
+];

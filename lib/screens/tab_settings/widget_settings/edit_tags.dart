@@ -20,6 +20,7 @@ class _TagsEditorState extends State<TagsEditor> {
   late List<LinkTag> tagsList;
   late LinkTag? newTag;
 
+
   ///--------------------------------------------------------------
   /// Build method
   ///--------------------------------------------------------------
@@ -111,6 +112,7 @@ class _TagsEditorState extends State<TagsEditor> {
                           newTag = LinkTag();
 
                           bool? toDelete = await showDialog(context: context, builder: (context) {
+
                             return AlertDialog(
                               title: const Text('Confirm Deletion', style: TextStyle(color: Constants.kBlackColor),),
                               content: const Text('Deleting this tag cannot be reversed. Are you sure you want to continue?'),
@@ -119,6 +121,7 @@ class _TagsEditorState extends State<TagsEditor> {
                                 TextButton(onPressed: () {Navigator.pop(context, true);}, child: Text('Delete', style: TextStyle(color: Constants.kErrorColor),)),
                               ],
                             );
+
                           }
                           );
 
@@ -182,70 +185,95 @@ class WidgetTagDialog extends StatefulWidget {
 class _WidgetTagDialogState extends State<WidgetTagDialog> {
 
   final tagController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            children: [
-
-              WidgetTagNameTextField(initialText: widget.initialTag?.tagName, tagController: tagController),
-
-              BlockPicker(
-                pickerColor: Color(widget.initialTag?.tagColor ?? 0xfff44336),
-                onColorChanged: (newColor) {
-                  widget.newColorValue = newColor;
-                },
-                itemBuilder: pickerItemBuilder,
-              ),
-
-              Row(
+      child: Container(
+        margin: EdgeInsets.fromLTRB(0, 32, 0, 0),
+        child: Dialog(
+          alignment: Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
                 children: [
 
-                  //Cancel Button
-                  Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: OutlinedButton(
-                            onPressed: () {
+                  //Get name field
+                  WidgetTagNameTextField(initialTag: widget.initialTag, tagController: tagController),
 
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel'),
-                            style: OutlinedButton.styleFrom(primary: Constants.kPrimaryColor,backgroundColor: Constants.kWhiteColor)
-                        ),
-                      )
+                  //Get color picker
+                  BlockPicker(
+                    pickerColor: Color(widget.initialTag?.tagColor ?? Colors.red.shade200.value),
+                    availableColors: tagColors,
+                    onColorChanged: (newColor) {
+                      widget.newColorValue = newColor;
+                    },
+                    itemBuilder: pickerItemBuilder,
+                    layoutBuilder: layoutBuilder,
                   ),
 
-                  //Done button
-                  Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: OutlinedButton(
-                          onPressed: () {
 
-                            widget.newTag.tagName = tagController.text;
-                            widget.newTag.tagColor = widget.newColorValue?.value ?? widget.initialTag?.tagColor ?? 0xfff44336;
-                            widget.newTag.tagID = widget.initialTag?.tagID ?? widget.newTag.hashCode;
+                  Row(
+                    children: [
 
-                            Navigator.pop(context, widget.newTag);
-                          },
-                          child: const Text('Done'),
-                          style: OutlinedButton.styleFrom(primary: Constants.kWhiteColor,backgroundColor: Constants.kPrimaryColor),
-                        ),
-                      ))
+                      //Cancel Button
+                      Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: OutlinedButton(
+                                onPressed: () {
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                                style: OutlinedButton.styleFrom(primary: Constants.kPrimaryColor,backgroundColor: Constants.kWhiteColor)
+                            ),
+                          )
+                      ),
+
+
+                      //Done button
+                      Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: OutlinedButton(
+                              onPressed: () {
+
+                                if(_formKey.currentState!.validate()) {
+                                  widget.newTag.tagName = tagController.text;
+
+                                  widget.newTag.tagColor =
+                                      widget.newColorValue?.value ??
+                                          widget.initialTag?.tagColor ??
+                                          Colors.red.shade200.value;
+                                  widget.newTag.tagID =
+                                      widget.initialTag?.tagID ??
+                                          widget.newTag.hashCode;
+
+                                  Navigator.pop(context, widget.newTag);
+                                }
+                              },
+                              child: const Text('Done'),
+                              style: OutlinedButton.styleFrom(primary: Constants.kWhiteColor,backgroundColor: Constants.kPrimaryColor),
+                            ),
+                          ))
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
+
+          elevation: 20,
+
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+
+          backgroundColor: Constants.kWhiteColor,
         ),
-        elevation: 20,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20))),
-        backgroundColor: Constants.kWhiteColor,
       ),
     );
   }
@@ -259,10 +287,10 @@ class _WidgetTagDialogState extends State<WidgetTagDialog> {
 
 class WidgetTagNameTextField extends StatefulWidget {
   WidgetTagNameTextField({
-    Key? key, this.initialText, required this.tagController
+    Key? key, this.initialTag, required this.tagController
   }) : super(key: key);
 
-  final String? initialText;
+  final LinkTag? initialTag;
   final TextEditingController tagController;
 
   @override
@@ -273,19 +301,39 @@ class WidgetTagNameTextField extends StatefulWidget {
 class _WidgetTagNameTextFieldState extends State<WidgetTagNameTextField> {
 
 
+  String? tagvalidator(text) {
+
+      if (text == null || text.isEmpty) {
+        return 'Tag name cannot be blank';
+      }
+      
+      Box tagsBox = Hive.box(Constants.tagsBox);
+      List<LinkTag> tagsList = tagsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+      
+      if (tagsList.where((element) => element.tagName == text).isNotEmpty && widget.initialTag?.tagName != text) {
+        return 'Tag name already exists';
+      }
+      
+      return null;
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
 
-   widget.tagController.text = widget.initialText?.toUpperCase() ?? '';
+   widget.tagController.text = widget.initialTag?.tagName?.toUpperCase() ?? '';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: TextField(
+      child: TextFormField(
+        validator: tagvalidator,
         textCapitalization: TextCapitalization.characters,
         controller: widget.tagController,
         inputFormatters: [UpperCaseTextFormatter()],
         maxLength: 12,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Enter the tag name',
           hintText: 'e.g. WORK or SCHOOL',
@@ -364,4 +412,25 @@ Color colorModifier (Color color) {
 
   return modColor;
 
+}
+
+///--------------------------------------------------------------
+/// Widget Layout Builder
+///--------------------------------------------------------------
+
+
+Widget layoutBuilder(
+    BuildContext context, List<Color> colors, PickerItem child) {
+  Orientation orientation = MediaQuery.of(context).orientation;
+
+  return SizedBox(
+    width: 300,
+    height: orientation == Orientation.portrait ? 300 : 200,
+    child: GridView.count(
+      crossAxisCount: orientation == Orientation.portrait ? 4 : 6,
+      crossAxisSpacing: 5,
+      mainAxisSpacing: 5,
+      children: [for (Color color in colors) child(color)],
+    ),
+  );
 }
