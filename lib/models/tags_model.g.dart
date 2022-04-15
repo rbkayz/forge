@@ -53,17 +53,19 @@ class LinkTagAdapter extends TypeAdapter<LinkTag> {
     return LinkTag(
       tagName: fields[0] as String?,
       tagColor: fields[1] as int?,
-    );
+    )..tagID = fields[2] as int?;
   }
 
   @override
   void write(BinaryWriter writer, LinkTag obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.tagName)
       ..writeByte(1)
-      ..write(obj.tagColor);
+      ..write(obj.tagColor)
+      ..writeByte(2)
+      ..write(obj.tagID);
   }
 
   @override

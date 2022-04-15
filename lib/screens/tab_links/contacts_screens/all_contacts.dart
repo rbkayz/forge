@@ -39,11 +39,9 @@ class _AllContactsState extends State<AllContacts> {
           ))
         : Scaffold(
             appBar: const ForgeAppBar(title: 'Add / remove links', showSearch: true,),
-            body: Container(
-                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                child: ContactListBuilder(
-                  contacts: contacts,
-                )),
+            body: ContactListBuilder(
+              contacts: contacts,
+            ),
           );
   }
 }
@@ -79,6 +77,7 @@ class _ContactListBuilderState extends State<ContactListBuilder> {
           },
           child: ListTile(
             leading: ContactCircleAvatar(currentContact: currentContact,),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
             title: Text(currentContact.displayName),
             subtitle: Text(currentContactPhone),
             trailing: ToggleLinks(

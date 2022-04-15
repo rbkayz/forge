@@ -23,6 +23,7 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       title: (title == null) ? const AppBarForgeLogo() : AppBarTitle(title: title!),
+      leading: (title == null) ? null : const AppBarBackButton(),
       leadingWidth: (title == null) ? 56 : 45,
       actions: <Widget>[
         showSearch ? AppBarSearch(contacts: contacts) : const NullAction(),
@@ -86,6 +87,7 @@ class AppBarBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      padding: EdgeInsets.symmetric(horizontal: 20),
       icon: const Icon(
         Icons.arrow_back_ios,
         size: 20,

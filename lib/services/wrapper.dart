@@ -96,6 +96,7 @@ class _WrapperState extends State<Wrapper> {
                 body: Container(),
                 bottomNavigationBar: ForgeBottomNavigationBar(currentTab: TabName.timeline, onSelectTab: (tab) {}),
               );
+
             }
 
          },

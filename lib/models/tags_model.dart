@@ -17,7 +17,7 @@ class ForgeTags extends HiveObject {
 @HiveType(typeId: 3)
 class LinkTag extends HiveObject {
 
-  LinkTag({this.tagName, this.tagColor});
+  LinkTag({this.tagName, this.tagColor, this.tagID});
 
   @HiveField(0)
   String? tagName;
@@ -25,10 +25,14 @@ class LinkTag extends HiveObject {
   @HiveField(1)
   int? tagColor;
 
+  @HiveField(2)
+  int? tagID;
+
   Map<String, dynamic> toMap(){
     return {
       "tagName": tagName,
       "tagColor": tagColor,
+      "tagID": tagID,
     };
   }
 
