@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
 
+import '../../../services/contacts_service.dart';
+
 class ContactInfoTab extends StatelessWidget {
   ContactInfoTab({Key? key}) : super(key: key);
 
@@ -43,7 +45,8 @@ class ContactInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Contact currentContact = Provider.of<Contact>(context);
+    String currentID = Provider.of<String>(context);
+    Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
 
     return SingleChildScrollView(
       child: Column(

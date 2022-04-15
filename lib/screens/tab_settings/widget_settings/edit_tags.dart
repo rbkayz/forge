@@ -55,18 +55,10 @@ class _TagsEditorState extends State<TagsEditor> {
                         : Color(currentTag.tagColor!) ,
                   ),
 
-                  title: Row(children: [
+                  title: Row(
+                      children: [
 
-                    DecoratedBox(
-                      decoration: BoxDecoration(color: Color(currentTag.tagColor!), borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
-                        child: Text('${currentTag.tagName?.toUpperCase()}',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: useWhiteForeground(Color(currentTag.tagColor!)) ? Colors.white : Colors.black)),
-                      ),
-                    ),
+                    WidgetTagTile(currentTag: currentTag),
                   ]),
 
                   trailing: Row(
@@ -160,6 +152,33 @@ class _TagsEditorState extends State<TagsEditor> {
         child: const Icon(Icons.add),
       ),
 
+    );
+  }
+}
+
+///--------------------------------------------------------------
+/// Tag Tile for each widget
+///--------------------------------------------------------------
+
+class WidgetTagTile extends StatelessWidget {
+  const WidgetTagTile({
+    Key? key,
+    required this.currentTag,
+  }) : super(key: key);
+
+  final LinkTag currentTag;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(color: Color(currentTag.tagColor ?? Constants.kSecondaryColor.value), borderRadius: BorderRadius.circular(5)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
+        child: Text('${currentTag.tagName?.toUpperCase()}',
+            style: TextStyle(
+                fontSize: 14,
+                color: useWhiteForeground(Color(currentTag.tagColor ?? Constants.kSecondaryColor.value)) ? Colors.white : Colors.black)),
+      ),
     );
   }
 }

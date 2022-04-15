@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/tags_model.dart';
@@ -9,6 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/links_model.dart';
+import '../../services/contacts_service.dart';
+import '../standalone/dialog_tags.dart';
 
 ///--------------------------------------------------------------
 /// Links tag
@@ -33,17 +37,25 @@ class WidgetTag extends StatelessWidget {
       currentTag = tagsList[tagsList.indexWhere((element) => element.tagID == currentTagID)];
     }
 
-    return Container(
-      padding: const EdgeInsets.all(3),
-      child: Text(
-        '# ${currentTag.tagName?.toUpperCase()}',
-        style: const TextStyle(fontSize: 12, color: Constants.kBlackColor),
-      ),
-      decoration: BoxDecoration(
-        color: Color(currentTag.tagColor!),
+    return Material(
+      color: Color(currentTag.tagColor!),
+      child: InkWell(
+        onTap: () {
+
+          showDialog(context: context, builder: (context) => DialogTagSelector(currentID: id,));
+
+        },
         borderRadius: BorderRadius.circular(5),
+        child: Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Text(
+            '# ${currentTag.tagName?.toUpperCase()}',
+            style: const TextStyle(fontSize: 12, color: Constants.kBlackColor),
+          ),
+        ),
       ),
     );
+
   }
 }
 
@@ -114,7 +126,8 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
   @override
   Widget build(BuildContext context) {
 
-    Contact currentContact = Provider.of<Contact>(context);
+    String currentID = Provider.of<String>(context);
+    Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
     ForgeDates prevDate = LinkDateServices().getPrevDate(currentContact.id);
     ForgeDates nextDate = LinkDateServices().getNextDate(currentContact.id);
 
@@ -153,6 +166,12 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
   }
 }
 
+
+///--------------------------------------------------------------
+/// Link header row (three rows)
+///--------------------------------------------------------------
+
+
 class LinkHeaderRowWidget extends StatelessWidget {
   const LinkHeaderRowWidget({
     Key? key,
@@ -182,5 +201,59 @@ class LinkHeaderRowWidget extends StatelessWidget {
             )),
       ],
     );
+  }
+}
+
+
+///--------------------------------------------------------------
+/// Get two initials of the name. If not return a -
+///--------------------------------------------------------------
+
+String getInitials(List<String> nameParts) {
+  try {
+    if (nameParts.length > 1) {
+      return nameParts[0].characters.first.toUpperCase() +
+          nameParts[1].characters.first.toUpperCase();
+    } else if (nameParts.length == 1) {
+      return nameParts[0].characters.first.toUpperCase();
+    } else {
+      return '-';
+    }
+  } on Exception catch (e) {
+    print(e.toString());
+    return '-';
+  }
+}
+
+///--------------------------------------------------------------
+/// Builds the circle avatar for the contact
+///--------------------------------------------------------------
+
+
+class ContactCircleAvatar extends StatefulWidget {
+  const ContactCircleAvatar(
+      {Key? key, required this.currentContact, this.radius = 20})
+      : super(key: key);
+
+  final Contact currentContact;
+  final double? radius;
+
+  @override
+  _ContactCircleAvatarState createState() => _ContactCircleAvatarState();
+}
+
+class _ContactCircleAvatarState extends State<ContactCircleAvatar> {
+  @override
+  Widget build(BuildContext context) {
+    Uint8List? currentContactImage = widget.currentContact.photoOrThumbnail;
+    List<String> nameParts = widget.currentContact.displayName.split(" ");
+    String initials = getInitials(nameParts);
+
+    return (currentContactImage == null)
+        ? CircleAvatar(
+      child: Text(initials),
+      radius: widget.radius,
+    )
+        : CircleAvatar(backgroundImage: MemoryImage(currentContactImage));
   }
 }

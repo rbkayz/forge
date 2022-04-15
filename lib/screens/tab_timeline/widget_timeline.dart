@@ -32,7 +32,7 @@ class _LinkDateTileState extends State<LinkDateTile> {
         : GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, Constants.contactDetailNavigate,
-                  arguments: currentContact);
+                  arguments: currentContact.id);
             },
             child: Container(
               padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),

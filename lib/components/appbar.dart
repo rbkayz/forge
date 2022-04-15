@@ -6,6 +6,8 @@ import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
+import '../services/contacts_service.dart';
+
 class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ForgeAppBar({Key? key, this.title, this.showSearch = false, this.showOptions = false}) : super(key: key);
 
@@ -50,7 +52,8 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
 
-    Contact currentContact = Provider.of<Contact>(context);
+    String currentID = Provider.of<String>(context);
+    Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
 
     return AppBar(
       leading: const AppBarBackButton(),

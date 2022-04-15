@@ -3,10 +3,11 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/components/toggle_links.dart';
-import 'package:forge/screens/tab_links/contacts_screens/widget_contacts.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets_links.dart';
 
 class AllContactsPage extends StatelessWidget {
   const AllContactsPage({Key? key}) : super(key: key);
@@ -73,7 +74,7 @@ class _ContactListBuilderState extends State<ContactListBuilder> {
         return GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, Constants.contactDetailNavigate,
-                    arguments: currentContact).then((value) => setState(() {}));
+                    arguments: currentContact.id).then((value) => setState(() {}));
           },
           child: ListTile(
             leading: ContactCircleAvatar(currentContact: currentContact,),

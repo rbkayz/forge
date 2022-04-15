@@ -49,10 +49,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const AllContactsPage());
 
       case Constants.contactDetailNavigate:
-        var currentContact = settings.arguments as Contact;
+        var currentID = settings.arguments as String;
         return MaterialPageRoute(
             builder: (context) =>
-                ContactDetail(currentContact: currentContact));
+                ContactDetail(currentID: currentID));
 
       case Constants.helpCenterNavigate:
         return MaterialPageRoute(builder: (context) => const HelpCenter());

@@ -5,16 +5,16 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_body_history.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_body_notes.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
-import 'package:forge/screens/tab_links/contacts_screens/widget_contacts.dart';
+import 'package:forge/services/contacts_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 import 'contact_body_info.dart';
 
 class ContactDetail extends StatefulWidget {
 
-  const ContactDetail({Key? key, required this.currentContact}) : super(key: key);
+  const ContactDetail({Key? key, required this.currentID}) : super(key: key);
 
-  final Contact currentContact;
+  final String currentID;
 
   @override
   State<ContactDetail> createState() => _ContactDetailState();
@@ -51,9 +51,11 @@ class _ContactDetailState extends State<ContactDetail> {
 
 
     return Provider(
-      create: (BuildContext context) => widget.currentContact,
+      create: (BuildContext context) => widget.currentID,
       child: Scaffold(
+
         appBar: ContactAppBar(isScrolled: _isScrolled),
+
         body: DefaultTabController(
             length: 3,
             child: NestedScrollView(
@@ -69,8 +71,10 @@ class _ContactDetailState extends State<ContactDetail> {
                   ),
                 ];
               },
+
               body: Column(
                 children: <Widget>[
+
                   const TabBar(
                     labelColor: Constants.kPrimaryColor,
                       unselectedLabelColor: Constants.kSecondaryColor,
@@ -79,6 +83,7 @@ class _ContactDetailState extends State<ContactDetail> {
                         Tab(text: 'TIMELINE'),
                         Tab(text: 'NOTES'),
                       ]),
+
                   Expanded(
                     child: TabBarView(children: [
                       ContactInfoTab(),
@@ -99,7 +104,8 @@ class _ContactDetailState extends State<ContactDetail> {
 
 Widget profileHeader(BuildContext context) {
 
-  Contact currentContact = Provider.of<Contact>(context);
+  String currentID = Provider.of<String>(context);
+  Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
 
   return Container(
     width: double.infinity,
@@ -136,14 +142,14 @@ Widget profileHeader(BuildContext context) {
                     height: 7,
                   ),
 
-                  WidgetTag(id: currentContact.id,),
+                  WidgetTag(id: currentID,),
 
                 ],
               ),
 
               const Expanded(child: SizedBox.shrink()),
               
-              NextConnectDateWidget(id: currentContact.id,),
+              NextConnectDateWidget(id: currentID,),
               
             ],
           ),

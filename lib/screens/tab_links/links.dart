@@ -4,13 +4,13 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
-import 'package:forge/screens/tab_links/contacts_screens/widget_contacts.dart';
 import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import '../../services/contacts_service.dart';
 import '../../services/links_service.dart';
 
 class LinksPage extends StatefulWidget {
@@ -86,7 +86,7 @@ class LinkListView extends StatelessWidget {
                       .single;
 
               return currentLink.isActive
-                  ? LinkCard(currentContact: currentContact)
+                  ? LinkCard(currentID: currentContact.id)
                   : const SizedBox.shrink();
             },
           );
@@ -100,10 +100,10 @@ class LinkListView extends StatelessWidget {
 class LinkCard extends StatefulWidget {
   LinkCard({
     Key? key,
-    required this.currentContact,
+    required this.currentID,
   }) : super(key: key);
 
-  Contact currentContact;
+  String currentID;
 
   @override
   State<LinkCard> createState() => _LinkCardState();
@@ -117,19 +117,20 @@ class _LinkCardState extends State<LinkCard> {
   @override
   Widget build(BuildContext context) {
 
-    ForgeDates prevDate = LinkDateServices().getPrevDate(widget.currentContact.id);
+    ForgeDates prevDate = LinkDateServices().getPrevDate(widget.currentID);
+    Contact currentContact = AllContactsServices().getContactfromID(context, widget.currentID);
 
     //Get last connected date
     String lastConnected = prevDate.linkid != null
         ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
         : 'No previous meetings available';
 
-    return widget.currentContact.displayName == ''
+    return currentContact.displayName == ''
         ? const SizedBox.shrink()
         : GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, Constants.contactDetailNavigate,
-                  arguments: widget.currentContact);
+                  arguments: widget.currentID);
             },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
@@ -142,7 +143,7 @@ class _LinkCardState extends State<LinkCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ContactCircleAvatar(
-                          currentContact: widget.currentContact,
+                          currentContact: currentContact,
                         ),
                         const SizedBox(
                           width: 8,
@@ -151,7 +152,7 @@ class _LinkCardState extends State<LinkCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.currentContact.displayName,
+                              currentContact.displayName,
                               style: const TextStyle(
                                   fontSize: 16,
                                   color: Constants.kBlackColor,
@@ -170,14 +171,14 @@ class _LinkCardState extends State<LinkCard> {
                             const SizedBox(
                               height: 6,
                             ),
-                            WidgetTag(id: widget.currentContact.id,),
+                            WidgetTag(id: currentContact.id,),
                           ],
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(),
-                  NextConnectDateWidget(id: widget.currentContact.id,),
+                  NextConnectDateWidget(id: currentContact.id,),
                 ],
               ),
             ),
