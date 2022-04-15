@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
+import 'package:forge/models/tags_model.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:forge/utilities/widget_styles.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -12,19 +14,33 @@ import '../../models/links_model.dart';
 /// Links tag
 ///--------------------------------------------------------------
 
-class LinksTag extends StatelessWidget {
-  const LinksTag({Key? key}) : super(key: key);
+class WidgetTag extends StatelessWidget {
+  WidgetTag({Key? key, required this.id}) : super(key: key);
+
+  final String id;
+  LinkTag currentTag = LinkTag(tagName: 'NO TAG', tagColor: Colors.grey.shade100.value);
 
   @override
   Widget build(BuildContext context) {
+
+    ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
+
+    int? currentTagID = currentLink.tagID;
+
+    if (currentTagID != null) {
+      Box tagsBox = Hive.box(Constants.tagsBox);
+      List<LinkTag> tagsList = tagsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+      currentTag = tagsList[tagsList.indexWhere((element) => element.tagID == currentTagID)];
+    }
+
     return Container(
       padding: const EdgeInsets.all(3),
-      child: const Text(
-        '# PLACEHOLDER',
-        style: TextStyle(fontSize: 12, color: Constants.kBlackColor),
+      child: Text(
+        '# ${currentTag.tagName?.toUpperCase()}',
+        style: const TextStyle(fontSize: 12, color: Constants.kBlackColor),
       ),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Color(currentTag.tagColor!),
         borderRadius: BorderRadius.circular(5),
       ),
     );
@@ -36,15 +52,15 @@ class LinksTag extends StatelessWidget {
 ///--------------------------------------------------------------
 
 class NextConnectDateWidget extends StatelessWidget {
-  const NextConnectDateWidget({Key? key, required this.currentContact})
+  const NextConnectDateWidget({Key? key, required this.id})
       : super(key: key);
 
-  final Contact currentContact;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
 
-    ForgeDates nextDate = LinkDateServices().getNextDate(currentContact.id);
+    ForgeDates nextDate = LinkDateServices().getNextDate(id);
 
     return Stack(children: <Widget>[
       Container(

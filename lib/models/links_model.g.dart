@@ -21,13 +21,13 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
       displayName: fields[1] as String,
       isActive: fields[2] as bool,
       linkDates: (fields[3] as List).cast<ForgeDates>(),
-    );
+    )..tagID = fields[4] as int?;
   }
 
   @override
   void write(BinaryWriter writer, ForgeLinks obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +35,9 @@ class ForgeLinksAdapter extends TypeAdapter<ForgeLinks> {
       ..writeByte(2)
       ..write(obj.isActive)
       ..writeByte(3)
-      ..write(obj.linkDates);
+      ..write(obj.linkDates)
+      ..writeByte(4)
+      ..write(obj.tagID);
   }
 
   @override

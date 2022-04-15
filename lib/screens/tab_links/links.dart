@@ -76,6 +76,7 @@ class LinkListView extends StatelessWidget {
             shrinkWrap: true,
             itemCount: linksValues.length,
             itemBuilder: (context, index) {
+
               ForgeLinks currentLink = linksValues.elementAt(index);
 
               Contact? currentContact = (contacts.isEmpty)
@@ -169,14 +170,14 @@ class _LinkCardState extends State<LinkCard> {
                             const SizedBox(
                               height: 6,
                             ),
-                            const LinksTag(),
+                            WidgetTag(id: widget.currentContact.id,),
                           ],
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(),
-                  NextConnectDateWidget(currentContact: widget.currentContact,),
+                  NextConnectDateWidget(id: widget.currentContact.id,),
                 ],
               ),
             ),

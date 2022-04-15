@@ -136,14 +136,14 @@ Widget profileHeader(BuildContext context) {
                     height: 7,
                   ),
 
-                  const LinksTag(),
+                  WidgetTag(id: currentContact.id,),
 
                 ],
               ),
 
               const Expanded(child: SizedBox.shrink()),
               
-              NextConnectDateWidget(currentContact: currentContact,),
+              NextConnectDateWidget(id: currentContact.id,),
               
             ],
           ),

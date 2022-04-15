@@ -19,6 +19,9 @@ class ForgeLinks extends HiveObject {
   @HiveField(3)
   List<ForgeDates> linkDates;
 
+  @HiveField(4)
+  int? tagID;
+
   String get linkKey {
     return id;
   }

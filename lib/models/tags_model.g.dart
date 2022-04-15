@@ -53,7 +53,8 @@ class LinkTagAdapter extends TypeAdapter<LinkTag> {
     return LinkTag(
       tagName: fields[0] as String?,
       tagColor: fields[1] as int?,
-    )..tagID = fields[2] as int?;
+      tagID: fields[2] as int?,
+    );
   }
 
   @override
