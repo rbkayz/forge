@@ -122,20 +122,22 @@ class Months {
 ///--------------------------------------------------------------
 
 List<Color> tagColors = [
-  Colors.red.shade200,
-  Colors.pink.shade200,
-  Colors.purple.shade200,
-  Colors.deepPurple.shade200,
-  Colors.indigo.shade200,
-  Colors.blue.shade200,
-  Colors.cyan.shade200,
-  Colors.teal.shade200,
-  Colors.green.shade200,
-  Colors.lightGreen.shade200,
-  Colors.lime.shade200,
-  Colors.amber.shade200,
-  Colors.orange.shade200,
-  Colors.deepOrange.shade200,
-  Colors.brown.shade200,
-  Colors.blueGrey.shade200,
+  Color(Colors.red.shade100.value),
+Color(Colors.pink.shade100.value),
+Color(Colors.purple.shade100.value),
+Color(Colors.deepPurple.shade100.value),
+Color(Colors.indigo.shade100.value),
+Color(Colors.blue.shade100.value),
+Color(Colors.cyan.shade100.value),
+Color(Colors.teal.shade100.value),
+Color(Colors.green.shade100.value),
+Color(Colors.lightGreen.shade100.value),
+Color(Colors.lime.shade100.value),
+Color(Colors.amber.shade100.value),
+Color(Colors.orange.shade100.value),
+Color(Colors.deepOrange.shade100.value),
+Color(Colors.brown.shade100.value),
+  Color(Colors.blueGrey.shade100.value),
 ];
+
+

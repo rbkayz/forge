@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/tags_model.dart';
@@ -42,7 +43,15 @@ class WidgetTag extends StatelessWidget {
       child: InkWell(
         onTap: () {
 
-          showDialog(context: context, builder: (context) => DialogTagSelector(currentID: id,));
+          showModalBottomSheet(
+              context: context,
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.9) ,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
+              elevation: 20,
+              builder: (context) {
+                return DialogTagSelector(currentID: id);
+              }
+          );
 
         },
         borderRadius: BorderRadius.circular(5),

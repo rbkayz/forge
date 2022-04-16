@@ -225,7 +225,7 @@ class _WidgetTagDialogState extends State<WidgetTagDialog> {
 
                   //Get color picker
                   BlockPicker(
-                    pickerColor: Color(widget.initialTag?.tagColor ?? Colors.red.shade200.value),
+                    pickerColor: Color(widget.initialTag?.tagColor ?? Colors.red.shade100.value),
                     availableColors: tagColors,
                     onColorChanged: (newColor) {
                       widget.newColorValue = newColor;
@@ -267,7 +267,7 @@ class _WidgetTagDialogState extends State<WidgetTagDialog> {
                                   widget.newTag.tagColor =
                                       widget.newColorValue?.value ??
                                           widget.initialTag?.tagColor ??
-                                          Colors.red.shade200.value;
+                                          tagColors.first.value;
                                   widget.newTag.tagID =
                                       widget.initialTag?.tagID ??
                                           widget.newTag.hashCode;
