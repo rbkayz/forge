@@ -43,65 +43,65 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'EDIT TAG',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Constants.kPrimaryColor,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5),
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(
-                          fontSize: 12, color: Constants.kSecondaryColor),
-                    ))
-              ],
-            ),
-          ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: tagsList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  minLeadingWidth: 20,
-                  title: Row(children: [
-                    WidgetTagTile(currentTag: tagsList[index]),
-                  ]),
-                  leading: Icon(
-                    Icons.tag,
-                    color: Color(tagsList[index].tagColor ??
-                        Constants.kSecondaryColor.value),
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'EDIT TAG',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Constants.kPrimaryColor,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5),
                   ),
-                  trailing: Radio(groupValue: _selectvalue, value: index, onChanged: (int? value) {
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                            fontSize: 12, color: Constants.kSecondaryColor),
+                      ))
+                ],
+              ),
+            ),
+            ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: tagsList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      minLeadingWidth: 20,
+                      title: Row(children: [
+                        WidgetTagTile(currentTag: tagsList[index]),
+                      ]),
+                      leading: Icon(
+                        Icons.tag,
+                        color: Color(tagsList[index].tagColor ??
+                            Constants.kSecondaryColor.value),
+                      ),
+                      trailing: Radio(groupValue: _selectvalue, value: index, onChanged: (int? value) {
 
-                    setState(() {
-                      _selectvalue = value!;
-                      currentLink.tagID = tagsList[value].tagID;
-                      linksBox.put(currentLink.linkKey, currentLink);
-                    });
+                        setState(() {
+                          _selectvalue = value!;
+                          currentLink.tagID = tagsList[value].tagID;
+                          linksBox.put(currentLink.linkKey, currentLink);
+                        });
 
-                    Navigator.pop(context);
+                        Navigator.pop(context);
 
-                  },),
-                );
-              }),
-        ],
-      ),
+                      },),
+                    );
+                  }),
+          ],
+        ),
     );
   }
 }

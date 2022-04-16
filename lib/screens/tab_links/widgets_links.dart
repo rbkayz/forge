@@ -51,6 +51,7 @@ class _WidgetTagState extends State<WidgetTag> {
         onTap: () {
 
           showModalBottomSheet(
+            isScrollControlled: true,
               context: context,
               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.9) ,
               shape: RoundedRectangleBorder(borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
