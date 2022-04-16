@@ -88,12 +88,15 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
                         Constants.kSecondaryColor.value),
                   ),
                   trailing: Radio(groupValue: _selectvalue, value: index, onChanged: (int? value) {
+
                     setState(() {
                       _selectvalue = value!;
                       currentLink.tagID = tagsList[value].tagID;
                       linksBox.put(currentLink.linkKey, currentLink);
-                      Navigator.pop(context);
                     });
+
+                    Navigator.pop(context);
+
                   },),
                 );
               }),

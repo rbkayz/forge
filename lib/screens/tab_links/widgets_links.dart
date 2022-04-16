@@ -13,22 +13,28 @@ import 'package:intl/intl.dart';
 
 import '../../models/links_model.dart';
 import '../../services/contacts_service.dart';
-import '../standalone/dialog_tags.dart';
+import '../dialogs/dialog_tags.dart';
 
 ///--------------------------------------------------------------
 /// Links tag
 ///--------------------------------------------------------------
 
-class WidgetTag extends StatelessWidget {
+class WidgetTag extends StatefulWidget {
   WidgetTag({Key? key, required this.id}) : super(key: key);
 
   final String id;
+
+  @override
+  State<WidgetTag> createState() => _WidgetTagState();
+}
+
+class _WidgetTagState extends State<WidgetTag> {
   LinkTag currentTag = LinkTag(tagName: 'NO TAG', tagColor: Colors.grey.shade100.value);
 
   @override
   Widget build(BuildContext context) {
 
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
+    ForgeLinks currentLink = LinkDateServices().getLinkfromid(widget.id);
 
     int? currentTagID = currentLink.tagID;
 
@@ -40,21 +46,22 @@ class WidgetTag extends StatelessWidget {
 
     return Material(
       color: Color(currentTag.tagColor!),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: InkWell(
         onTap: () {
 
           showModalBottomSheet(
               context: context,
               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.9) ,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
+              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
               elevation: 20,
               builder: (context) {
-                return DialogTagSelector(currentID: id);
+                return DialogTagSelector(currentID: widget.id);
               }
-          );
+          ).then((_) => updateState());
 
         },
-        borderRadius: BorderRadius.circular(5),
+
         child: Padding(
           padding: const EdgeInsets.all(3.0),
           child: Text(
@@ -65,6 +72,12 @@ class WidgetTag extends StatelessWidget {
       ),
     );
 
+  }
+
+  updateState() {
+    setState(() {
+
+    });
   }
 }
 
@@ -83,12 +96,22 @@ class NextConnectDateWidget extends StatelessWidget {
 
     ForgeDates nextDate = LinkDateServices().getNextDate(id);
 
-    return Stack(children: <Widget>[
-      Container(
-        alignment: Alignment.center,
-        decoration: forgeBoxDecoration(),
-        height: 60,
-        width: 50,
+    return SizedBox(
+      width: 50,
+      height: 60,
+      child: ElevatedButton(
+        //alignment: Alignment.center,
+        //decoration: forgeBoxDecoration(),
+        //height: 60,
+        //width: 50,
+        style: ElevatedButton.styleFrom(
+          primary: Constants.kWhiteColor,
+          minimumSize: Size.zero,
+          padding: EdgeInsets.zero
+        ),
+        onPressed: () {
+
+        },
         child: nextDate.linkid != null
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +122,7 @@ class NextConnectDateWidget extends StatelessWidget {
                     child: FittedBox(
                       child: Text(DateFormat('d')
                           .format(nextDate.meetingDate!)
-                          .padLeft(2, '0')),
+                          .padLeft(2, '0'), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400),),
                     ),
                   ),
                   SizedBox(
@@ -107,16 +130,16 @@ class NextConnectDateWidget extends StatelessWidget {
                     child: FittedBox(
                       child: Text(DateFormat('MMM')
                           .format(nextDate.meetingDate!)
-                          .toUpperCase()),
+                          .toUpperCase(),style: const TextStyle(color: Constants.kBlackColor,fontWeight: FontWeight.w400)),
                     ),
                   ),
                 ],
               )
             : const Center(
-                child: Text('-'),
+                child: Text('--',style: TextStyle(color: Constants.kBlackColor)),
               ),
       ),
-    ]);
+    );
   }
 }
 

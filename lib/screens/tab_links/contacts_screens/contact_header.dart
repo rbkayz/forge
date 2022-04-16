@@ -65,7 +65,7 @@ class _ContactDetailState extends State<ContactDetail> {
                   SliverList(
                     delegate: SliverChildListDelegate(
                         [
-                          profileHeader(context),
+                          WidgetProfileHeader(),
                         ]
                     ),
                   ),
@@ -102,69 +102,79 @@ class _ContactDetailState extends State<ContactDetail> {
 }
 
 
-Widget profileHeader(BuildContext context) {
 
-  String currentID = Provider.of<String>(context);
-  Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
+class WidgetProfileHeader extends StatefulWidget {
+  const WidgetProfileHeader({Key? key}) : super(key: key);
 
-  return Container(
-    width: double.infinity,
-    decoration: const BoxDecoration(color: Constants.kWhiteColor),
-    child: Padding(
-      padding: const EdgeInsets.only(left: 18.0, right: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+  @override
+  State<WidgetProfileHeader> createState() => _WidgetProfileHeaderState();
+}
 
-              ContactCircleAvatar(currentContact: currentContact,radius: 30,),
+class _WidgetProfileHeaderState extends State<WidgetProfileHeader> {
+  @override
+  Widget build(BuildContext context) {
+    String currentID = Provider.of<String>(context);
+    Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
 
-              const SizedBox(width: 10,),
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(color: Constants.kWhiteColor),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 18.0, right: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    currentContact.displayName,
-                    style: const TextStyle(
-                      color: Constants.kBlackColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.4
+                ContactCircleAvatar(currentContact: currentContact,radius: 30,),
+
+                const SizedBox(width: 10,),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      currentContact.displayName,
+                      style: const TextStyle(
+                          color: Constants.kBlackColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.4
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(
-                    height: 7,
-                  ),
+                    const SizedBox(
+                      height: 7,
+                    ),
 
-                  WidgetTag(id: currentID,),
+                    WidgetTag(id: currentID,),
 
-                ],
-              ),
+                  ],
+                ),
 
-              const Expanded(child: SizedBox.shrink()),
-              
-              NextConnectDateWidget(id: currentID,),
-              
-            ],
-          ),
+                const Expanded(child: SizedBox.shrink()),
 
-          const SizedBox(
-            height: 20,
-          ),
+                NextConnectDateWidget(id: currentID,),
 
-          LinkProgressBar(),
+              ],
+            ),
 
-          const SizedBox(
-            height: 10,
-          ),
-        ],
+            const SizedBox(
+              height: 20,
+            ),
+
+            LinkProgressBar(),
+
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
