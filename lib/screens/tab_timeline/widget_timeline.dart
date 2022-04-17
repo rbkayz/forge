@@ -111,8 +111,8 @@ class _LinkDateTileState extends State<LinkDateTile> {
 /// Date Divider
 ///--------------------------------------------------------------
 
-class DateDivider extends StatelessWidget {
-  const DateDivider({Key? key, required this.divText}) : super(key: key);
+class DateDividerAlt extends StatelessWidget {
+  const DateDividerAlt({Key? key, required this.divText}) : super(key: key);
 
   final String divText;
 
@@ -138,4 +138,29 @@ class DateDivider extends StatelessWidget {
       ),
     );
   }
+}
+
+
+Widget DateDivider ({required String divText}) {
+
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(18, 5, 20, 0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          divText,
+          style: const TextStyle(
+            color: Constants.kSecondaryColor,
+            fontSize: 14,
+          ),
+        ),
+        Expanded(child: Divider(
+          indent: 10,
+          color: Colors.grey.shade200,
+        ))
+      ],
+    ),
+  );
+
 }

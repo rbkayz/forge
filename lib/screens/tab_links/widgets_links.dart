@@ -30,13 +30,14 @@ class WidgetTag extends StatefulWidget {
 
 class _WidgetTagState extends State<WidgetTag> {
   LinkTag currentTag = LinkTag(tagName: 'NO TAG', tagColor: Colors.grey.shade100.value);
+  int? currentTagID;
 
   @override
   Widget build(BuildContext context) {
 
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(widget.id);
+    ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.id);
 
-    int? currentTagID = currentLink.tagID;
+    currentLink != null ? currentTagID = currentLink.tagID : currentTagID = null;
 
     if (currentTagID != null) {
       Box tagsBox = Hive.box(Constants.tagsBox);
@@ -82,6 +83,7 @@ class _WidgetTagState extends State<WidgetTag> {
   }
 }
 
+
 ///--------------------------------------------------------------
 /// Calendar Widget for the next meeting
 ///--------------------------------------------------------------
@@ -97,48 +99,49 @@ class NextConnectDateWidget extends StatelessWidget {
 
     ForgeDates nextDate = LinkDateServices().getNextDate(id);
 
-    return SizedBox(
-      width: 50,
-      height: 60,
-      child: ElevatedButton(
-        //alignment: Alignment.center,
-        //decoration: forgeBoxDecoration(),
-        //height: 60,
-        //width: 50,
-        style: ElevatedButton.styleFrom(
-          primary: Constants.kWhiteColor,
-          minimumSize: Size.zero,
-          padding: EdgeInsets.zero
-        ),
-        onPressed: () {
+    return Tooltip(
+      message: 'Upcoming meeting date. Press to edit.',
+      child: SizedBox(
+        width: 50,
+        height: 60,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Constants.kWhiteColor,
+            minimumSize: Size.zero,
+            padding: EdgeInsets.zero
+          ),
 
-        },
-        child: nextDate.linkid != null
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 27,
-                    child: FittedBox(
-                      child: Text(DateFormat('d')
-                          .format(nextDate.meetingDate!)
-                          .padLeft(2, '0'), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400),),
+          onPressed: () {
+
+          },
+
+          child: nextDate.linkid != null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 27,
+                      child: FittedBox(
+                        child: Text(DateFormat('d')
+                            .format(nextDate.meetingDate!)
+                            .padLeft(2, '0'), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400),),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 24,
-                    child: FittedBox(
-                      child: Text(DateFormat('MMM')
-                          .format(nextDate.meetingDate!)
-                          .toUpperCase(),style: const TextStyle(color: Constants.kBlackColor,fontWeight: FontWeight.w400)),
+                    SizedBox(
+                      width: 24,
+                      child: FittedBox(
+                        child: Text(DateFormat('MMM')
+                            .format(nextDate.meetingDate!)
+                            .toUpperCase(),style: const TextStyle(color: Constants.kBlackColor,fontWeight: FontWeight.w400)),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            : const Center(
-                child: Text('--',style: TextStyle(color: Constants.kBlackColor)),
-              ),
+                  ],
+                )
+              : const Center(
+                  child: Text('--',style: TextStyle(color: Constants.kBlackColor)),
+                ),
+        ),
       ),
     );
   }

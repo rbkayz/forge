@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/utilities/constants.dart';
@@ -22,6 +24,47 @@ class _ToggleLinksState extends State<ToggleLinks> {
   Widget build(BuildContext context) {
     bool isStored = linksBox.containsKey(widget.currentContact.id);
 
+
+    ///--------------------------------------------------------------
+    /// Add Snack Bar
+    ///--------------------------------------------------------------
+
+    SnackBar linkModNotification (bool isActivated) {
+
+      Text response = isActivated ? Text('Activated ${widget.currentContact.displayName}',overflow: TextOverflow.ellipsis, style:TextStyle(color: Constants.kPrimaryColor))
+          : Text('Deactivated ${widget.currentContact.displayName}',overflow: TextOverflow.ellipsis, style:TextStyle(color: Constants.kSecondaryColor));
+      Icon personIcon = isActivated ? const Icon(
+        Icons.person,
+        color: Constants.kPrimaryColor,
+      ) : const Icon(
+        Icons.person_outline,
+        color: Constants.kSecondaryColor,
+      );
+
+      return SnackBar(duration: Duration(milliseconds : 1000),
+        width: MediaQuery.of(context).size.width*0.6,
+        padding: EdgeInsets.zero,
+        backgroundColor: Constants.kWhiteColor,
+        content: Container(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                personIcon,
+                SizedBox(width: 5,),
+                response,
+              ],
+            ),
+          ),
+        ),
+        behavior: SnackBarBehavior.floating,
+      );
+
+    }
+
+
+
     ///--------------------------------------------------------------
     /// Deactivate the link
     ///--------------------------------------------------------------
@@ -33,7 +76,10 @@ class _ToggleLinksState extends State<ToggleLinks> {
       currentLink.isActive = false;
 
       await linksBox.put(currentLink.linkKey, currentLink);
-      print('successfully deactivated ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          linkModNotification(false)
+      );
 
       setState(() {});
     }
@@ -63,19 +109,21 @@ class _ToggleLinksState extends State<ToggleLinks> {
       currentLink.linkDates = [];
       currentLink.linkDates.add(
           ForgeDates(
-              meetingDate: DateUtils.dateOnly(DateTime.now().add(Duration(days: int.parse(currentLink.id)))),
+              meetingDate: DateUtils.dateOnly(DateTime.now().add(Duration(days: 5))),
               meetingType: 'Default',
               isComplete: false,
             linkid: currentLink.id,
           ));
 
       ///--------------------------------------------------------------
-      /// TEST CODE
+      /// Put this in the box
       ///--------------------------------------------------------------
 
       await linksBox.put(currentLink.linkKey, currentLink);
 
-      print('successfully added ${currentLink.displayName}. Key is ${currentLink.linkKey}. Total n is ${linksBox.length}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        linkModNotification(true)
+      );
 
       setState(() {});
     }

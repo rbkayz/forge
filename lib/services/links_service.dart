@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -24,22 +26,23 @@ class LinkDateServices {
   List<ForgeDates> sortDates = [];
   List<Map<String, dynamic>> mapListDates = [];
 
-  Map<DateTime, List<ForgeDates>> map_dates = {};
-
   ///--------------------------------------------------------------
   /// Concatenate all dates
   ///--------------------------------------------------------------
 
-  List<Map<String, dynamic>> sortAllDates(value) {
+  List<ForgeDates> sortAllDates(value) {
     value.cast<ForgeLinks>().forEach((element) {
       if (element.isActive) {
         element.linkDates.forEach((e) {
-          mapListDates.add(e.toMap());
+          //mapListDates.add(e.toMap());
+          sortDates.add(e);
         });
       }
     });
 
-    return mapListDates;
+    //return mapListDates;
+    sortDates.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!));
+    return sortDates;
   }
 
   ///--------------------------------------------------------------
@@ -85,13 +88,19 @@ class LinkDateServices {
   /// Get Link from ID
   ///--------------------------------------------------------------
 
-  ForgeLinks getLinkfromid(String id) {
+  ForgeLinks? getLinkfromid(String id) {
+
+    if (doesLinkExist(id)) {
+
     ForgeLinks foundLink = linksBox.values
         .cast<ForgeLinks>()
         .where((element) => element.id == id)
         .first;
 
     return foundLink;
+  } else {
+      return null;
+    }
   }
 
   ///--------------------------------------------------------------
@@ -114,9 +123,9 @@ class LinkDateServices {
     bool linkExists = LinkDateServices().doesLinkExist(id);
 
     if (linkExists) {
-      ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
+      ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
 
-      List<ForgeDates> nextDateList = currentLink.linkDates
+      List<ForgeDates> nextDateList = currentLink!.linkDates
           .where((element) =>
               element.isComplete == false &&
               element.meetingDate!
@@ -146,9 +155,9 @@ class LinkDateServices {
     bool linkExists = LinkDateServices().doesLinkExist(id);
 
     if (linkExists) {
-      ForgeLinks currentLink = LinkDateServices().getLinkfromid(id);
+      ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
 
-      List<ForgeDates> prevDateList = currentLink.linkDates
+      List<ForgeDates> prevDateList = currentLink!.linkDates
           .where((element) =>
               element.isComplete == true &&
               element.meetingDate!

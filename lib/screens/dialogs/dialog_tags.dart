@@ -32,11 +32,11 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
     Initialization of values
     *****************************************************************/
 
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(widget.currentID);
+    ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.currentID);
     List<LinkTag> tagsList =
         tagsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 
-    if (currentLink.tagID != null) {
+    if (currentLink!.tagID != null) {
       currentTag = tagsList[
           tagsList.indexWhere((element) => element.tagID == currentLink.tagID)];
       _selectvalue = tagsList.indexWhere((element) => element.tagID == currentLink.tagID);

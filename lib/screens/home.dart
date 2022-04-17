@@ -27,6 +27,26 @@ class _HomeState extends State<Home> {
       //!await Navigator.maybePop(NavigatorKeys.homeKey.currentState!.context);
   }
 
+  PreferredSizeWidget ForgeAppBarSelector(TabName activeTab) {
+    switch (activeTab) {
+
+      case TabName.timeline: {
+        return ForgeAppBar(showOptions: true,showSearch: true);
+      }
+
+      case TabName.links: {
+        return ForgeAppBar(showOptions: true,showSearch: true, customWidget: AppBarAddLink(),);
+      }
+
+      case TabName.settings: {
+        return ForgeAppBar(showOptions: true,showSearch: true);
+      }
+
+    }
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +55,7 @@ class _HomeState extends State<Home> {
       onWillPop: _onPop,
 
       child: Scaffold(
-              appBar: const ForgeAppBar(showOptions: true,showSearch: true),
+              appBar: ForgeAppBarSelector(activeTab),
               body: IndexedStack(
                 index: activeTab.index,
                 children: tabPage.entries.map((e) => e.value).toList(),

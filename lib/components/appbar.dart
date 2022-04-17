@@ -9,11 +9,12 @@ import 'package:provider/provider.dart';
 import '../services/contacts_service.dart';
 
 class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ForgeAppBar({Key? key, this.title, this.showSearch = false, this.showOptions = false}) : super(key: key);
+  const ForgeAppBar({Key? key, this.title, this.showSearch = false, this.showOptions = false, this.customWidget}) : super(key: key);
 
   final String? title;
   final bool showSearch;
   final bool showOptions;
+  final Widget? customWidget;
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -28,6 +29,7 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: (title == null) ? null : const AppBarBackButton(),
       leadingWidth: (title == null) ? 56 : 45,
       actions: <Widget>[
+        customWidget != null ? customWidget! : const NullAction(),
         showSearch ? AppBarSearch(contacts: contacts) : const NullAction(),
         showOptions ? const AppBarOptions() : const NullAction(),
       ],
@@ -72,16 +74,14 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 
-/* #############################################################################
 
-Common widgets for the appbar
+///--------------------------------------------------------------
+/// Common Widgets for the AppBar
+///--------------------------------------------------------------
 
-##############################################################################*/
 
-
+/// Sets the app bar back button (Cupertino style - <)
 class AppBarBackButton extends StatelessWidget {
-
-  // BackButton (iOS style)
 
   const AppBarBackButton({
     Key? key,
@@ -103,9 +103,10 @@ class AppBarBackButton extends StatelessWidget {
   }
 }
 
+
+/// Sets the title text of the appbar
 class AppBarTitle extends StatelessWidget {
 
-  // BackButton (Title)
 
   const AppBarTitle({
     Key? key,
@@ -127,9 +128,8 @@ class AppBarTitle extends StatelessWidget {
 }
 
 
+/// Sets the more options (three dots) for the app bar
 class AppBarOptions extends StatelessWidget {
-
-  // Options action button
 
   const AppBarOptions({
     Key? key,
@@ -137,21 +137,20 @@ class AppBarOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: GestureDetector(
-        onTap: () {},
-        child: const Icon(
-          Icons.more_vert,
-        ),
-      ),
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      splashRadius: 20,
+      icon: Icon(Icons.more_vert),
+      onPressed: () {
+        print('dead code');
+      },
     );
   }
 }
 
-class AppBarAddLink extends StatelessWidget {
 
-  // Options action button
+/// Sets the add new link option for the app bar
+class AppBarAddLink extends StatelessWidget {
 
   const AppBarAddLink({
     Key? key,
@@ -159,24 +158,20 @@ class AppBarAddLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: GestureDetector(
-        onTap: () {
-          NavigatorKeys.homeKey.currentState!.pushNamed(Constants.allContactsNavigate);
-        },
-        child: const Icon(
-          Icons.person_add_alt_outlined,
-        ),
-      ),
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      splashRadius: 20,
+      icon: Icon(Icons.person_add_alt_outlined),
+      onPressed: () {
+        NavigatorKeys.homeKey.currentState!.pushNamed(Constants.allContactsNavigate);
+      },
     );
   }
 }
 
 
+/// Sets the search button in the app bar
 class AppBarSearch extends StatelessWidget {
-
-  // Search action button
 
   const AppBarSearch({
     Key? key,
@@ -187,23 +182,20 @@ class AppBarSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: GestureDetector(
-        onTap: () {
-          showSearch(context: context, delegate: DataSearch(contacts: contacts));
-        },
-        child: const Icon(
-          Icons.search,
-        ),
-      ),
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      splashRadius: 20,
+      icon: Icon(Icons.search),
+      onPressed: () {
+        showSearch(context: context, delegate: DataSearch(contacts: contacts));
+      },
     );
   }
 }
 
-class AppBarForgeLogo extends StatelessWidget {
 
-  // Forge Logo
+/// Sets the logo in the appbar (Defaults if there is no title text)
+class AppBarForgeLogo extends StatelessWidget {
 
   const AppBarForgeLogo({
     Key? key,
@@ -218,6 +210,7 @@ class AppBarForgeLogo extends StatelessWidget {
   }
 }
 
+/// Sets the null action button in the appbar (if there is no icon)
 class NullAction extends StatelessWidget {
   const NullAction({
     Key? key,
@@ -228,3 +221,5 @@ class NullAction extends StatelessWidget {
     return const Padding(padding: EdgeInsets.only(right: 0), child: SizedBox.shrink());
   }
 }
+
+

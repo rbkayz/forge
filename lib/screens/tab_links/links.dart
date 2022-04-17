@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:forge/components/appbar.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
@@ -26,13 +27,6 @@ class _LinksPageState extends State<LinksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.person_add_alt_outlined),
-        onPressed: () {
-          NavigatorKeys.homeKey.currentState!
-              .pushNamed(Constants.allContactsNavigate);
-        },
-      ),
       body: ValueListenableBuilder(
         valueListenable: linksBox.listenable(),
         builder: (BuildContext context, Box value, Widget? child) {
