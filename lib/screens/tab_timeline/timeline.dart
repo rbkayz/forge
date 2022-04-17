@@ -22,42 +22,39 @@ class TimelinePage extends StatefulWidget {
 }
 
 class _TimelinePageState extends State<TimelinePage> {
+
   List<ForgeDates> dates = [];
+
   final linksBox = Hive.box(Constants.linksBox);
+
   late Contact currentContact;
-  bool isLoaded = false;
+
   final itemController = GroupedItemScrollController();
 
-  ///--------------------------------------------------------------
-  /// InitState
-  ///--------------------------------------------------------------
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future scrollToItem() async {
-    print('yes');
+
     itemController.scrollTo(index: 6, duration: Duration(milliseconds: 500));
   }
 
-  ///--------------------------------------------------------------
-  /// Build method
-  ///--------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
 
+    /// Listens to any changes in the box, and triggers a rebuild
     return ValueListenableBuilder(
         valueListenable: linksBox.listenable(),
         builder: (BuildContext context, Box links, Widget? child) {
+
+          /// Receives a sorted list of meeting dates by parsing through each link
           dates = LinkDateServices().sortAllDates(links.values);
 
+          /// Retrieves the list of contacts from the provider
           List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
           return (contacts == null || contacts.isEmpty)
 
+                /// Returns a loading widget if contacts is empty or null
               ? const Center(
                   child: ForgeSpinKitRipple(
                   size: 100,
@@ -75,28 +72,43 @@ class _TimelinePageState extends State<TimelinePage> {
             //         groupSeparatorBuilder: (value) => DateDivider(divText: DateFormat('EEE, d MMM').format(value.meetingDate!).toUpperCase()),
             //       );
 
-          :ScrollablePositionedList.separated(
+              /// Returns a scrollable list of date tiles, grouped and seperated by dates
+            : ScrollablePositionedList.separated(
+
+              // Add two items to the list length to add empty boxes at start and end
               itemCount: dates.length + 2,
+
+              // Builds a linkdate tile except at first and last index
               itemBuilder: (context, index) {
                 if (index > 0 && index < dates.length + 1) {
                   return LinkDateTile(date: dates[index-1]);
-                } else {return SizedBox.shrink();}
+                }
+                else {
+                  return const SizedBox.shrink();
+                }
               },
 
+              // Builds a separator. If index is 0, returns the date of the first widget.
+              // If index is >0, and <list length, then it checks if the previous list item has same date as current item. If yes, then doesn't build anything
+              // If no, then it builds a separator of the current date
               separatorBuilder: (context, index) {
 
                 if (index == 0) {
                   return DateDivider(divText: DateFormat('EEE, d MMM').format(dates[index].meetingDate!).toUpperCase());
-                } else if (index > 0 && index < dates.length) {
+                }
+
+                else if (index > 0 && index < dates.length) {
                   if (dates[index-1].meetingDate! != dates[index].meetingDate!) {
                     return DateDivider(divText: DateFormat('EEE, d MMM').format(dates[index].meetingDate!).toUpperCase());
-                  } else {return SizedBox.shrink();}
-                } else {return SizedBox.shrink();}
+                  }
+
+                  else {return const SizedBox.shrink();}
+                }
+
+                else {return const SizedBox.shrink();}
 
               }
               );
-
-
 
         });
   }

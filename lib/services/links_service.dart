@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -26,23 +24,20 @@ class LinkDateServices {
   List<ForgeDates> sortDates = [];
   List<Map<String, dynamic>> mapListDates = [];
 
-  ///--------------------------------------------------------------
-  /// Concatenate all dates
-  ///--------------------------------------------------------------
 
+  /// Cycles through each link and gets all dates, and sorts it
   List<ForgeDates> sortAllDates(value) {
     value.cast<ForgeLinks>().forEach((element) {
       if (element.isActive) {
         element.linkDates.forEach((e) {
-          //mapListDates.add(e.toMap());
           sortDates.add(e);
         });
       }
     });
 
-    //return mapListDates;
     sortDates.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!));
     return sortDates;
+
   }
 
   ///--------------------------------------------------------------

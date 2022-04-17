@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:forge/services/router.dart';
 
+///--------------------------------------------------------------
+/// Class to pass a separate route list
+///--------------------------------------------------------------
+
 class NavigatorPage extends StatefulWidget {
   const NavigatorPage({Key? key}) : super(key: key);
 
@@ -11,6 +15,7 @@ class NavigatorPage extends StatefulWidget {
 
 class _NavigatorPageState extends State<NavigatorPage> {
 
+  /// Future that disables the back button on home page
   Future<bool> _onPop() async {
     return !await Navigator.maybePop(NavigatorKeys.homeKey.currentState!.context);
   }

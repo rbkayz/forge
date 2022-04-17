@@ -12,21 +12,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-
-  var list = <Widget>[];
+  /// Sets the active tab at start of app
   TabName activeTab = TabName.timeline;
 
+  /// Function that sets the selected tab as the active tab, and calls rebuild
   void _selectTab(TabName tab){
     setState(() {
       activeTab = tab;
     });
   }
 
+  /// Future that returns [false] to any calls for screen pops
   Future<bool> _onPop() async {
     return false;
       //!await Navigator.maybePop(NavigatorKeys.homeKey.currentState!.context);
   }
 
+  /// Modifies the app bar options based on the active tab
   PreferredSizeWidget ForgeAppBarSelector(TabName activeTab) {
     switch (activeTab) {
 
@@ -45,7 +47,6 @@ class _HomeState extends State<Home> {
     }
 
   }
-
 
 
   @override

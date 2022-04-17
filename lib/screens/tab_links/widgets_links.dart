@@ -37,7 +37,7 @@ class _WidgetTagState extends State<WidgetTag> {
 
     ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.id);
 
-    currentLink != null ? currentTagID = currentLink.tagID : currentTagID = null;
+    currentTagID = currentLink?.tagID;
 
     if (currentTagID != null) {
       Box tagsBox = Hive.box(Constants.tagsBox);
@@ -55,7 +55,7 @@ class _WidgetTagState extends State<WidgetTag> {
             isScrollControlled: true,
               context: context,
               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.9) ,
-              shape: RoundedRectangleBorder(borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
               elevation: 20,
               builder: (context) {
                 return DialogTagSelector(currentID: widget.id);

@@ -6,7 +6,10 @@ class AllContactsServices {
 
   List<Contact>? contacts = [];
 
+  /// Returns a future with list of contacts
   Future<List<Contact>?> getAllContacts() async {
+
+    /// Requests the user for permission to access contacts on device
     if (await FlutterContacts.requestPermission()) {
 
       List<Contact> _contacts = await FlutterContacts.getContacts(
@@ -17,12 +20,13 @@ class AllContactsServices {
     }
   }
 
+  /// Returns a Contact object by passing an ID.
   Contact getContactfromID(BuildContext context, String id) {
 
     Contact currentContact;
     List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
-    currentContact = contacts!.where((element) => element.id == id).first;
+    currentContact = contacts?.where((element) => element.id == id).first ?? Contact();
 
     return currentContact;
 

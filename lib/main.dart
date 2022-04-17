@@ -33,7 +33,7 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  runApp(ForgeApp());
+  runApp(const ForgeApp());
 
 }
 

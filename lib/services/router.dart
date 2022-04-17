@@ -12,10 +12,12 @@ import 'package:forge/utilities/constants.dart';
 import 'package:forge/services/wrapper.dart';
 
 class RouteGenerator {
+
   Future<bool?> loginStatus() async {
     await FirebaseAuthService().isLogged();
   }
 
+  /// Generates the route list for the main function
   static Route<dynamic> generateRouteMain(RouteSettings settings) {
     switch (settings.name) {
       case Constants.wrapperNavigate:
@@ -35,6 +37,8 @@ class RouteGenerator {
     }
   }
 
+
+  /// Generates the route list for the home screen
   static Route<dynamic> generateRouteHome(RouteSettings settings) {
 
     switch (settings.name) {
@@ -70,6 +74,7 @@ class RouteGenerator {
 
 }
 
+/// Throws an undefined screen if wrong route is passed
 class UndefinedView extends StatelessWidget {
   final String name;
 
@@ -89,6 +94,4 @@ class UndefinedView extends StatelessWidget {
 class NavigatorKeys {
   static final GlobalKey<NavigatorState> mainKey = GlobalKey();
   static final GlobalKey<NavigatorState> homeKey = GlobalKey();
-
-
 }
