@@ -7,6 +7,11 @@ import '../../../models/tags_model.dart';
 import '../../../utilities/constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+
+///--------------------------------------------------------------
+/// Main method for tags
+///--------------------------------------------------------------
+
 class TagsEditor extends StatefulWidget {
   TagsEditor({Key? key}) : super(key: key);
 
@@ -19,11 +24,6 @@ class _TagsEditorState extends State<TagsEditor> {
   final tagsBox = Hive.box(Constants.tagsBox);
   late List<LinkTag> tagsList;
   late LinkTag? newTag;
-
-
-  ///--------------------------------------------------------------
-  /// Build method
-  ///--------------------------------------------------------------
 
 
   @override
@@ -75,7 +75,7 @@ class _TagsEditorState extends State<TagsEditor> {
                         ),
                         onPressed: () async {
 
-                          newTag = await showDialog(context: context, builder: (context) => WidgetTagDialog(initialTag: currentTag,));
+                          newTag = await showDialog(context: context, builder: (context) => DialogAddEditTag(initialTag: currentTag,));
 
                           setState(() {
 
@@ -137,7 +137,7 @@ class _TagsEditorState extends State<TagsEditor> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          newTag = await showDialog(context: context, builder: (context) => WidgetTagDialog());
+          newTag = await showDialog(context: context, builder: (context) => DialogAddEditTag());
 
           setState(() {
 
@@ -155,6 +155,7 @@ class _TagsEditorState extends State<TagsEditor> {
     );
   }
 }
+
 
 ///--------------------------------------------------------------
 /// Tag Tile for each widget
@@ -184,24 +185,25 @@ class WidgetTagTile extends StatelessWidget {
 }
 
 
+
 ///--------------------------------------------------------------
-/// Dialog widget
+/// Dialog Widget to Add / Edit Tags
 ///--------------------------------------------------------------
 
 
-class WidgetTagDialog extends StatefulWidget {
-  WidgetTagDialog({Key? key, this.initialTag}) : super(key: key);
+class DialogAddEditTag extends StatefulWidget {
+  DialogAddEditTag({Key? key, this.initialTag}) : super(key: key);
 
   LinkTag? initialTag;
   LinkTag newTag = LinkTag();
   Color? newColorValue;
 
   @override
-  State<WidgetTagDialog> createState() => _WidgetTagDialogState();
+  State<DialogAddEditTag> createState() => _DialogAddEditTagState();
 
 }
 
-class _WidgetTagDialogState extends State<WidgetTagDialog> {
+class _DialogAddEditTagState extends State<DialogAddEditTag> {
 
   final tagController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -301,7 +303,7 @@ class _WidgetTagDialogState extends State<WidgetTagDialog> {
 
 
 ///--------------------------------------------------------------
-/// Tag Name Text Field
+/// Widget to edit tag name within dialog
 ///--------------------------------------------------------------
 
 class WidgetTagNameTextField extends StatefulWidget {
@@ -369,7 +371,7 @@ class _WidgetTagNameTextFieldState extends State<WidgetTagNameTextField> {
 }
 
 ///--------------------------------------------------------------
-/// Picker Item Builder
+/// Widget to pick item color within dialog
 ///--------------------------------------------------------------
 
 Widget pickerItemBuilder(
@@ -434,7 +436,7 @@ Color colorModifier (Color color) {
 }
 
 ///--------------------------------------------------------------
-/// Widget Layout Builder
+/// Widget to modify layout builder
 ///--------------------------------------------------------------
 
 

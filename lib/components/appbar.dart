@@ -29,7 +29,7 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: (title == null) ? 56 : 45,
       actions: <Widget>[
         showSearch ? AppBarSearch(contacts: contacts) : const NullAction(),
-        showOptions? const AppBarOptions() : const NullAction(),
+        showOptions ? const AppBarOptions() : const NullAction(),
       ],
     );
   }

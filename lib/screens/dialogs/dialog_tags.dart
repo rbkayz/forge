@@ -7,7 +7,7 @@ import '../../utilities/constants.dart';
 import '../tab_settings/widget_settings/edit_tags.dart';
 
 ///--------------------------------------------------------------
-/// Dialog widget
+/// Dialog (Bottom sheet) to select tags
 ///--------------------------------------------------------------
 
 class DialogTagSelector extends StatefulWidget {
