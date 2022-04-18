@@ -103,19 +103,6 @@ class _ToggleLinksState extends State<ToggleLinks> {
       }
 
       ///--------------------------------------------------------------
-      /// TEST CODE
-      ///--------------------------------------------------------------
-
-      currentLink.linkDates = [];
-      currentLink.linkDates.add(
-          ForgeDates(
-              meetingDate: DateUtils.dateOnly(DateTime.now().add(Duration(days: 5))),
-              meetingType: 'Default',
-              isComplete: false,
-            linkid: currentLink.id,
-          ));
-
-      ///--------------------------------------------------------------
       /// Put this in the box
       ///--------------------------------------------------------------
 
