@@ -1,12 +1,11 @@
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/tags_model.dart';
+import 'package:forge/screens/dialogs/dialog_datepicker.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
-import 'package:forge/utilities/widget_styles.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -88,16 +87,21 @@ class _WidgetTagState extends State<WidgetTag> {
 /// Calendar Widget for the next meeting
 ///--------------------------------------------------------------
 
-class NextConnectDateWidget extends StatelessWidget {
+class NextConnectDateWidget extends StatefulWidget {
   const NextConnectDateWidget({Key? key, required this.id})
       : super(key: key);
 
   final String id;
 
   @override
+  State<NextConnectDateWidget> createState() => _NextConnectDateWidgetState();
+}
+
+class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
+  @override
   Widget build(BuildContext context) {
 
-    ForgeDates nextDate = LinkDateServices().getNextDate(id);
+    ForgeDates nextDate = LinkDateServices().getNextDate(widget.id);
 
     return Tooltip(
       message: 'Upcoming meeting date. Press to edit.',
@@ -112,6 +116,10 @@ class NextConnectDateWidget extends StatelessWidget {
           ),
 
           onPressed: () {
+
+            setState(() {
+              DatePickerService().changeDate(context,widget.id);
+            });
 
           },
 

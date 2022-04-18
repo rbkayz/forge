@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:forge/components/appbar.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
-import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -48,18 +46,23 @@ class LinkListView extends StatelessWidget {
   }) : super(key: key);
 
   final List linksValues;
-  Contact dummyContact = Contact();
 
   @override
   Widget build(BuildContext context) {
+
+    /// Retrieves the list of contacts from the provider
     List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
     return (contacts == null || contacts.isEmpty)
+
+          /// Returns a loading screen if contacts is empty
         ? const Center(
             child: ForgeSpinKitRipple(
             size: 100,
             color: Constants.kPrimaryColor,
           ))
+
+          /// Listview that builds a list of cards separated with a grey divider
         : ListView.separated(
             separatorBuilder: (BuildContext context, int index) => Divider(
               color: Colors.grey.shade400,
@@ -73,12 +76,14 @@ class LinkListView extends StatelessWidget {
 
               ForgeLinks currentLink = linksValues.elementAt(index);
 
+              /// Retrieves a contact. Returns an empty contact if contacts is empty
               Contact? currentContact = (contacts.isEmpty)
-                  ? dummyContact
+                  ? Contact()
                   : contacts
                       .where((element) => element.id == currentLink.id)
                       .single;
 
+              /// Returns a linkcard is link is active, else an empty box
               return currentLink.isActive
                   ? LinkCard(currentID: currentContact.id)
                   : const SizedBox.shrink();
@@ -119,20 +124,28 @@ class _LinkCardState extends State<LinkCard> {
         ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
         : 'No previous meetings available';
 
-    return currentContact.displayName == ''
+    return currentContact.id == ''
+
+          /// Returns an empty box if contact id is blank
         ? const SizedBox.shrink()
+
+          /// Calls a Gesture detector on Tap
         : GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Navigator.pushNamed(context, Constants.contactDetailNavigate,
                   arguments: widget.currentID);
             },
+
             child: Padding(
+
               padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   Expanded(
-                    flex: 5,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -171,7 +184,7 @@ class _LinkCardState extends State<LinkCard> {
                       ],
                     ),
                   ),
-                  const SizedBox(),
+
                   NextConnectDateWidget(id: currentContact.id,),
                 ],
               ),

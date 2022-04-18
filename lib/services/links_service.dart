@@ -93,7 +93,9 @@ class LinkDateServices {
         .first;
 
     return foundLink;
-  } else {
+  }
+
+    else {
       return null;
     }
   }
@@ -115,8 +117,11 @@ class LinkDateServices {
   ///--------------------------------------------------------------
 
   ForgeDates getNextDate(String id) {
+
+    /// Checks if link exists
     bool linkExists = LinkDateServices().doesLinkExist(id);
 
+    /// Returns next date if link exists
     if (linkExists) {
       ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
 
@@ -137,7 +142,10 @@ class LinkDateServices {
           nextDateList.isNotEmpty ? nextDateList.first : ForgeDates();
 
       return nextDate;
-    } else {
+    }
+
+    /// Returns an empty forgedates if link doesn't exist
+    else {
       return ForgeDates();
     }
   }
@@ -147,8 +155,11 @@ class LinkDateServices {
   ///--------------------------------------------------------------
 
   ForgeDates getPrevDate(String id) {
+
+    /// Checks if link exists
     bool linkExists = LinkDateServices().doesLinkExist(id);
 
+    /// Returns prev date if link exists
     if (linkExists) {
       ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
 
@@ -169,7 +180,10 @@ class LinkDateServices {
           prevDateList.isNotEmpty ? prevDateList.last : ForgeDates();
 
       return prevDate;
-    } else {
+    }
+
+    /// Returns an empty forgedates if link doesn't exist
+    else {
       return ForgeDates();
     }
   }
