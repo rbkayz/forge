@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/tags_model.dart';
 import 'package:forge/screens/dialogs/dialog_datepicker.dart';
+import 'package:forge/screens/dialogs/dialog_snackbar.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
@@ -99,6 +100,31 @@ class NextConnectDateWidget extends StatefulWidget {
 }
 
 class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
+
+  DateTime? newDate;
+
+
+  Future _changeDate() async {
+
+    if (LinkDateServices().isLinkActive(widget.id)) {
+
+      HapticFeedback.lightImpact();
+      newDate = await DatePickerService().changeDate(context, widget.id);
+
+    } else {
+
+      HapticFeedback.lightImpact();
+
+      LinkDateServices().activateLink(context, widget.id);
+
+      newDate = await DatePickerService().changeDate(context, widget.id);
+
+    }
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -116,14 +142,12 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
             padding: EdgeInsets.zero
           ),
 
-          onPressed: () {
+          onPressed: () async {
+              _changeDate().then((value) {
+                setState(() {
 
-            HapticFeedback.lightImpact();
-
-            setState(() {
-              DatePickerService().changeDate(context,widget.id);
-            });
-
+                });
+              });
           },
 
           child: nextDate.linkid != null

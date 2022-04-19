@@ -48,6 +48,8 @@ class _TimelinePageState extends State<TimelinePage> {
           /// Receives a sorted list of meeting dates by parsing through each link
           dates = LinkDateServices().sortAllDates(links.values);
 
+          //dates = dates.where((element) => element.isComplete == false).toList();
+
           /// Retrieves the list of contacts from the provider
           List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
@@ -79,7 +81,8 @@ class _TimelinePageState extends State<TimelinePage> {
 
               /// Builds a linkdate tile except at first and last index
               itemBuilder: (context, index) {
-                if (index > 0 && index < dates.length + 1) {
+                if (index > 0 && index < (dates.length + 1)) {
+
                   return LinkDateTile(date: dates[index-1]);
                 }
                 else {
@@ -92,7 +95,7 @@ class _TimelinePageState extends State<TimelinePage> {
               /// If no, then it builds a separator of the current date
               separatorBuilder: (context, index) {
 
-                if (index == 0) {
+                if (index == 0 && dates.isNotEmpty) {
                   return DateDivider(divText: DateFormat('EEE, d MMM').format(dates[index].meetingDate!).toUpperCase());
                 }
 

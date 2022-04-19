@@ -9,7 +9,7 @@ import '../../models/links_model.dart';
 class DatePickerService {
 
 
-  void changeDate(BuildContext context, String id) async {
+  Future<DateTime?> changeDate(BuildContext context, String id) async {
 
     bool meetingExists = LinkDateServices().getNextDate(id).meetingDate != null;
     DateTime initialDate = LinkDateServices().getNextDate(id).meetingDate ?? DateUtils.dateOnly(DateTime.now());
@@ -39,7 +39,10 @@ class DatePickerService {
 
           ForgeSnackBar().showFloatingSnackBar(context, Text('Changed meeting date', style: TextStyle(color: Constants.kPrimaryColor,), textAlign: TextAlign.center,));
 
-        } else {
+        }
+
+
+        else {
           currentLink.linkDates.add(ForgeDates(
             meetingDate: newDate,
             meetingType: 'Recurring Meeting',
@@ -56,9 +59,8 @@ class DatePickerService {
       }
 
     }
+    return newDate;
 
   }
-
-
 
 }

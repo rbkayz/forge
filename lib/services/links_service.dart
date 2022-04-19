@@ -1,18 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_contacts/contact.dart';
+import 'package:forge/services/contacts_service.dart';
 import 'package:hive/hive.dart';
 import '../models/links_model.dart';
 import '../utilities/constants.dart';
-
-///--------------------------------------------------------------
-/// Extension method to compare two dates
-///--------------------------------------------------------------
-
-extension DateOnlyCompare on DateTime {
-  bool isSameDate(DateTime other) {
-    return year == other.year && month == other.month && day == other.day;
-  }
-}
 
 ///--------------------------------------------------------------
 /// Link Date Services Class
@@ -23,6 +16,44 @@ class LinkDateServices {
 
   List<ForgeDates> sortDates = [];
   List<Map<String, dynamic>> mapListDates = [];
+
+
+
+  /// Deactivate a link
+  void deactivateLink(String id) async {
+    ForgeLinks currentLink = linksBox.get(id);
+
+    currentLink.isActive = false;
+
+    HapticFeedback.lightImpact();
+
+    await linksBox.put(currentLink.linkKey, currentLink);
+  }
+
+
+
+  /// Activate a link
+  void activateLink(BuildContext context, String id) async {
+
+    bool isStored = linksBox.containsKey(id);
+
+    ForgeLinks currentLink = isStored ? linksBox.get(id) : ForgeLinks(
+      id: id,
+      isActive: true,
+    );
+
+    currentLink.isActive = true;
+
+    //Setting the linkDates to an empty list if it is null
+    if (currentLink.linkDates.isEmpty) {
+      currentLink.linkDates = [];
+    }
+
+    HapticFeedback.lightImpact();
+    await linksBox.put(currentLink.linkKey, currentLink);
+  }
+
+
 
 
   /// Cycles through each link and gets all dates, and sorts it
@@ -40,10 +71,8 @@ class LinkDateServices {
 
   }
 
-  ///--------------------------------------------------------------
-  /// Compare a map to the map of dates, and return a date
-  ///--------------------------------------------------------------
 
+  /// Compare a map to the map of dates, and return a date
   ForgeDates getDateFromMap(linklist, Map<String, dynamic> mapval) {
     late ForgeDates foundDate;
     sortDates = [];
@@ -61,10 +90,8 @@ class LinkDateServices {
     return foundDate;
   }
 
-  ///--------------------------------------------------------------
-  /// Toggle Checkbox
-  ///--------------------------------------------------------------
 
+  /// Toggle Checkbox
   void onTapCheckbox(bool? newValue, ForgeDates currentDate) async {
     ForgeLinks currentLink = linksBox.values
         .cast<ForgeLinks>()
@@ -79,10 +106,8 @@ class LinkDateServices {
     await linksBox.put(currentLink.linkKey, currentLink);
   }
 
-  ///--------------------------------------------------------------
-  /// Get Link from ID
-  ///--------------------------------------------------------------
 
+  /// Get Link from ID
   ForgeLinks? getLinkfromid(String id) {
 
     if (doesLinkExist(id)) {
@@ -100,10 +125,8 @@ class LinkDateServices {
     }
   }
 
-  ///--------------------------------------------------------------
-  /// Does a link exist
-  ///--------------------------------------------------------------
 
+  /// Checks if a link exists
   bool doesLinkExist(String id) {
     Iterable<ForgeLinks> foundLink = linksBox.values
         .cast<ForgeLinks>()
@@ -112,16 +135,31 @@ class LinkDateServices {
     return (foundLink.isNotEmpty);
   }
 
-  ///--------------------------------------------------------------
-  /// Get Next date that isn't complete
-  ///--------------------------------------------------------------
 
+
+  /// Checks if link is active
+  bool isLinkActive(String id) {
+    Iterable<ForgeLinks> foundLink = linksBox.values
+        .cast<ForgeLinks>()
+        .where((element) => element.id == id);
+
+    if (foundLink.isNotEmpty && foundLink.first.isActive) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+
+
+  /// Get Next date that isn't complete
   ForgeDates getNextDate(String id) {
 
-    /// Checks if link exists
+    // Checks if link exists
     bool linkExists = LinkDateServices().doesLinkExist(id);
 
-    /// Returns next date if link exists
+    // Returns next date if link exists
     if (linkExists) {
       ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
 
@@ -144,22 +182,20 @@ class LinkDateServices {
       return nextDate;
     }
 
-    /// Returns an empty forgedates if link doesn't exist
+    // Returns an empty forgedates if link doesn't exist
     else {
       return ForgeDates();
     }
   }
 
-  ///--------------------------------------------------------------
-  /// Get Prev Date that is complete
-  ///--------------------------------------------------------------
 
+  /// Get Prev Date that is complete
   ForgeDates getPrevDate(String id) {
 
-    /// Checks if link exists
+    // Checks if link exists
     bool linkExists = LinkDateServices().doesLinkExist(id);
 
-    /// Returns prev date if link exists
+    // Returns prev date if link exists
     if (linkExists) {
       ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
 
@@ -182,7 +218,7 @@ class LinkDateServices {
       return prevDate;
     }
 
-    /// Returns an empty forgedates if link doesn't exist
+    // Returns an empty forgedates if link doesn't exist
     else {
       return ForgeDates();
     }

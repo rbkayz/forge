@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/components/search.dart';
 import 'package:forge/components/toggle_links.dart';
+import 'package:forge/screens/dialogs/dialog_popupmenu.dart';
 import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,7 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: <Widget>[
         customWidget != null ? customWidget! : const NullAction(),
         showSearch ? AppBarSearch(contacts: contacts) : const NullAction(),
-        showOptions ? const AppBarOptions() : const NullAction(),
+        showOptions ? const TimelinePopupMenu() : const NullAction(),
       ],
     );
   }
