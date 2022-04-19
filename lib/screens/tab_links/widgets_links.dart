@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/tags_model.dart';
 import 'package:forge/screens/dialogs/dialog_datepicker.dart';
@@ -116,6 +117,8 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
           ),
 
           onPressed: () {
+
+            HapticFeedback.lightImpact();
 
             setState(() {
               DatePickerService().changeDate(context,widget.id);

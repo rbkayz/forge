@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forge/models/tags_model.dart';
 import 'package:forge/services/wrapper.dart';
 import 'package:forge/utilities/themedata.dart';
@@ -52,6 +53,8 @@ class ForgeApp extends StatelessWidget {
     Streamprovider is available to all widgets in the entire tree, and
     navigates to the Splash screen
    */
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark));
 
     return StreamProvider<User?>.value(
       value: FirebaseAuthService().currentUser,

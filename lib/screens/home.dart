@@ -56,13 +56,13 @@ class _HomeState extends State<Home> {
       onWillPop: _onPop,
 
       child: Scaffold(
-              appBar: ForgeAppBarSelector(activeTab),
-              body: IndexedStack(
-                index: activeTab.index,
-                children: tabPage.entries.map((e) => e.value).toList(),
-              ),
-              bottomNavigationBar: ForgeBottomNavigationBar(currentTab: activeTab, onSelectTab: _selectTab),
-      ),
+                appBar: ForgeAppBarSelector(activeTab),
+                body: IndexedStack(
+                  index: activeTab.index,
+                  children: tabPage.entries.map((e) => e.value).toList(),
+                ),
+                bottomNavigationBar: ForgeBottomNavigationBar(currentTab: activeTab, onSelectTab: _selectTab),
+        ),
     );
   }
 

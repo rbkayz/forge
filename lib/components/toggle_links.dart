@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/utilities/constants.dart';
@@ -75,6 +76,8 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
       currentLink.isActive = false;
 
+      HapticFeedback.lightImpact();
+
       await linksBox.put(currentLink.linkKey, currentLink);
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -106,6 +109,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
       /// Put this in the box
       ///--------------------------------------------------------------
 
+      HapticFeedback.lightImpact();
       await linksBox.put(currentLink.linkKey, currentLink);
 
       ScaffoldMessenger.of(context).showSnackBar(

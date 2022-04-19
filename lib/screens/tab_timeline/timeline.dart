@@ -5,7 +5,6 @@ import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/tab_timeline/widget_timeline.dart';
 import 'package:intl/intl.dart';
 import 'package:forge/services/links_service.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -75,10 +74,10 @@ class _TimelinePageState extends State<TimelinePage> {
               /// Returns a scrollable list of date tiles, grouped and seperated by dates
             : ScrollablePositionedList.separated(
 
-              // Add two items to the list length to add empty boxes at start and end
+              /// Add two items to the list length to add empty boxes at start and end
               itemCount: dates.length + 2,
 
-              // Builds a linkdate tile except at first and last index
+              /// Builds a linkdate tile except at first and last index
               itemBuilder: (context, index) {
                 if (index > 0 && index < dates.length + 1) {
                   return LinkDateTile(date: dates[index-1]);
@@ -88,9 +87,9 @@ class _TimelinePageState extends State<TimelinePage> {
                 }
               },
 
-              // Builds a separator. If index is 0, returns the date of the first widget.
-              // If index is >0, and <list length, then it checks if the previous list item has same date as current item. If yes, then doesn't build anything
-              // If no, then it builds a separator of the current date
+              /// Builds a separator. If index is 0, returns the date of the first widget.
+              /// If index is >0, and <list length, then it checks if the previous list item has same date as current item. If yes, then doesn't build anything
+              /// If no, then it builds a separator of the current date
               separatorBuilder: (context, index) {
 
                 if (index == 0) {

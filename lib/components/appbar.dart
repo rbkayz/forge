@@ -1,5 +1,6 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/components/search.dart';
 import 'package:forge/components/toggle_links.dart';
@@ -26,7 +27,7 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
     final contacts = Provider.of<List<Contact>?>(context);
 
     return AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+      //systemOverlayStyle: SystemUiOverlayStyle(statusBarBrightness: Brightness.dark, statusBarColor: Constants.kWhiteColor),
       title: (title == null) ? const AppBarForgeLogo() : AppBarTitle(title: title!),
       leading: (title == null) ? null : const AppBarBackButton(),
       leadingWidth: (title == null) ? 56 : 45,
