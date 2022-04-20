@@ -47,7 +47,7 @@ class _WrapperState extends State<Wrapper> {
 
   /// Opens the preferences box, where all common settings e.g. tags, notifications are stored
   Future<bool> openPreferencesBox () async {
-    await Hive.openBox(Constants.tagsBox);
+    await Hive.openBox(Constants.prefsBox);
     return true;
   }
 
@@ -97,7 +97,7 @@ class _WrapperState extends State<Wrapper> {
 
               /// Returns an empty home screen while the future is waiting to be completed
               return Scaffold(
-                appBar: const ForgeAppBar(showOptions: true,showSearch: true),
+                appBar: const ForgeAppBar(),
                 body: Container(),
                 bottomNavigationBar: ForgeBottomNavigationBar(currentTab: TabName.timeline, onSelectTab: (tab) {}),
               );

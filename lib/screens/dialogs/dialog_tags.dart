@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:hive/hive.dart';
 import '../../models/links_model.dart';
-import '../../models/tags_model.dart';
+import '../../models/prefs_model.dart';
 import '../../utilities/constants.dart';
 import '../tab_settings/widget_settings/edit_tags.dart';
 
@@ -20,7 +20,7 @@ class DialogTagSelector extends StatefulWidget {
 }
 
 class _DialogTagSelectorState extends State<DialogTagSelector> {
-  Box tagsBox = Hive.box(Constants.tagsBox);
+  Box prefsBox = Hive.box(Constants.prefsBox);
   Box linksBox = Hive.box(Constants.linksBox);
   LinkTag currentTag = LinkTag();
   int? _selectvalue;
@@ -34,7 +34,7 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
 
     ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.currentID);
     List<LinkTag> tagsList =
-        tagsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+        prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 
     if (currentLink!.tagID != null) {
       currentTag = tagsList[

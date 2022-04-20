@@ -1,32 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tags_model.dart';
+part of 'prefs_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ForgeTagsAdapter extends TypeAdapter<ForgeTags> {
+class ForgePrefsAdapter extends TypeAdapter<ForgePrefs> {
   @override
   final int typeId = 2;
 
   @override
-  ForgeTags read(BinaryReader reader) {
+  ForgePrefs read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ForgeTags(
+    return ForgePrefs(
       tagsList: (fields[0] as List).cast<LinkTag>(),
+      showAllDatesinTimeline: fields[1] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, ForgeTags obj) {
+  void write(BinaryWriter writer, ForgePrefs obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.tagsList);
+      ..write(obj.tagsList)
+      ..writeByte(1)
+      ..write(obj.showAllDatesinTimeline);
   }
 
   @override
@@ -35,7 +38,7 @@ class ForgeTagsAdapter extends TypeAdapter<ForgeTags> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ForgeTagsAdapter &&
+      other is ForgePrefsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

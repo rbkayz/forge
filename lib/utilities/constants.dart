@@ -35,7 +35,7 @@ class Constants {
 
   //boxes
   static const linksBox = 'links';
-  static const tagsBox = 'tags';
+  static const prefsBox = 'tags';
 
   //statusBarColor
   static const statusBarColor = SystemUiOverlayStyle(

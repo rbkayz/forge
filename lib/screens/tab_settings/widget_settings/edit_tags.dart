@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 import '../../../components/appbar.dart';
-import '../../../models/tags_model.dart';
+import '../../../models/prefs_model.dart';
 import '../../../utilities/constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -21,14 +21,14 @@ class TagsEditor extends StatefulWidget {
 
 class _TagsEditorState extends State<TagsEditor> {
 
-  final tagsBox = Hive.box(Constants.tagsBox);
+  final prefsBox = Hive.box(Constants.prefsBox);
   late List<LinkTag> tagsList;
   late LinkTag? newTag;
 
 
   @override
   Widget build(BuildContext context) {
-    tagsList = tagsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+    tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 
     return Scaffold(
       appBar: const ForgeAppBar(
@@ -82,7 +82,7 @@ class _TagsEditorState extends State<TagsEditor> {
                             if (newTag != null) {
 
                               tagsList[tagsList.indexWhere((element) => element.tagID == newTag?.tagID)] = newTag!;
-                              tagsBox.put('tags', tagsList);
+                              prefsBox.put('tags', tagsList);
                             }
 
                           });
@@ -121,7 +121,7 @@ class _TagsEditorState extends State<TagsEditor> {
                             if (toDelete != null && toDelete == true) {
                               tagsList.removeWhere((element) => element.tagID == currentTag.tagID);
 
-                              tagsBox.put('tags', tagsList);
+                              prefsBox.put('tags', tagsList);
                             }
                           });
 
@@ -143,7 +143,7 @@ class _TagsEditorState extends State<TagsEditor> {
 
             if (newTag != null) {
               tagsList.add(newTag!);
-              tagsBox.put('tags', tagsList);
+              prefsBox.put('tags', tagsList);
             }
 
           });
@@ -328,8 +328,8 @@ class _WidgetTagNameTextFieldState extends State<WidgetTagNameTextField> {
         return 'Tag name cannot be blank';
       }
       
-      Box tagsBox = Hive.box(Constants.tagsBox);
-      List<LinkTag> tagsList = tagsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+      Box prefsBox = Hive.box(Constants.prefsBox);
+      List<LinkTag> tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
       
       if (tagsList.where((element) => element.tagName == text).isNotEmpty && widget.initialTag?.tagName != text) {
         return 'Tag name already exists';

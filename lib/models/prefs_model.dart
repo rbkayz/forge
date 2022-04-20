@@ -1,14 +1,17 @@
 import 'package:hive/hive.dart';
 
-part 'tags_model.g.dart';
+part 'prefs_model.g.dart';
 
 @HiveType(typeId: 2)
-class ForgeTags extends HiveObject {
+class ForgePrefs extends HiveObject {
 
-  ForgeTags({this.tagsList = const []});
+  ForgePrefs({this.tagsList = const [], this.showAllDatesinTimeline = true});
 
   @HiveField(0)
   List<LinkTag> tagsList;
+
+  @HiveField(1)
+  bool showAllDatesinTimeline;
 
 
 }

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 import '../../components/loader.dart';
+import '../../services/listenables.dart';
 import '../../utilities/constants.dart';
 
 class TimelinePage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _TimelinePageState extends State<TimelinePage> {
   List<ForgeDates> dates = [];
 
   final linksBox = Hive.box(Constants.linksBox);
+  final prefsBox = Hive.box(Constants.prefsBox);
 
   late Contact currentContact;
 
@@ -41,12 +43,13 @@ class _TimelinePageState extends State<TimelinePage> {
   Widget build(BuildContext context) {
 
     /// Listens to any changes in the box, and triggers a rebuild
-    return ValueListenableBuilder(
-        valueListenable: linksBox.listenable(),
-        builder: (BuildContext context, Box links, Widget? child) {
+    return ValueListenableBuilder2(
+        first: linksBox.listenable(),
+        second: prefsBox.listenable(),
+        builder: (BuildContext context, Box links, Box prefs, Widget? child) {
 
           /// Receives a sorted list of meeting dates by parsing through each link
-          dates = LinkDateServices().sortAllDates(links.values, showAllDate: false);
+          dates = LinkDateServices().sortAllDates(links.values, showAllDate: prefs.get('showAllDatesInTimeline'));
 
           /// Retrieves the list of contacts from the provider
           List<Contact>? contacts = Provider.of<List<Contact>?>(context);

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
-import 'package:forge/models/tags_model.dart';
+import 'package:forge/models/prefs_model.dart';
 import 'package:forge/screens/dialogs/dialog_datepicker.dart';
 import 'package:forge/screens/dialogs/dialog_snackbar.dart';
 import 'package:forge/services/links_service.dart';
@@ -41,8 +41,8 @@ class _WidgetTagState extends State<WidgetTag> {
     currentTagID = currentLink?.tagID;
 
     if (currentTagID != null) {
-      Box tagsBox = Hive.box(Constants.tagsBox);
-      List<LinkTag> tagsList = tagsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+      Box prefsBox = Hive.box(Constants.prefsBox);
+      List<LinkTag> tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
       currentTag = tagsList[tagsList.indexWhere((element) => element.tagID == currentTagID)];
     }
 

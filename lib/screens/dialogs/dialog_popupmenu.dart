@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+
+import '../../utilities/constants.dart';
 
 
 ///--------------------------------------------------------------
@@ -15,17 +18,24 @@ class TimelinePopupMenu extends StatefulWidget {
 
 class _TimelinePopupMenuState extends State<TimelinePopupMenu> {
 
-  late bool _isSelected = false;
+  Box prefsBox = Hive.box(Constants.prefsBox);
+
 
   @override
   Widget build(BuildContext context) {
+
+    bool showAllDates = prefsBox.get('showAllDatesInTimeline', defaultValue: true);
+
     return PopupMenuButton(
       onSelected: (val) {
 
         if (val == 1) {
           setState(() {
-            print('pressed');
-            _isSelected = !_isSelected;
+
+            showAllDates = !showAllDates;
+            prefsBox.put('showAllDatesInTimeline', showAllDates);
+            print(prefsBox.get('showAllDatesInTimeline'));
+
           });
         }
       },
@@ -34,7 +44,7 @@ class _TimelinePopupMenuState extends State<TimelinePopupMenu> {
     [
       CheckedPopupMenuItem(
         padding: EdgeInsets.zero,
-        checked: _isSelected,
+        checked: showAllDates,
         child: Text("First"),
         value: 1,
       ),
