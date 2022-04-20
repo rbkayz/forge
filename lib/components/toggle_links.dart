@@ -67,49 +67,36 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
       ForgeLinks? currentLink = linksBox.get(widget.currentContact.id);
 
-      // Deactivate link if not null and active
-      if (currentLink != null && currentLink.isActive) {
-        return GestureDetector(
-          onTap: () {
-
-            LinkDateServices().deactivateLink(widget.currentContact.id);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-                linkModNotification(false)
-            );
-
-            setState(() {});
-
-
-          },
-          child: const Icon(
-            Icons.person,
-            color: Constants.kPrimaryColor,
-          ),
-        );
-      }
-
-
-      // Activate link if active
-      else {
-        return GestureDetector(
+      return GestureDetector(
 
           onTap: () {
 
-            LinkDateServices().activateLink(context, widget.currentContact.id);
+            if (currentLink != null && currentLink.isActive) {
 
-            ScaffoldMessenger.of(context).showSnackBar(
-                linkModNotification(true)
-            );
+              LinkDateServices().deactivateLink(widget.currentContact.id);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                  linkModNotification(false)
+              );
+
+            } else {
+
+              LinkDateServices().activateLink(context, widget.currentContact.id);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                  linkModNotification(true)
+              );
+
+            }
 
             setState(() {});
 
           },
-          child: const Icon(
-            Icons.person_outline,
-            color: Constants.kSecondaryColor,
+
+          child:  Icon(
+              (currentLink != null && currentLink.isActive) ? Icons.person : Icons.person_outlined,
+              color: (currentLink != null && currentLink.isActive) ? Constants.kPrimaryColor : Constants.kSecondaryColor
           ),
-        );
-      }
+      );
     }
 }

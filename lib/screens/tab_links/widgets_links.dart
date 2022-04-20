@@ -104,6 +104,7 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
   DateTime? newDate;
 
 
+  /// Function that updates the value in the next date box
   Future _changeDate() async {
 
     if (LinkDateServices().isLinkActive(widget.id)) {
@@ -143,6 +144,8 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
           ),
 
           onPressed: () async {
+
+            /// Updates the value in the box
               _changeDate().then((value) {
                 setState(() {
 
