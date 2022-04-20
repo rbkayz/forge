@@ -46,9 +46,7 @@ class _TimelinePageState extends State<TimelinePage> {
         builder: (BuildContext context, Box links, Widget? child) {
 
           /// Receives a sorted list of meeting dates by parsing through each link
-          dates = LinkDateServices().sortAllDates(links.values);
-
-          //dates = dates.where((element) => element.isComplete == false).toList();
+          dates = LinkDateServices().sortAllDates(links.values, showAllDate: false);
 
           /// Retrieves the list of contacts from the provider
           List<Contact>? contacts = Provider.of<List<Contact>?>(context);
@@ -62,16 +60,6 @@ class _TimelinePageState extends State<TimelinePage> {
                   color: Constants.kPrimaryColor,
                 ))
 
-
-            //   : StickyGroupedListView<ForgeDates, DateTime>(
-            //         elements: dates,
-            //         groupBy: (element) => element.meetingDate!,
-            //         itemBuilder: (context, element) {
-            //           return LinkDateTile(date: element);
-            //         },
-            // itemScrollController: itemController,
-            //         groupSeparatorBuilder: (value) => DateDivider(divText: DateFormat('EEE, d MMM').format(value.meetingDate!).toUpperCase()),
-            //       );
 
               /// Returns a scrollable list of date tiles, grouped and seperated by dates
             : ScrollablePositionedList.separated(

@@ -20,7 +20,7 @@ class LinkDateServices {
 
 
   /// Deactivate a link
-  void deactivateLink(String id) async {
+  Future<void> deactivateLink(String id) async {
     ForgeLinks currentLink = linksBox.get(id);
 
     currentLink.isActive = false;
@@ -33,7 +33,7 @@ class LinkDateServices {
 
 
   /// Activate a link
-  void activateLink(BuildContext context, String id) async {
+  Future<void> activateLink(BuildContext context, String id) async {
 
     bool isStored = linksBox.containsKey(id);
 
@@ -57,7 +57,7 @@ class LinkDateServices {
 
 
   /// Cycles through each link and gets all dates, and sorts it
-  List<ForgeDates> sortAllDates(value) {
+  List<ForgeDates> sortAllDates(value, {bool showAllDate = true}) {
     value.cast<ForgeLinks>().forEach((element) {
       if (element.isActive) {
         element.linkDates.forEach((e) {
@@ -67,6 +67,11 @@ class LinkDateServices {
     });
 
     sortDates.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!));
+
+    if (showAllDate == false) {
+      sortDates = sortDates.where((element) => element.isComplete == false).toList();
+    }
+
     return sortDates;
 
   }
@@ -157,11 +162,11 @@ class LinkDateServices {
   ForgeDates getNextDate(String id) {
 
     // Checks if link exists
-    bool linkExists = LinkDateServices().doesLinkExist(id);
+    bool linkExists = doesLinkExist(id);
 
     // Returns next date if link exists
     if (linkExists) {
-      ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
+      ForgeLinks? currentLink = getLinkfromid(id);
 
       List<ForgeDates> nextDateList = currentLink!.linkDates
           .where((element) =>
@@ -193,11 +198,11 @@ class LinkDateServices {
   ForgeDates getPrevDate(String id) {
 
     // Checks if link exists
-    bool linkExists = LinkDateServices().doesLinkExist(id);
+    bool linkExists = doesLinkExist(id);
 
     // Returns prev date if link exists
     if (linkExists) {
-      ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
+      ForgeLinks? currentLink = getLinkfromid(id);
 
       List<ForgeDates> prevDateList = currentLink!.linkDates
           .where((element) =>

@@ -116,7 +116,7 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
 
       HapticFeedback.lightImpact();
 
-      LinkDateServices().activateLink(context, widget.id);
+      await LinkDateServices().activateLink(context, widget.id);
 
       newDate = await DatePickerService().changeDate(context, widget.id);
 

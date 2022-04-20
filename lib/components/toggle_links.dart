@@ -6,6 +6,7 @@ import 'package:forge/models/links_model.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 
 
@@ -67,36 +68,39 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
       ForgeLinks? currentLink = linksBox.get(widget.currentContact.id);
 
-      return GestureDetector(
+      return ValueListenableBuilder(
+            valueListenable: linksBox.listenable(),
+            builder: (BuildContext context, Box links, Widget? child) => GestureDetector(
 
-          onTap: () {
+            onTap: () {
 
-            if (currentLink != null && currentLink.isActive) {
+              if (currentLink != null && currentLink.isActive) {
 
-              LinkDateServices().deactivateLink(widget.currentContact.id);
+                LinkDateServices().deactivateLink(widget.currentContact.id);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                  linkModNotification(false)
-              );
+                ScaffoldMessenger.of(context).showSnackBar(
+                    linkModNotification(false)
+                );
 
-            } else {
+              } else {
 
-              LinkDateServices().activateLink(context, widget.currentContact.id);
+                LinkDateServices().activateLink(context, widget.currentContact.id);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                  linkModNotification(true)
-              );
+                ScaffoldMessenger.of(context).showSnackBar(
+                    linkModNotification(true)
+                );
 
-            }
+              }
 
-            setState(() {});
+              setState(() {});
 
-          },
+            },
 
-          child:  Icon(
-              (currentLink != null && currentLink.isActive) ? Icons.person : Icons.person_outlined,
-              color: (currentLink != null && currentLink.isActive) ? Constants.kPrimaryColor : Constants.kSecondaryColor
-          ),
+            child:  Icon(
+                (currentLink != null && currentLink.isActive) ? Icons.person : Icons.person_outlined,
+                color: (currentLink != null && currentLink.isActive) ? Constants.kPrimaryColor : Constants.kSecondaryColor
+            ),
+        ),
       );
     }
 }
