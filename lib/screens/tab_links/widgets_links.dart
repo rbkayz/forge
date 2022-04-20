@@ -52,6 +52,8 @@ class _WidgetTagState extends State<WidgetTag> {
       child: InkWell(
         onTap: () {
 
+          HapticFeedback.lightImpact();
+
           showModalBottomSheet(
             isScrollControlled: true,
               context: context,

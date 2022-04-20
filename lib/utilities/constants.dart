@@ -37,13 +37,20 @@ class Constants {
   static const linksBox = 'links';
   static const prefsBox = 'tags';
 
+  //Preferences Constants
+  static const showAllDatesinTimeline = 'showAllDatesinTimeline'; //key
+  static const sortLinkMethod = 'sortLinkMethod'; //key
+  static const sortbyName = 'Name';
+  static const sortbyDate = 'Date';
+
+
   //statusBarColor
   static const statusBarColor = SystemUiOverlayStyle(
       statusBarColor: Constants.kWhiteColor,
       statusBarIconBrightness: Brightness.dark);
 
-  //Map Phone Label to String
 
+  //Map Phone Label to String
   static const Map<PhoneLabel, String> phoneLabelToString = {
     PhoneLabel.assistant: 'assistant',
     PhoneLabel.callback: 'callback',
@@ -70,7 +77,7 @@ class Constants {
     PhoneLabel.custom: 'custom',
   };
 
-
+  //Map Email Label to String
   static const Map<EmailLabel, String> emailLabelToString = {
     EmailLabel.home: 'home',
     EmailLabel.iCloud: 'iCloud',

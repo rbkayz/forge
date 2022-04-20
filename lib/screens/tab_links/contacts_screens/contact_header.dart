@@ -87,7 +87,7 @@ class _ContactDetailState extends State<ContactDetail> {
                   Expanded(
                     child: TabBarView(children: [
                       ContactInfoTab(),
-                      const ContactHistoryTab(),
+                      const ContactTimelineTab(),
                       const ContactNotesTab(),
                     ]),
                   )

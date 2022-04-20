@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ContactHistoryTab extends StatelessWidget {
-  const ContactHistoryTab({Key? key}) : super(key: key);
+class ContactTimelineTab extends StatelessWidget {
+  const ContactTimelineTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

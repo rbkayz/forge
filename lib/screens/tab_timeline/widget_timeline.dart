@@ -76,6 +76,8 @@ class _LinkDateTileState extends State<LinkDateTile> {
                                 shape: const CircleBorder(),
 
                                 onChanged: (bool? newValue) {
+
+                                  HapticFeedback.lightImpact();
                                   _setState(() {
 
                                     // Changes the value of the checkbox and updates the box

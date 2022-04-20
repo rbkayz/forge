@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:forge/components/loader.dart';
@@ -11,6 +12,8 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import '../../services/contacts_service.dart';
 import '../../services/links_service.dart';
+import '../../services/listenables.dart';
+import '../../utilities/constants.dart';
 
 class LinksPage extends StatefulWidget {
   const LinksPage({Key? key}) : super(key: key);
@@ -21,14 +24,41 @@ class LinksPage extends StatefulWidget {
 
 class _LinksPageState extends State<LinksPage> {
   final linksBox = Hive.box(Constants.linksBox);
+  final prefsBox = Hive.box(Constants.prefsBox);
+  final contactsService = AllContactsServices();
+  final linksService = LinkDateServices();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ValueListenableBuilder(
-        valueListenable: linksBox.listenable(),
-        builder: (BuildContext context, Box value, Widget? child) {
-          return LinkListView(linksValues: value.toMap().values.cast<ForgeLinks>().where((element) => element.isActive).toList());
+      body: ValueListenableBuilder2(
+        first: linksBox.listenable(),
+        second: prefsBox.listenable(),
+        builder: (BuildContext context, Box links, Box prefs, Widget? child) {
+
+          String sortLinkMethod = prefs.get(Constants.sortLinkMethod, defaultValue: Constants.sortbyDate);
+          List<ForgeLinks> sortedlinksValues = links.toMap().values.cast<ForgeLinks>().where((element) => element.isActive).toList();
+
+          sortedlinksValues.sort((a, b) => contactsService.getContactfromID(context, a.id).displayName.compareTo(contactsService.getContactfromID(context, b.id).displayName));
+
+          switch(sortLinkMethod) {
+
+            case Constants.sortbyDate:
+              {
+                sortedlinksValues.sort((a, b) {
+
+                  DateTime meetingDate1 = linksService.getNextDate(a.id).meetingDate ?? DateTime.now().add(Duration(days: 5000));
+                  DateTime meetingDate2 = linksService.getNextDate(b.id).meetingDate ?? DateTime.now().add(Duration(days: 5000));
+
+                  return meetingDate1.compareTo(meetingDate2);
+
+                });
+              } break;
+
+        }
+
+
+          return LinkListView(linksValues: sortedlinksValues);
         },
       ),
     );
@@ -52,6 +82,7 @@ class LinkListView extends StatelessWidget {
 
     /// Retrieves the list of contacts from the provider
     List<Contact>? contacts = Provider.of<List<Contact>?>(context);
+
 
     return (contacts == null || contacts.isEmpty)
 
@@ -133,6 +164,7 @@ class _LinkCardState extends State<LinkCard> {
         : GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
+              HapticFeedback.lightImpact();
               Navigator.pushNamed(context, Constants.contactDetailNavigate,
                   arguments: widget.currentID);
             },
