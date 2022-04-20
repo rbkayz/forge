@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/services/links_service.dart';
@@ -83,7 +82,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
 
           },
-          child: Icon(
+          child: const Icon(
             Icons.person,
             color: Constants.kPrimaryColor,
           ),
@@ -106,7 +105,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
             setState(() {});
 
           },
-          child: Icon(
+          child: const Icon(
             Icons.person_outline,
             color: Constants.kSecondaryColor,
           ),
