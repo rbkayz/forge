@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forge/services/contacts_service.dart';
 import 'package:forge/services/links_service.dart';
 import '../../models/links_model.dart';
@@ -36,7 +37,10 @@ class _LinkDateTileState extends State<LinkDateTile> {
 
           /// Navigates to the detail sheet on tap
         : GestureDetector(
+
+            behavior: HitTestBehavior.opaque,
             onTap: () {
+              HapticFeedback.lightImpact();
               Navigator.pushNamed(context, Constants.contactDetailNavigate,
                   arguments: currentContact.id);
             },
