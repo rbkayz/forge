@@ -3,7 +3,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:forge/components/appbar.dart';
 // import 'package:flutter_contacts/flutter_contacts.dart';
-// import 'package:forge/screens/contacts_screens/contact_body_history.dart';
+// import 'package:forge/screens/contacts_screens/contact_body_timeline.dart';
 // import 'package:forge/screens/contacts_screens/contact_body_notes.dart';
 // import 'package:forge/screens/tab_links/widgets_links.dart';
 // import 'package:forge/utilities/constants.dart';

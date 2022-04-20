@@ -28,8 +28,6 @@ class _LinkDateTileState extends State<LinkDateTile> {
     final currentContact =
         AllContactsServices().getContactfromID(context, widget.date.linkid!);
 
-    /// Checks if the date is marked as done or not
-    bool? _isSelected = widget.date.isComplete;
 
     return currentContact.displayName == ''
           /// returns an empty box if contact name is null
@@ -55,84 +53,98 @@ class _LinkDateTileState extends State<LinkDateTile> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+
+                  // Builds the checkbox widget on each date tile.
+                  LinkDateCheckbox(date: widget.date,),
+
+                  const SizedBox(
+                    width: 8,
+                  ),
+
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      // Builds the checkbox widget on each date tile.
-                      SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: Transform.scale(
-                          scale: 1.5,
-                          child: StatefulBuilder(
-                            builder: (context, _setState) => Checkbox(
-
-                                side: const BorderSide(color: Constants.kPrimaryColor, width: 2),
-                                activeColor: Constants.kSecondaryColor,
-                                value: _isSelected,
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                shape: const CircleBorder(),
-
-                                onChanged: (bool? newValue) {
-
-                                  HapticFeedback.lightImpact();
-                                  _setState(() {
-
-                                    // Changes the value of the checkbox and updates the box
-                                    LinkDateServices()
-                                        .onTapCheckbox(newValue, widget.date);
-                                    _isSelected = newValue;
-                                  });
-
-                                }
-                                ),
-                          ),
+                      // Returns the display name widget on datetile
+                      Text(
+                        currentContact.displayName,
+                        style: widget.date.isComplete! ? const TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                          decoration: TextDecoration.lineThrough
+                        )
+                            : const TextStyle(
+                          fontSize: 16,
                         ),
                       ),
 
                       const SizedBox(
-                        width: 8,
+                        height: 3,
                       ),
 
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          // Returns the display name widget on datetile
-                          Text(
-                            currentContact.displayName,
-                            style: widget.date.isComplete! ? const TextStyle(
-                              fontSize: 16,
-                              fontStyle: FontStyle.italic,
-                              decoration: TextDecoration.lineThrough
-                            )
-                                : const TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 3,
-                          ),
-
-                          // Returns the nature of meeting widget on datetile
-                          const Text(
-                            'Recurring meeting',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 14, color: Constants.kSecondaryColor),
-                          ),
-
-                        ],
+                      // Returns the nature of meeting widget on datetile
+                      Text(
+                        widget.date.meetingType ?? '-',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 14, color: Constants.kSecondaryColor),
                       ),
+
                     ],
                   ),
                 ],
               ),
             ),
           );
+  }
+}
+
+class LinkDateCheckbox extends StatefulWidget {
+  const LinkDateCheckbox({
+    Key? key,
+    required this.date
+  }) : super(key: key);
+
+  final ForgeDates date;
+
+  @override
+  State<LinkDateCheckbox> createState() => _LinkDateCheckboxState();
+}
+
+class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      width: 40,
+      child: Transform.scale(
+        scale: 1.5,
+        child: StatefulBuilder(
+          builder: (context, _setState) => Checkbox(
+
+              side: const BorderSide(color: Constants.kPrimaryColor, width: 2),
+              activeColor: Constants.kSecondaryColor,
+              value: widget.date.isComplete,
+              materialTapTargetSize:
+                  MaterialTapTargetSize.shrinkWrap,
+              shape: const CircleBorder(),
+
+              onChanged: (bool? newValue) {
+
+                HapticFeedback.lightImpact();
+                _setState(() {
+
+                  // Changes the value of the checkbox and updates the box
+                  LinkDateServices()
+                      .onTapCheckbox(newValue, widget.date);
+                  widget.date.isComplete = newValue;
+                });
+
+              }
+              ),
+        ),
+      ),
+    );
   }
 }
 

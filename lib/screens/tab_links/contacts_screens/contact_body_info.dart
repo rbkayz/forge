@@ -5,6 +5,7 @@ import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
+import 'package:libphonenumber/libphonenumber.dart';
 
 import '../../../services/contacts_service.dart';
 
@@ -12,7 +13,7 @@ class ContactInfoTab extends StatelessWidget {
   ContactInfoTab({Key? key}) : super(key: key);
 
 
-  final relationshipsBox = Hive.box(Constants.linksBox);
+  final linksBox = Hive.box(Constants.linksBox);
 
   launchDialer(String currPhone) async {
     String url = 'tel:$currPhone';

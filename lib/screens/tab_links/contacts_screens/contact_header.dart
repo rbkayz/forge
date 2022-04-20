@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:forge/screens/tab_links/contacts_screens/contact_body_history.dart';
+import 'package:forge/screens/tab_links/contacts_screens/contact_body_timeline.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_body_notes.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
 import 'package:forge/services/contacts_service.dart';
 import 'package:forge/utilities/constants.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+import '../../../services/listenables.dart';
 import 'contact_body_info.dart';
 
 class ContactDetail extends StatefulWidget {
@@ -24,6 +27,8 @@ class _ContactDetailState extends State<ContactDetail> {
 
   late ScrollController _controller;
   bool _isScrolled = false;
+  final linksBox = Hive.box(Constants.linksBox);
+  final prefsBox = Hive.box(Constants.prefsBox);
 
   _scrollListener() {
     if (_controller.offset >= 60 && _isScrolled == false) {
@@ -52,7 +57,10 @@ class _ContactDetailState extends State<ContactDetail> {
 
     return Provider(
       create: (BuildContext context) => widget.currentID,
-      child: Scaffold(
+      child: ValueListenableBuilder2(
+        first: linksBox.listenable(),
+    second: prefsBox.listenable(),
+    builder: (BuildContext context, a, b, Widget? child) => Scaffold(
 
         appBar: ContactAppBar(isScrolled: _isScrolled),
 
@@ -96,7 +104,7 @@ class _ContactDetailState extends State<ContactDetail> {
             ),
         ),
       ),
-    );
+    ));
   }
 
 }

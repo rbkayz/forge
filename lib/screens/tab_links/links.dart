@@ -39,7 +39,6 @@ class _LinksPageState extends State<LinksPage> {
           String sortLinkMethod = prefs.get(Constants.sortLinkMethod, defaultValue: Constants.sortbyDate);
           List<ForgeLinks> sortedlinksValues = links.toMap().values.cast<ForgeLinks>().where((element) => element.isActive).toList();
 
-          sortedlinksValues.sort((a, b) => contactsService.getContactfromID(context, a.id).displayName.compareTo(contactsService.getContactfromID(context, b.id).displayName));
 
           switch(sortLinkMethod) {
 
@@ -54,6 +53,12 @@ class _LinksPageState extends State<LinksPage> {
 
                 });
               } break;
+
+            case Constants.sortbyName: {
+
+              sortedlinksValues.sort((a, b) => contactsService.getContactfromID(context, a.id).displayName.compareTo(contactsService.getContactfromID(context, b.id).displayName));
+
+            } break;
 
         }
 
