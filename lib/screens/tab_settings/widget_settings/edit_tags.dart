@@ -209,6 +209,12 @@ class _DialogAddEditTagState extends State<DialogAddEditTag> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    tagController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(

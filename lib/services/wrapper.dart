@@ -97,7 +97,7 @@ class _WrapperState extends State<Wrapper> {
 
               /// Returns an empty home screen while the future is waiting to be completed
               return Scaffold(
-                appBar: const ForgeAppBar(),
+                appBar: ForgeAppBar(),
                 body: Container(),
                 bottomNavigationBar: ForgeBottomNavigationBar(currentTab: TabName.timeline, onSelectTab: (tab) {}),
               );
