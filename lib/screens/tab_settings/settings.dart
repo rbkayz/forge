@@ -49,6 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void dispose() {
     Hive.box(Constants.linksBox).close();
+    Hive.box(Constants.prefsBox).close();
     super.dispose();
   }
 }

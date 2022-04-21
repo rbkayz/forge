@@ -18,8 +18,6 @@ NeumorphicStyle forgeNeumorphicStyle() {
 BoxDecoration forgeBoxDecoration() {
   return BoxDecoration(
     color: Constants.kWhiteColor,
-    border: Border.all(color: Colors.grey.shade100),
-    borderRadius: BorderRadius.circular(8),
     boxShadow: const [
       BoxShadow(
           blurRadius: 0.5,

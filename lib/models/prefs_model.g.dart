@@ -19,17 +19,20 @@ class ForgePrefsAdapter extends TypeAdapter<ForgePrefs> {
     return ForgePrefs(
       tagsList: (fields[0] as List).cast<LinkTag>(),
       showAllDatesinTimeline: fields[1] as bool,
+      sortLinkMethod: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ForgePrefs obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.tagsList)
       ..writeByte(1)
-      ..write(obj.showAllDatesinTimeline);
+      ..write(obj.showAllDatesinTimeline)
+      ..writeByte(2)
+      ..write(obj.sortLinkMethod);
   }
 
   @override

@@ -19,6 +19,12 @@ class ForgeLinks extends HiveObject {
   @HiveField(4)
   int? tagID;
 
+  @HiveField(5)
+  String? note;
+
+  @HiveField(6)
+  DateTime? lastUpdateNote;
+
   String get linkKey {
     return id;
   }
