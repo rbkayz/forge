@@ -6,9 +6,9 @@ import 'package:forge/components/loader.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
 import 'package:forge/utilities/constants.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import '../../services/contacts_service.dart';
 import '../../services/links_service.dart';
@@ -46,8 +46,8 @@ class _LinksPageState extends State<LinksPage> {
               {
                 sortedlinksValues.sort((a, b) {
 
-                  DateTime meetingDate1 = linksService.getNextDate(a.id).meetingDate ?? DateTime.now().add(Duration(days: 5000));
-                  DateTime meetingDate2 = linksService.getNextDate(b.id).meetingDate ?? DateTime.now().add(Duration(days: 5000));
+                  DateTime meetingDate1 = linksService.getNextDate(a.id).meetingDate ?? Constants().maxDate;
+                  DateTime meetingDate2 = linksService.getNextDate(b.id).meetingDate ?? Constants().maxDate;
 
                   return meetingDate1.compareTo(meetingDate2);
 
@@ -56,7 +56,16 @@ class _LinksPageState extends State<LinksPage> {
 
             case Constants.sortbyName: {
 
-              sortedlinksValues.sort((a, b) => contactsService.getContactfromID(context, a.id).displayName.compareTo(contactsService.getContactfromID(context, b.id).displayName));
+              List<Contact>? contacts = Provider.of<List<Contact>?>(context);
+
+              if (contacts != null && contacts.isNotEmpty) {
+                sortedlinksValues.sort((a, b) => contactsService
+                        .getContactfromID(context, a.id)
+                        .displayName
+                        .compareTo(contactsService
+                        .getContactfromID(context, b.id)
+                        .displayName));
+              }
 
             } break;
 
@@ -155,9 +164,11 @@ class _LinkCardState extends State<LinkCard> {
     ForgeDates prevDate = LinkDateServices().getPrevDate(widget.currentID);
     Contact currentContact = AllContactsServices().getContactfromID(context, widget.currentID);
 
+    Box linksBox = Hive.box(Constants.linksBox);
+
     //Get last connected date
     String lastConnected = prevDate.linkid != null
-        ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
+        ? 'Last connected on ${DateFormat('d MMM').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
         : 'No previous meetings available';
 
     return currentContact.id == ''

@@ -38,8 +38,8 @@ class _ContactTimelineTabState extends State<ContactTimelineTab> {
       builder: (BuildContext context, a, b, Widget? child) {
 
         linkDates.sort((a, b) {
-          DateTime meetingDate1 = a.meetingDate ?? DateTime.now().add(const Duration(days: 5000));
-          DateTime meetingDate2 = b.meetingDate ?? DateTime.now().add(const Duration(days: 5000));
+          DateTime meetingDate1 = a.meetingDate ?? Constants().maxDate;
+          DateTime meetingDate2 = b.meetingDate ?? Constants().maxDate;
           return meetingDate1.compareTo(meetingDate2);
         });
 
@@ -74,7 +74,7 @@ class _ContactTimelineTabState extends State<ContactTimelineTab> {
                           Text(
                             date.meetingType ?? '------',
                             overflow: TextOverflow.ellipsis,
-                            style: date.isComplete! ? const TextStyle(
+                            style: (date.isComplete != null && date.isComplete == true) ? const TextStyle(
                                 fontSize: 16,
                                 fontStyle: FontStyle.italic,
                                 decoration: TextDecoration.lineThrough

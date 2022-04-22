@@ -30,20 +30,27 @@ class WidgetTag extends StatefulWidget {
 }
 
 class _WidgetTagState extends State<WidgetTag> {
-  LinkTag currentTag = LinkTag(tagName: 'NO TAG', tagColor: Colors.grey.shade100.value);
+  LinkTag currentTag =
+      LinkTag(tagName: 'NO TAG', tagColor: Colors.grey.shade100.value);
   int? currentTagID;
 
   @override
   Widget build(BuildContext context) {
-
     ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.id);
 
     currentTagID = currentLink?.tagID;
 
+    Box prefsBox = Hive.box(Constants.prefsBox);
+    List<LinkTag> tagsList =
+        prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+
     if (currentTagID != null) {
-      Box prefsBox = Hive.box(Constants.prefsBox);
-      List<LinkTag> tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
-      currentTag = tagsList[tagsList.indexWhere((element) => element.tagID == currentTagID)];
+      int foundindex =
+          tagsList.indexWhere((element) => element.tagID == currentTagID);
+      if (foundindex >= 0) {
+        currentTag = tagsList[
+            tagsList.indexWhere((element) => element.tagID == currentTagID)];
+      }
     }
 
     return Material(
@@ -51,22 +58,26 @@ class _WidgetTagState extends State<WidgetTag> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: InkWell(
         onTap: () {
-
           HapticFeedback.lightImpact();
 
-          showModalBottomSheet(
-            isScrollControlled: true,
-              context: context,
-              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.9) ,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
-              elevation: 20,
-              builder: (context) {
-                return DialogTagSelector(currentID: widget.id);
-              }
-          ).then((_) => updateState());
-
+          if (tagsList.isNotEmpty) {
+            showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.9),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                elevation: 20,
+                builder: (context) {
+                  return DialogTagSelector(currentID: widget.id);
+                }).then((_) => updateState());
+          } else {
+            Navigator.pushNamed(context, Constants.editTagsNavigate).then((value) => updateState());
+          }
         },
-
         child: Padding(
           padding: const EdgeInsets.all(3.0),
           child: Text(
@@ -76,24 +87,19 @@ class _WidgetTagState extends State<WidgetTag> {
         ),
       ),
     );
-
   }
 
   updateState() {
-    setState(() {
-
-    });
+    setState(() {});
   }
 }
-
 
 ///--------------------------------------------------------------
 /// Calendar Widget for the next meeting
 ///--------------------------------------------------------------
 
 class NextConnectDateWidget extends StatefulWidget {
-  const NextConnectDateWidget({Key? key, required this.id})
-      : super(key: key);
+  const NextConnectDateWidget({Key? key, required this.id}) : super(key: key);
 
   final String id;
 
@@ -102,35 +108,24 @@ class NextConnectDateWidget extends StatefulWidget {
 }
 
 class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
-
   DateTime? newDate;
-
 
   /// Function that updates the value in the next date box
   Future _changeDate() async {
-
     if (LinkDateServices().isLinkActive(widget.id)) {
-
       HapticFeedback.lightImpact();
       newDate = await DatePickerService().changeDate(context, widget.id);
-
     } else {
-
       HapticFeedback.lightImpact();
 
       await LinkDateServices().activateLink(context, widget.id);
 
       newDate = await DatePickerService().changeDate(context, widget.id);
-
     }
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-
     ForgeDates nextDate = LinkDateServices().getNextDate(widget.id);
 
     return Tooltip(
@@ -140,21 +135,15 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
         height: 60,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Constants.kWhiteColor,
-            minimumSize: Size.zero,
-            padding: EdgeInsets.zero
-          ),
-
+              primary: Constants.kWhiteColor,
+              minimumSize: Size.zero,
+              padding: EdgeInsets.zero),
           onPressed: () async {
-
             /// Updates the value in the box
-              _changeDate().then((value) {
-                setState(() {
-
-                });
-              });
+            _changeDate().then((value) {
+              setState(() {});
+            });
           },
-
           child: nextDate.linkid != null
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -163,23 +152,32 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
                     SizedBox(
                       width: 27,
                       child: FittedBox(
-                        child: Text(DateFormat('d')
-                            .format(nextDate.meetingDate!)
-                            .padLeft(2, '0'), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400),),
+                        child: Text(
+                          DateFormat('d')
+                              .format(nextDate.meetingDate!)
+                              .padLeft(2, '0'),
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w400),
+                        ),
                       ),
                     ),
                     SizedBox(
                       width: 24,
                       child: FittedBox(
-                        child: Text(DateFormat('MMM')
-                            .format(nextDate.meetingDate!)
-                            .toUpperCase(),style: const TextStyle(color: Constants.kBlackColor,fontWeight: FontWeight.w400)),
+                        child: Text(
+                            DateFormat('MMM')
+                                .format(nextDate.meetingDate!)
+                                .toUpperCase(),
+                            style: const TextStyle(
+                                color: Constants.kBlackColor,
+                                fontWeight: FontWeight.w400)),
                       ),
                     ),
                   ],
                 )
               : const Center(
-                  child: Text('--',style: TextStyle(color: Constants.kBlackColor)),
+                  child: Text('--',
+                      style: TextStyle(color: Constants.kBlackColor)),
                 ),
         ),
       ),
@@ -201,19 +199,18 @@ class LinkProgressBar extends StatefulWidget {
 class _LinkProgressBarState extends State<LinkProgressBar> {
   @override
   Widget build(BuildContext context) {
-
     String currentID = Provider.of<String>(context);
-    Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
+    Contact currentContact =
+        AllContactsServices().getContactfromID(context, currentID);
     ForgeDates prevDate = LinkDateServices().getPrevDate(currentContact.id);
     ForgeDates nextDate = LinkDateServices().getNextDate(currentContact.id);
-
 
     String first_row = prevDate.linkid != null
         ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
         : 'No previous connects available';
 
-    String third_row = nextDate.linkid != null ?
-        'Next connect is in ${nextDate.meetingDate!.difference(DateTime.now()).inDays} days'
+    String third_row = nextDate.linkid != null
+        ? 'Next connect is in ${nextDate.meetingDate!.difference(DateTime.now()).inDays} days'
         : 'No connects scheduled';
 
     return Row(
@@ -223,17 +220,12 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
           child: Column(
             children: [
               LinkHeaderRowWidget(icon: Icons.event_outlined, text: first_row),
-
               const SizedBox(height: 12),
-
               const LinkHeaderRowWidget(
                   icon: Icons.repeat, text: 'Repeats every 3 months'),
-
               const SizedBox(height: 12),
-
               LinkHeaderRowWidget(
-                  icon: Icons.upcoming_outlined,
-                  text: third_row),
+                  icon: Icons.upcoming_outlined, text: third_row),
             ],
           ),
         ),
@@ -242,11 +234,9 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
   }
 }
 
-
 ///--------------------------------------------------------------
 /// Link header row (three rows)
 ///--------------------------------------------------------------
-
 
 class LinkHeaderRowWidget extends StatelessWidget {
   const LinkHeaderRowWidget({
@@ -280,7 +270,6 @@ class LinkHeaderRowWidget extends StatelessWidget {
   }
 }
 
-
 ///--------------------------------------------------------------
 /// Get two initials of the name. If not return a -
 ///--------------------------------------------------------------
@@ -305,7 +294,6 @@ String getInitials(List<String> nameParts) {
 /// Builds the circle avatar for the contact
 ///--------------------------------------------------------------
 
-
 class ContactCircleAvatar extends StatefulWidget {
   const ContactCircleAvatar(
       {Key? key, required this.currentContact, this.radius = 20})
@@ -327,9 +315,9 @@ class _ContactCircleAvatarState extends State<ContactCircleAvatar> {
 
     return (currentContactImage == null)
         ? CircleAvatar(
-      child: Text(initials),
-      radius: widget.radius,
-    )
+            child: Text(initials),
+            radius: widget.radius,
+          )
         : CircleAvatar(backgroundImage: MemoryImage(currentContactImage));
   }
 }

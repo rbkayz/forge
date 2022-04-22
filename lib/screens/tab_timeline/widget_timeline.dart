@@ -68,7 +68,7 @@ class _LinkDateTileState extends State<LinkDateTile> {
                       // Returns the display name widget on datetile
                       Text(
                         currentContact.displayName,
-                        style: widget.date.isComplete! ? const TextStyle(
+                        style: (widget.date.isComplete != null && widget.date.isComplete == true) ? const TextStyle(
                           fontSize: 16,
                           fontStyle: FontStyle.italic,
                           decoration: TextDecoration.lineThrough
@@ -124,7 +124,7 @@ class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
 
               side: const BorderSide(color: Constants.kPrimaryColor, width: 2),
               activeColor: Constants.kSecondaryColor,
-              value: widget.date.isComplete,
+              value: widget.date.isComplete ?? false,
               materialTapTargetSize:
                   MaterialTapTargetSize.shrinkWrap,
               shape: const CircleBorder(),

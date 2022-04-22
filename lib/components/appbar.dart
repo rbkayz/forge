@@ -187,9 +187,9 @@ class AppBarAddDate extends StatelessWidget {
     return IconButton(
       visualDensity: VisualDensity.compact,
       splashRadius: 20,
-      icon: Icon(Icons.calendar_month),
+      icon: Icon(Icons.add_task_outlined),
       onPressed: () {
-        showDialog(context: context, builder: (context) => DialogAddNewLinkDate());
+        showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate());
       },
     );
   }

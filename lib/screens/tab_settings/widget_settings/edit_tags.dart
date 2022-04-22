@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 import '../../../components/appbar.dart';
+import '../../../models/links_model.dart';
 import '../../../models/prefs_model.dart';
 import '../../../utilities/constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
 
 ///--------------------------------------------------------------
 /// Main method for tags
@@ -20,11 +20,9 @@ class TagsEditor extends StatefulWidget {
 }
 
 class _TagsEditorState extends State<TagsEditor> {
-
   final prefsBox = Hive.box(Constants.prefsBox);
   late List<LinkTag> tagsList;
   late LinkTag? newTag;
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +32,8 @@ class _TagsEditorState extends State<TagsEditor> {
       appBar: const ForgeAppBar(
         title: 'Edit Tags',
       ),
-
       body: tagsList.isEmpty
-
           ? const SizedBox.shrink()
-
           : ListView.builder(
               shrinkWrap: true,
               itemCount: tagsList.length,
@@ -52,18 +47,15 @@ class _TagsEditorState extends State<TagsEditor> {
                     Icons.tag,
                     color: currentTag.tagColor == null
                         ? Constants.kSecondaryColor
-                        : Color(currentTag.tagColor!) ,
+                        : Color(currentTag.tagColor!),
                   ),
-
-                  title: Row(
-                      children: [
-
+                  title: Row(children: [
                     WidgetTagTile(currentTag: currentTag),
                   ]),
-
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+
 
                       //Edit button
                       IconButton(
@@ -75,18 +67,19 @@ class _TagsEditorState extends State<TagsEditor> {
                         ),
                         onPressed: () async {
 
-                          newTag = await showDialog(context: context, builder: (context) => DialogAddEditTag(initialTag: currentTag,));
+                          newTag = await showDialog(
+                              context: context,
+                              builder: (context) => DialogAddEditTag(
+                                    initialTag: currentTag,
+                                  ));
 
                           setState(() {
-
                             if (newTag != null) {
-
-                              tagsList[tagsList.indexWhere((element) => element.tagID == newTag?.tagID)] = newTag!;
+                              tagsList[tagsList.indexWhere((element) =>
+                                  element.tagID == newTag?.tagID)] = newTag!;
                               prefsBox.put('tags', tagsList);
                             }
-
                           });
-
                         },
                       ),
 
@@ -103,59 +96,84 @@ class _TagsEditorState extends State<TagsEditor> {
 
                           newTag = LinkTag();
 
-                          bool? toDelete = await showDialog(context: context, builder: (context) {
 
-                            return AlertDialog(
-                              title: const Text('Confirm Deletion', style: TextStyle(color: Constants.kBlackColor),),
-                              content: const Text('Deleting this tag cannot be reversed. Are you sure you want to continue?'),
-                              actions: [
-                                TextButton(onPressed: () {Navigator.pop(context, false);}, child: Text('Cancel', style: TextStyle(color: Constants.kBlackColor))),
-                                TextButton(onPressed: () {Navigator.pop(context, true);}, child: Text('Delete', style: TextStyle(color: Constants.kErrorColor),)),
-                              ],
-                            );
+                          bool? toDelete = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Confirm Deletion',
+                                    style:
+                                        TextStyle(color: Constants.kBlackColor),
+                                  ),
+                                  content: const Text(
+                                      'Deleting this tag cannot be reversed. Are you sure you want to continue?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                        child: const Text('Cancel',
+                                            style: TextStyle(
+                                                color: Constants.kBlackColor))),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, true);
+                                        },
+                                        child: const Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                              color: Constants.kErrorColor),
+                                        )),
+                                  ],
+                                );
+                              });
 
-                          }
-                          );
 
-                          setState(() {
-                            if (toDelete != null && toDelete == true) {
-                              tagsList.removeWhere((element) => element.tagID == currentTag.tagID);
+                          /// Function is called when deleting a tag. Bug still occurs that on deleting a tag, there is no update on the main screen tags
+                          if (toDelete != null && toDelete == true) {
 
-                              prefsBox.put('tags', tagsList);
+                            Box linksBox = Hive.box(Constants.linksBox);
+
+                            List<ForgeLinks> linkswithTag = linksBox.values.where((element) => element.tagID == currentTag.tagID).cast<ForgeLinks>().toList();
+
+                            for (int i = 0; i < linkswithTag.length; i++) {
+                              ForgeLinks e = linkswithTag.elementAt(i);
+                              e.tagID = null;
+                              linksBox.put(e.id, e);
                             }
-                          });
+
+                            setState(() {});
+
+                            tagsList.removeWhere((element) => element.tagID == currentTag.tagID);
+                            prefsBox.put('tags', tagsList);
+                          }
+
 
                         },
                       ),
-
-
                     ],
                   ),
                 );
               },
             ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          newTag = await showDialog(context: context, builder: (context) => DialogAddEditTag());
+          newTag = await showDialog(
+              context: context, builder: (context) => DialogAddEditTag());
 
           setState(() {
-
             if (newTag != null) {
               tagsList.add(newTag!);
               prefsBox.put('tags', tagsList);
             }
-
           });
-
         },
         child: const Icon(Icons.add),
       ),
-
     );
   }
 }
-
 
 ///--------------------------------------------------------------
 /// Tag Tile for each widget
@@ -172,24 +190,26 @@ class WidgetTagTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(color: Color(currentTag.tagColor ?? Constants.kSecondaryColor.value), borderRadius: BorderRadius.circular(5)),
+      decoration: BoxDecoration(
+          color: Color(currentTag.tagColor ?? Constants.kSecondaryColor.value),
+          borderRadius: BorderRadius.circular(5)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
         child: Text('${currentTag.tagName?.toUpperCase()}',
             style: TextStyle(
                 fontSize: 14,
-                color: useWhiteForeground(Color(currentTag.tagColor ?? Constants.kSecondaryColor.value)) ? Colors.white : Colors.black)),
+                color: useWhiteForeground(Color(
+                        currentTag.tagColor ?? Constants.kSecondaryColor.value))
+                    ? Colors.white
+                    : Colors.black)),
       ),
     );
   }
 }
 
-
-
 ///--------------------------------------------------------------
 /// Dialog Widget to Add / Edit Tags
 ///--------------------------------------------------------------
-
 
 class DialogAddEditTag extends StatefulWidget {
   DialogAddEditTag({Key? key, this.initialTag}) : super(key: key);
@@ -200,11 +220,9 @@ class DialogAddEditTag extends StatefulWidget {
 
   @override
   State<DialogAddEditTag> createState() => _DialogAddEditTagState();
-
 }
 
 class _DialogAddEditTagState extends State<DialogAddEditTag> {
-
   final tagController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -227,13 +245,15 @@ class _DialogAddEditTagState extends State<DialogAddEditTag> {
               key: _formKey,
               child: Column(
                 children: [
-
                   //Get name field
-                  WidgetTagNameTextField(initialTag: widget.initialTag, tagController: tagController),
+                  WidgetTagNameTextField(
+                      initialTag: widget.initialTag,
+                      tagController: tagController),
 
                   //Get color picker
                   BlockPicker(
-                    pickerColor: Color(widget.initialTag?.tagColor ?? tagColors.first.value),
+                    pickerColor: Color(
+                        widget.initialTag?.tagColor ?? tagColors.first.value),
                     availableColors: tagColors,
                     onColorChanged: (newColor) {
                       widget.newColorValue = newColor;
@@ -242,63 +262,56 @@ class _DialogAddEditTagState extends State<DialogAddEditTag> {
                     layoutBuilder: layoutBuilder,
                   ),
 
-
                   Row(
                     children: [
-
                       //Cancel Button
                       Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: OutlinedButton(
-                                onPressed: () {
-
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
-                                style: OutlinedButton.styleFrom(primary: Constants.kPrimaryColor,backgroundColor: Constants.kWhiteColor)
-                            ),
-                          )
-                      ),
-
+                        padding: const EdgeInsets.all(8.0),
+                        child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                            style: OutlinedButton.styleFrom(
+                                primary: Constants.kPrimaryColor,
+                                backgroundColor: Constants.kWhiteColor)),
+                      )),
 
                       //Done button
                       Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: OutlinedButton(
-                              onPressed: () {
+                        padding: const EdgeInsets.all(8.0),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              widget.newTag.tagName = tagController.text;
 
-                                if(_formKey.currentState!.validate()) {
-                                  widget.newTag.tagName = tagController.text;
+                              widget.newTag.tagColor =
+                                  widget.newColorValue?.value ??
+                                      widget.initialTag?.tagColor ??
+                                      tagColors.first.value;
+                              widget.newTag.tagID = widget.initialTag?.tagID ??
+                                  widget.newTag.hashCode;
 
-                                  widget.newTag.tagColor =
-                                      widget.newColorValue?.value ??
-                                          widget.initialTag?.tagColor ??
-                                          tagColors.first.value;
-                                  widget.newTag.tagID =
-                                      widget.initialTag?.tagID ??
-                                          widget.newTag.hashCode;
-
-                                  Navigator.pop(context, widget.newTag);
-                                }
-                              },
-                              child: const Text('Done'),
-                              style: OutlinedButton.styleFrom(primary: Constants.kWhiteColor,backgroundColor: Constants.kPrimaryColor),
-                            ),
-                          ))
+                              Navigator.pop(context, widget.newTag);
+                            }
+                          },
+                          child: const Text('Done'),
+                          style: OutlinedButton.styleFrom(
+                              primary: Constants.kWhiteColor,
+                              backgroundColor: Constants.kPrimaryColor),
+                        ),
+                      ))
                     ],
                   )
                 ],
               ),
             ),
           ),
-
           elevation: 20,
-
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20))),
-
           backgroundColor: Constants.kWhiteColor,
         ),
       ),
@@ -306,51 +319,43 @@ class _DialogAddEditTagState extends State<DialogAddEditTag> {
   }
 }
 
-
-
 ///--------------------------------------------------------------
 /// Widget to edit tag name within dialog
 ///--------------------------------------------------------------
 
 class WidgetTagNameTextField extends StatefulWidget {
-  WidgetTagNameTextField({
-    Key? key, this.initialTag, required this.tagController
-  }) : super(key: key);
+  WidgetTagNameTextField(
+      {Key? key, this.initialTag, required this.tagController})
+      : super(key: key);
 
   final LinkTag? initialTag;
   final TextEditingController tagController;
 
   @override
   State<WidgetTagNameTextField> createState() => _WidgetTagNameTextFieldState();
-
 }
 
 class _WidgetTagNameTextFieldState extends State<WidgetTagNameTextField> {
-
-
   String? tagvalidator(text) {
+    if (text == null || text.isEmpty) {
+      return 'Tag name cannot be blank';
+    }
 
-      if (text == null || text.isEmpty) {
-        return 'Tag name cannot be blank';
-      }
-      
-      Box prefsBox = Hive.box(Constants.prefsBox);
-      List<LinkTag> tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
-      
-      if (tagsList.where((element) => element.tagName == text).isNotEmpty && widget.initialTag?.tagName != text) {
-        return 'Tag name already exists';
-      }
-      
-      return null;
+    Box prefsBox = Hive.box(Constants.prefsBox);
+    List<LinkTag> tagsList =
+        prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 
+    if (tagsList.where((element) => element.tagName == text).isNotEmpty &&
+        widget.initialTag?.tagName != text) {
+      return 'Tag name already exists';
+    }
+
+    return null;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-
-   widget.tagController.text = widget.initialTag?.tagName?.toUpperCase() ?? '';
+    widget.tagController.text = widget.initialTag?.tagName?.toUpperCase() ?? '';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -368,12 +373,6 @@ class _WidgetTagNameTextFieldState extends State<WidgetTagNameTextField> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    widget.tagController.dispose();
-    super.dispose();
-  }
 }
 
 ///--------------------------------------------------------------
@@ -382,7 +381,6 @@ class _WidgetTagNameTextFieldState extends State<WidgetTagNameTextField> {
 
 Widget pickerItemBuilder(
     Color color, bool isCurrentColor, void Function() changeColor) {
-
   return Container(
     margin: const EdgeInsets.all(8),
     decoration: BoxDecoration(
@@ -395,7 +393,6 @@ Widget pickerItemBuilder(
             blurRadius: 0.2)
       ],
     ),
-
     child: InkWell(
       onTap: changeColor,
       borderRadius: BorderRadius.circular(15),
@@ -427,24 +424,20 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   }
 }
 
-
 ///--------------------------------------------------------------
 /// Color modifier
 ///--------------------------------------------------------------
 
-Color colorModifier (Color color) {
-
+Color colorModifier(Color color) {
   final hslColor = HSLColor.fromColor(color);
   final Color modColor = hslColor.withLightness(0.65).withAlpha(0.2).toColor();
 
   return modColor;
-
 }
 
 ///--------------------------------------------------------------
 /// Widget to modify layout builder
 ///--------------------------------------------------------------
-
 
 Widget layoutBuilder(
     BuildContext context, List<Color> colors, PickerItem child) {

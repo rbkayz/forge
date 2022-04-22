@@ -87,11 +87,16 @@ class WidgetLogout extends StatelessWidget {
 /// Edit Tags
 ///--------------------------------------------------------------
 
-class WidgetEditTags extends StatelessWidget {
+class WidgetEditTags extends StatefulWidget {
   const WidgetEditTags({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<WidgetEditTags> createState() => _WidgetEditTagsState();
+}
+
+class _WidgetEditTagsState extends State<WidgetEditTags> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -99,7 +104,7 @@ class WidgetEditTags extends StatelessWidget {
       leading: const Icon(Icons.tag),
       title: const Text('Tags'),
       onTap: () {
-        Navigator.pushNamed(context, Constants.editTagsNavigate);
+        Navigator.pushNamed(context, Constants.editTagsNavigate).then((value) => setState(() {}));
       },
     );
   }

@@ -18,7 +18,7 @@ class DatePickerService {
         context: context,
         initialDate: initialDate,
         firstDate: DateUtils.dateOnly(DateTime.now()),
-        lastDate: initialDate.add(Duration(days: 1461),),
+        lastDate: Constants().maxDate,
         helpText: meetingExists ? 'CHANGE DATE' : 'SET NEW MEETING DATE',
     );
 
