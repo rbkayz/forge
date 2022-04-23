@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forge/services/contacts_service.dart';
 import 'package:forge/services/links_service.dart';
+import 'package:hive/hive.dart';
 import '../../models/links_model.dart';
 import '../../utilities/constants.dart';
+import '../dialogs/dialog_addnewlinkdate.dart';
 
 
 ///--------------------------------------------------------------
@@ -47,11 +49,11 @@ class _LinkDateTileState extends State<LinkDateTile> {
             child: Container(
 
               // 18 px padding on Left to align with Forge
-              padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+              padding: const EdgeInsets.fromLTRB(18, 12, 0, 12),
 
 
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
 
                   // Builds the checkbox widget on each date tile.
@@ -61,43 +63,53 @@ class _LinkDateTileState extends State<LinkDateTile> {
                     width: 8,
                   ),
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                      // Returns the display name widget on datetile
-                      Text(
-                        currentContact.displayName,
-                        style: (widget.date.isComplete != null && widget.date.isComplete == true) ? const TextStyle(
-                          fontSize: 16,
-                          fontStyle: FontStyle.italic,
-                          decoration: TextDecoration.lineThrough
-                        )
-                            : const TextStyle(
-                          fontSize: 16,
+                        // Returns the display name widget on datetile
+                        Text(
+                          currentContact.displayName,
+                          style: (widget.date.isComplete != null && widget.date.isComplete == true) ? const TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            decoration: TextDecoration.lineThrough
+                          )
+                              : const TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
 
-                      const SizedBox(
-                        height: 3,
-                      ),
+                        const SizedBox(
+                          height: 3,
+                        ),
 
-                      // Returns the nature of meeting widget on datetile
-                      Text(
-                        widget.date.meetingType ?? '-',
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 14, color: Constants.kSecondaryColor),
-                      ),
+                        // Returns the nature of meeting widget on datetile
+                        Text(
+                          widget.date.meetingType ?? '-',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 14, color: Constants.kSecondaryColor),
+                        ),
 
-                    ],
+                      ],
+                    ),
                   ),
+
+                  WidgetDatePopupMenu(currentDate: widget.date),
+
                 ],
               ),
             ),
           );
   }
 }
+
+
+///--------------------------------------------------------------
+/// Widget for the checkbox
+///--------------------------------------------------------------
 
 class LinkDateCheckbox extends StatefulWidget {
   const LinkDateCheckbox({
@@ -175,4 +187,78 @@ Widget DateDivider ({required String divText}) {
     ),
   );
 
+}
+
+
+
+///--------------------------------------------------------------
+/// Widget Date PopupMenu
+///--------------------------------------------------------------
+
+
+class WidgetDatePopupMenu extends StatelessWidget {
+  WidgetDatePopupMenu({Key? key, required this.currentDate}) : super(key: key);
+
+  ForgeDates currentDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(Icons.more_vert, color: Constants.kSecondaryColor,),
+        onSelected: (val) {
+
+        },
+
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+
+        itemBuilder: (context) => [
+
+          /// Edits the date
+          PopupMenuItem(
+              padding: EdgeInsets.zero,
+              child: ListTile(
+                leading: const Icon(Icons.edit),
+                contentPadding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+                visualDensity: VisualDensity(vertical: -4),
+                minLeadingWidth: 5,
+                title: const Text('Edit'),
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: currentDate,));
+                },
+              ),
+          ),
+
+
+          /// Deletes the date
+          PopupMenuItem(
+            padding: EdgeInsets.zero,
+            child: ListTile(
+              leading: const Icon(Icons.delete),
+              contentPadding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+              visualDensity: VisualDensity(vertical: -4),
+              minLeadingWidth: 5,
+              title: const Text('Delete'),
+              onTap: () {
+
+                if (currentDate.linkid != null ) {
+                  ForgeLinks? currentLink = LinkDateServices().getLinkfromid(currentDate.linkid!);
+
+                  if (currentLink != null ) {
+                    currentLink.linkDates.removeWhere((element) => element == currentDate);
+                    Box linksBox = Hive.box(Constants.linksBox);
+                    linksBox.put(currentLink.id, currentLink);
+                  }
+                }
+
+                Navigator.pop(context);
+              },
+            ),
+          ),
+
+
+
+        ]
+    );
+  }
 }

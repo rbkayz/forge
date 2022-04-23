@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/components/search.dart';
 import 'package:forge/components/toggle_links.dart';
+import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/dialogs/dialog_addnewlinkdate.dart';
 import 'package:forge/screens/dialogs/dialog_popupmenu.dart';
 import 'package:forge/services/router.dart';
@@ -69,10 +70,23 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
       foregroundColor: Theme.of(context).primaryColor,
       elevation: 0,
       actions: <Widget>[
+
+        IconButton(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          visualDensity: VisualDensity.compact,
+          splashRadius: 20,
+          icon: Icon(Icons.add_task_outlined),
+          onPressed: () {
+            showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: ForgeDates(linkid: currentContact.id, isComplete: false),));
+            },
+        ),
+
         Padding(
           padding: const EdgeInsets.only(right: 20),
           child: ToggleLinks(currentContact: currentContact),
-        )
+        ),
+
+
       ],
     );
   }
@@ -145,9 +159,8 @@ class AppBarOptions extends StatelessWidget {
     return IconButton(
       visualDensity: VisualDensity.compact,
       splashRadius: 20,
-      icon: Icon(Icons.more_vert),
+      icon: Icon(Icons.menu),
       onPressed: () {
-        print('dead code');
       },
     );
   }

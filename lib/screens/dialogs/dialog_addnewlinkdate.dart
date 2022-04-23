@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:forge/services/contacts_service.dart';
+import 'package:forge/services/links_service.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_contacts/contact.dart';
@@ -13,7 +15,9 @@ import '../../utilities/constants.dart';
 ///--------------------------------------------------------------
 
 class DialogAddNewLinkDate extends StatefulWidget {
-  const DialogAddNewLinkDate({Key? key}) : super(key: key);
+  DialogAddNewLinkDate({Key? key, this.initDate}) : super(key: key);
+
+  ForgeDates? initDate;
 
   @override
   State<DialogAddNewLinkDate> createState() => _DialogAddNewLinkDateState();
@@ -26,13 +30,34 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
   TextEditingController NameController = TextEditingController();
   TextEditingController DateController = TextEditingController();
   TextEditingController TypeController = TextEditingController();
-  late DateTime newMeetingDate;
+  DateTime? newMeetingDate;
+
+
+  // Inital values if date is provided
+  String? currentName;
+  DateTime? currentDate;
+  String? currentType;
+
 
   @override
   Widget build(BuildContext context) {
+
+    /// Initialize values if an initial forgedates is provided
+
+    if (widget.initDate != null && widget.initDate?.linkid != null) {
+      Contact initContact = AllContactsServices().getContactfromID(context, widget.initDate!.linkid!);
+      currentName = initContact.displayName;
+      currentDate = widget.initDate?.meetingDate;
+      currentType = widget.initDate?.meetingType;
+
+      newMeetingDate = widget.initDate?.meetingDate;
+    }
+
+
+
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.fromLTRB(0, 32, 0, 0),
+        margin: const EdgeInsets.fromLTRB(0, 32, 0, 0),
         child: Dialog(
           alignment: Alignment.center,
           child: Padding(
@@ -56,18 +81,17 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
 
                   SizedBox(height: 12,),
 
-                  WidgetAddLinkName(NameController: NameController,),
+                  WidgetAddLinkName(NameController: NameController, currentName: currentName,),
 
                   SizedBox(height: 12,),
 
-                  WidgetPickDateAlt(DateController: DateController, dateTimeCallBack: (DateTime date) {
+                  WidgetPickDateAlt(DateController: DateController, currentDate: currentDate, dateTimeCallBack: (DateTime date) {
                     newMeetingDate = date;
-                    print('hello');
                   },),
 
                   SizedBox(height: 12,),
 
-                  WidgetSetMeetingType(TypeController: TypeController,),
+                  WidgetSetMeetingType(TypeController: TypeController, currentType: currentType,),
 
                   SizedBox(height: 12,),
 
@@ -91,6 +115,8 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
                       //Done button
                       Expanded(
                           child: OutlinedButton(
+
+                            /// Executes the addition or modification of the new date once done
                             onPressed: () {
 
                               if(_newLinkFormKey.currentState!.validate()) {
@@ -104,17 +130,56 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
 
                                   Contact currentContact = contacts.where((element) => element.displayName == currentDisplayName).first;
 
-                                  ForgeLinks currentLink = linksBox.get(currentContact.id);
+                                  ForgeLinks? currentLink = linksBox.get(currentContact.id);
 
-                                  //TODO: Need to make currentLink nullable, and then create a link if it is null;
+                                  // Makes currentLink nullable, and then creates a link if it is null;
+                                  if (currentLink == null) {
+                                    LinkDateServices().activateLink(context, currentContact.id);
+                                    currentLink = linksBox.get(currentContact.id);
+                                  } else {
+                                    currentLink.isActive = true;
+                                  }
 
                                   String newMeetingType = TypeController.text;
 
-                                  ForgeDates newDate = ForgeDates(meetingDate: newMeetingDate, meetingType: newMeetingType, linkid: currentContact.id, isComplete: false);
+                                  // If initial date is null, then adds a new date
+                                  if (widget.initDate == null) {
 
-                                  currentLink.linkDates.add(newDate);
+                                    ForgeDates newDate = ForgeDates(
+                                        meetingDate: newMeetingDate, meetingType: newMeetingType, linkid: currentContact.id, isComplete: false);
 
-                                  linksBox.put(currentLink.id, currentLink);
+                                    currentLink!.linkDates.add(newDate);
+
+                                  } else {
+
+                                    if (currentLink != null) {
+
+                                      // checks if the initdate exists in the link. If it does, then updates it
+                                      if (currentLink.linkDates.contains(widget.initDate)) {
+                                        currentLink.linkDates
+                                            .where((element) => element == widget.initDate)
+                                            .first
+                                            .meetingDate = newMeetingDate;
+                                        currentLink.linkDates
+                                            .where((element) => element == widget.initDate)
+                                            .first
+                                            .meetingType = newMeetingType;
+                                      }
+
+                                      // If initdate doesn't exist, then creates a new ForgeDate, and then adds it. Typically used for contact screen
+                                      else {
+
+                                        ForgeDates newDate = ForgeDates(
+                                            meetingDate: newMeetingDate, meetingType: newMeetingType, linkid: widget.initDate!.linkid, isComplete: widget.initDate!.isComplete);
+
+                                        currentLink.linkDates.add(newDate);
+
+                                      }
+                                    }
+                                  }
+                                  
+                                  
+                                  linksBox.put(currentLink!.id, currentLink);
 
                                   Navigator.pop(context);
 
@@ -154,9 +219,10 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
 
 
 class WidgetAddLinkName extends StatefulWidget {
-  WidgetAddLinkName({Key? key, required this.NameController}) : super(key: key);
+  WidgetAddLinkName({Key? key, required this.NameController, this.currentName}) : super(key: key);
 
   TextEditingController NameController;
+  String? currentName;
 
   @override
   State<WidgetAddLinkName> createState() => _WidgetAddLinkNameState();
@@ -171,6 +237,7 @@ class _WidgetAddLinkNameState extends State<WidgetAddLinkName> {
   Widget build(BuildContext context) {
 
     List<Contact>? contacts = Provider.of<List<Contact>?>(context);
+    widget.NameController.text = widget.currentName ?? '';
 
     /// Convert contacts to list of contact names
     contacts?.forEach((element) {
@@ -249,6 +316,7 @@ class _WidgetAddLinkNameState extends State<WidgetAddLinkName> {
 
           return TextFormField(
             controller: controller,
+            readOnly: widget.currentName != null ? true : false,
             validator: NameValidator,
             focusNode: focusNode,
             onEditingComplete: onEditingComplete,
@@ -273,10 +341,11 @@ class _WidgetAddLinkNameState extends State<WidgetAddLinkName> {
 typedef void DateTimeCallBack (DateTime date);
 
 class WidgetPickDateAlt extends StatefulWidget {
-  WidgetPickDateAlt({Key? key, required this.DateController, required this.dateTimeCallBack}) : super(key: key);
+  WidgetPickDateAlt({Key? key, required this.DateController, required this.dateTimeCallBack, this.currentDate}) : super(key: key);
 
   TextEditingController DateController;
   final DateTimeCallBack dateTimeCallBack;
+  DateTime? currentDate;
 
   @override
   State<WidgetPickDateAlt> createState() => _WidgetPickDateAltState();
@@ -303,7 +372,8 @@ class _WidgetPickDateAltState extends State<WidgetPickDateAlt> {
   @override
   Widget build(BuildContext context) {
 
-    widget.DateController.text = date?.toString() ?? '';
+    date = widget.currentDate;
+    widget.DateController.text = (date != null) ? DateFormat('d MMM y').format(date!) : '';
 
     return TextFormField(
       controller: widget.DateController,
@@ -344,9 +414,10 @@ class _WidgetPickDateAltState extends State<WidgetPickDateAlt> {
 
 
 class WidgetSetMeetingType extends StatefulWidget {
-  WidgetSetMeetingType({Key? key, required this.TypeController}) : super(key: key);
+  WidgetSetMeetingType({Key? key, required this.TypeController, this.currentType}) : super(key: key);
 
   TextEditingController TypeController;
+  String? currentType;
 
   @override
   State<WidgetSetMeetingType> createState() => _WidgetSetMeetingTypeState();
@@ -358,6 +429,8 @@ class _WidgetSetMeetingTypeState extends State<WidgetSetMeetingType> {
 
   @override
   Widget build(BuildContext context) {
+
+    widget.TypeController.text = widget.currentType ?? '';
 
     return TextFormField(
       controller: widget.TypeController,

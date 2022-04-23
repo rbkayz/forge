@@ -57,7 +57,7 @@ class _ContactTimelineTabState extends State<ContactTimelineTab> {
                 // 18 px padding on Left to align with Forge
                 padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
                 child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
 
                       LinkDateCheckbox(date: date),
@@ -66,37 +66,41 @@ class _ContactTimelineTabState extends State<ContactTimelineTab> {
                         width: 8,
                       ),
 
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
 
-                          // Returns the display name widget on datetile
-                          Text(
-                            date.meetingType ?? '------',
-                            overflow: TextOverflow.ellipsis,
-                            style: (date.isComplete != null && date.isComplete == true) ? const TextStyle(
+                            // Returns the display name widget on datetile
+                            Text(
+                              date.meetingType ?? '------',
+                              overflow: TextOverflow.ellipsis,
+                              style: (date.isComplete != null && date.isComplete == true) ? const TextStyle(
+                                  fontSize: 16,
+                                  fontStyle: FontStyle.italic,
+                                  decoration: TextDecoration.lineThrough
+                              )
+                                  : const TextStyle(
                                 fontSize: 16,
-                                fontStyle: FontStyle.italic,
-                                decoration: TextDecoration.lineThrough
-                            )
-                                : const TextStyle(
-                              fontSize: 16,
+                              ),
                             ),
-                          ),
 
-                          const SizedBox(
-                            height: 3,
-                          ),
+                            const SizedBox(
+                              height: 3,
+                            ),
 
-                          // Returns the nature of meeting widget on datetile
-                          Text(
-                            DateFormat('MMM d').format(date.meetingDate!),
-                            style: const TextStyle(
-                                fontSize: 14, color: Constants.kSecondaryColor),
-                          ),
+                            // Returns the nature of meeting widget on datetile
+                            Text(
+                              DateFormat('MMM d').format(date.meetingDate!),
+                              style: const TextStyle(
+                                  fontSize: 14, color: Constants.kSecondaryColor),
+                            ),
 
-                        ],
+                          ],
+                        ),
                       ),
+                      
+                      WidgetDatePopupMenu(currentDate: date),
 
                     ]
                 )
