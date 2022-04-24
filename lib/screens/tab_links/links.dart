@@ -168,7 +168,7 @@ class _LinkCardState extends State<LinkCard> {
 
     //Get last connected date
     String lastConnected = prevDate.linkid != null
-        ? 'Last connected on ${DateFormat('d MMM').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
+        ? 'Last connected on ${DateFormat('d MMM').format(prevDate.meetingDate!)} (${DateTime.now().difference(prevDate.meetingDate!).inDays} days ago)'
         : 'No previous meetings available';
 
     return currentContact.id == ''

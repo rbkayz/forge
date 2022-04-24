@@ -108,6 +108,16 @@ class LinkDateServices {
         .first
         .isComplete = newValue;
 
+    if (newValue == true) {
+
+      ForgeDates? newDate = createNextMeeting(currentLink.id);
+
+      if (newDate != null) {
+        currentLink.linkDates.add(newDate);
+      }
+
+    }
+
     await linksBox.put(currentLink.linkKey, currentLink);
   }
 
@@ -164,11 +174,12 @@ class LinkDateServices {
     // Checks if link exists
     bool linkExists = doesLinkExist(id);
 
-    // Returns next date if link exists
-    if (linkExists) {
-      ForgeLinks? currentLink = getLinkfromid(id);
+    ForgeLinks? currentLink = getLinkfromid(id);
 
-      List<ForgeDates> nextDateList = currentLink!.linkDates
+    // Returns next date if link exists
+    if (linkExists && currentLink != null) {
+
+      List<ForgeDates> nextDateList = currentLink.linkDates
           .where((element) =>
               element.isComplete == false &&
               element.meetingDate!
@@ -200,11 +211,12 @@ class LinkDateServices {
     // Checks if link exists
     bool linkExists = doesLinkExist(id);
 
-    // Returns prev date if link exists
-    if (linkExists) {
-      ForgeLinks? currentLink = getLinkfromid(id);
+    ForgeLinks? currentLink = getLinkfromid(id);
 
-      List<ForgeDates> prevDateList = currentLink!.linkDates
+    // Returns prev date if link exists
+    if (linkExists && currentLink != null) {
+
+      List<ForgeDates> prevDateList = currentLink.linkDates
           .where((element) =>
               element.isComplete == true &&
               element.meetingDate!
@@ -228,4 +240,65 @@ class LinkDateServices {
       return ForgeDates();
     }
   }
+
+
+
+  /// Create a new recurring meeting if recurring ones and no active one is left
+  ForgeDates? createNextMeeting (String id) {
+
+    // Checks if link exists
+    bool linkExists = doesLinkExist(id);
+
+    int addDays;
+
+    ForgeLinks? currentLink = getLinkfromid(id);
+
+    // Returns next date if link exists
+    if (linkExists && currentLink != null) {
+
+      // Checks is all dates are completed
+      bool allCompleted = currentLink.linkDates.every((element) => element.isComplete = true);
+
+      if (allCompleted) {
+
+        if (currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null) {
+
+
+          List<ForgeDates> dates = currentLink.linkDates;
+
+          // Sorts the dates to get last date
+          dates.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!));
+
+
+          // Computes number of days if months or weeks
+          if (currentLink.recurringType?.toLowerCase() == 'month(s)') {
+
+            addDays = currentLink.recurringNum! * 30;
+
+          } else {
+
+            addDays = currentLink.recurringNum! * 7;
+
+          }
+
+
+          ForgeDates newDate = ForgeDates(meetingDate: dates.last.meetingDate!.add(Duration(days: addDays)), meetingType: 'Recurring meeting', isComplete: false, linkid: currentLink.id);
+
+          return newDate;
+
+        }
+
+
+      }
+
+
+    }
+
+
+
+  }
+
+
+
+
 }

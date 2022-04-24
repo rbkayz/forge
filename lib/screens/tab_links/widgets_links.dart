@@ -202,7 +202,7 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
     ForgeDates nextDate = LinkDateServices().getNextDate(currentID);
 
     String first_row = prevDate.linkid != null
-        ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
+        ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${DateTime.now().difference(prevDate.meetingDate!).inDays} days ago)'
         : 'No previous connects available';
 
     String second_row = (currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null)

@@ -90,6 +90,8 @@ class _ToggleLinksState extends State<ToggleLinks> {
                     linkModNotification(true)
                 );
 
+                LinkDateServices().createNextMeeting(widget.currentContact.id);
+
               }
 
               setState(() {});

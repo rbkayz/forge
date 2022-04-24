@@ -58,6 +58,7 @@ dependencies:
   scrollable_positioned_list: ^0.2.3
   libphonenumber: ^2.0.2
   share_plus: ^4.0.3
+  file_picker: ^4.5.1
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,14 @@
+import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-//import 'package:share_plus/share_plus.dart';
+import 'dart:async';
+import 'dart:io';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -217,9 +221,15 @@ class WidgetShare extends StatelessWidget {
       onTap: () async {
         final box = context.findRenderObject() as RenderBox?;
 
-        await Share.share(sharetext,
-            subject: 'Check out forge',
-            sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+
+        //TODO change the forge image
+
+        ByteData imagebyte = await rootBundle.load(Constants.forgeHeaderLogo);
+        final temp = await getTemporaryDirectory();
+        final path = '${temp.path}/forge.jpg';
+        File(path).writeAsBytesSync(imagebyte.buffer.asUint8List());
+        await Share.shareFiles([path], text: sharetext, sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+
       },
     );
   }
