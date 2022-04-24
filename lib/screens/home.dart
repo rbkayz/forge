@@ -33,11 +33,11 @@ class _HomeState extends State<Home> {
     switch (activeTab) {
 
       case TabName.timeline: {
-        return ForgeAppBar(showOptions: true,showSearch: true, customWidget: AppBarAddDate(),);
+        return ForgeAppBar(showOptions: true,showSearch: true, customWidget1: AppBarAddDate(),);
       }
 
       case TabName.links: {
-        return ForgeAppBar(showOptions: true,showSearch: true, customWidget: AppBarAddLink(),);
+        return ForgeAppBar(showOptions: true,showSearch: true, customWidget1: AppBarAddLink(),);
       }
 
       case TabName.settings: {

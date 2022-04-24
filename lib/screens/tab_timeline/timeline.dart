@@ -9,7 +9,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 import '../../components/loader.dart';
 import '../../services/listenables.dart';
 import '../../utilities/constants.dart';
@@ -30,12 +29,11 @@ class _TimelinePageState extends State<TimelinePage> {
 
   late Contact currentContact;
 
-  final itemController = GroupedItemScrollController();
-
+  final itemController = ItemScrollController();
 
   Future scrollToItem() async {
 
-    itemController.scrollTo(index: 6, duration: Duration(milliseconds: 500));
+    itemController.scrollTo(index: 1, duration: Duration(milliseconds: 500));
   }
 
 
@@ -69,6 +67,9 @@ class _TimelinePageState extends State<TimelinePage> {
 
               /// Add two items to the list length to add empty boxes at start and end
               itemCount: dates.length + 2,
+
+              /// Sets a scroll controller to scroll to any date
+              itemScrollController: itemController,
 
               /// Builds a linkdate tile except at first and last index
               itemBuilder: (context, index) {

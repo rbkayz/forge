@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import '../../models/links_model.dart';
 import '../../utilities/constants.dart';
 import '../dialogs/dialog_addnewlinkdate.dart';
+import 'package:intl/intl.dart';
 
 
 ///--------------------------------------------------------------
@@ -167,6 +168,8 @@ class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
 
 Widget DateDivider ({required String divText}) {
 
+  bool isToday = DateFormat('EEE, d MMM').format(DateTime.now()).toUpperCase() == divText;
+
   return Padding(
     padding: const EdgeInsets.fromLTRB(18, 5, 20, 0),
     child: Row(
@@ -174,8 +177,8 @@ Widget DateDivider ({required String divText}) {
       children: [
         Text(
           divText,
-          style: const TextStyle(
-            color: Constants.kSecondaryColor,
+          style: TextStyle(
+            color: isToday ? Constants.kPrimaryColor : Constants.kSecondaryColor,
             fontSize: 14,
           ),
         ),

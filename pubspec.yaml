@@ -57,7 +57,7 @@ dependencies:
   sticky_grouped_list: ^2.1.0
   scrollable_positioned_list: ^0.2.3
   libphonenumber: ^2.0.2
-  #share_plus: ^4.0.3
+  share_plus: ^4.0.3
 
 dev_dependencies:
   flutter_test:

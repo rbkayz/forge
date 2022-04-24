@@ -15,6 +15,9 @@ class Constants {
   //fonts
   static const headerFont = 'Redressed';
 
+  //version
+  static const version = 'v1.0.0';
+
   //images
   static const forgeLogo = 'assets/images/forge-logo.png';
   static const googleLogo = 'assets/images/google-logo.png';
@@ -32,6 +35,7 @@ class Constants {
   static const allContactsNavigate = '/home/all-contacts';
   static const helpCenterNavigate = '/home/settings/help-center';
   static const editTagsNavigate = 'home/settings/edit-tags';
+  static const appInfoNavigate = 'home/settings/app-info';
 
   //boxes
   static const linksBox = 'links';

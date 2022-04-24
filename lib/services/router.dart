@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/contact.dart';
 import 'package:forge/screens/tab_links/contacts_screens/all_contacts.dart';
 import 'package:forge/screens/standalone/error.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_header.dart';
 import 'package:forge/screens/standalone/login.dart';
 import 'package:forge/screens/home.dart';
 import 'package:forge/screens/tab_settings/help_center.dart';
+import 'package:forge/screens/tab_settings/widget_settings/app_info.dart';
 import 'package:forge/screens/tab_settings/widget_settings/edit_tags.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/utilities/constants.dart';
@@ -63,6 +63,9 @@ class RouteGenerator {
 
       case Constants.editTagsNavigate:
         return MaterialPageRoute(builder: (context) => TagsEditor());
+
+      case Constants.appInfoNavigate:
+        return MaterialPageRoute(builder: (context) => AppInfo());
 
       default:
         return MaterialPageRoute(

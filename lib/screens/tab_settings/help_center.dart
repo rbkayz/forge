@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
 
+import '../../utilities/constants.dart';
+
 class HelpCenter extends StatelessWidget {
   const HelpCenter({Key? key}) : super(key: key);
 
@@ -109,6 +111,9 @@ class WidgetAppInfo extends StatelessWidget {
         leading: const Icon(Icons.info_outlined),
         title: const Text('App Info'),
         onTap: () {
+
+          Navigator.pushNamed(context, Constants.appInfoNavigate);
+
         }
     );
   }

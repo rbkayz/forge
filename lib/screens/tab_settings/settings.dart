@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:share_plus/share_plus.dart';
 //import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -205,16 +206,20 @@ class WidgetShare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    String sharetext = 'Hey there! Forge has been helping me keep in touch with friends better. Check it out at forge.com';
+
+
     return ListTile(
       minLeadingWidth: 30,
       leading: const Icon(Icons.share),
       title: const Text('Invite a friend'),
       onTap: () async {
-        // final box = context.findRenderObject() as RenderBox?;
-        //
-        // await Share.share('Invite a friend to forge',
-        //     subject: 'Invite',
-        //     sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+        final box = context.findRenderObject() as RenderBox?;
+
+        await Share.share(sharetext,
+            subject: 'Check out forge',
+            sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
       },
     );
   }

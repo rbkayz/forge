@@ -25,6 +25,15 @@ class ForgeLinks extends HiveObject {
   @HiveField(6)
   DateTime? lastUpdateNote;
 
+  @HiveField(7)
+  int? recurringNum;
+
+  @HiveField(8)
+  String? recurringType;
+
+  @HiveField(9)
+  bool? recurringEnabled;
+
   String get linkKey {
     return id;
   }

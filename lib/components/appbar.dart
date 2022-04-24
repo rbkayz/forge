@@ -11,15 +11,17 @@ import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/dialogs/dialog_setrecurringmeeting.dart';
 import '../services/contacts_service.dart';
 
 class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ForgeAppBar({Key? key, this.title, this.showSearch = false, this.showOptions = false, this.customWidget}) : super(key: key);
+  const ForgeAppBar({Key? key, this.title, this.showSearch = false, this.showOptions = false, this.customWidget1, this.customWidget2}) : super(key: key);
 
   final String? title;
   final bool showSearch;
   final bool showOptions;
-  final Widget? customWidget;
+  final Widget? customWidget1;
+  final Widget? customWidget2;
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -35,7 +37,8 @@ class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: (title == null) ? null : const AppBarBackButton(),
       leadingWidth: (title == null) ? 56 : 45,
       actions: <Widget>[
-        customWidget != null ? customWidget! : const NullAction(),
+        customWidget2 != null ? customWidget2! : const NullAction(),
+        customWidget1 != null ? customWidget1! : const NullAction(),
         showSearch ? AppBarSearch(contacts: contacts) : const NullAction(),
         showOptions ? const TimelinePopupMenu() : const NullAction(),
       ],
@@ -71,8 +74,21 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       actions: <Widget>[
 
+
         IconButton(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          visualDensity: VisualDensity.compact,
+          splashRadius: 20,
+          icon: Icon(Icons.repeat),
+          onPressed: () {
+            showDialog(useRootNavigator: false, context: context, builder: (context) => DialogSetRecurring(currentID: currentID,));
+          },
+        ),
+
+
+
+        IconButton(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           visualDensity: VisualDensity.compact,
           splashRadius: 20,
           icon: Icon(Icons.add_task_outlined),
@@ -82,7 +98,7 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
 
         Padding(
-          padding: const EdgeInsets.only(right: 20),
+          padding: const EdgeInsets.fromLTRB(10,0,20,0),
           child: ToggleLinks(currentContact: currentContact),
         ),
 
@@ -138,6 +154,7 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title.toUpperCase(),
+      overflow: TextOverflow.ellipsis,
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.normal,
@@ -147,24 +164,24 @@ class AppBarTitle extends StatelessWidget {
 }
 
 
-/// Sets the more options (three dots) for the app bar
-class AppBarOptions extends StatelessWidget {
-
-  const AppBarOptions({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      visualDensity: VisualDensity.compact,
-      splashRadius: 20,
-      icon: Icon(Icons.menu),
-      onPressed: () {
-      },
-    );
-  }
-}
+// /// Sets the datepicker
+// class AppBarOptions extends StatelessWidget {
+//
+//   const AppBarOptions({
+//     Key? key,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return PopupMenuButton(
+//         itemBuilder: (context) =>
+//             [
+//         PopupMenuEntry() DatePickerDialog(initialDate: Datetime.now(), firstDate: Datetime.now(), lastDate: Datetime.now()),
+//             ]
+//     );
+//
+//   }
+// }
 
 
 /// Sets the add new link option for the app bar

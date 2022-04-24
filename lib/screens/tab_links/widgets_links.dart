@@ -5,15 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/models/prefs_model.dart';
 import 'package:forge/screens/dialogs/dialog_datepicker.dart';
-import 'package:forge/screens/dialogs/dialog_snackbar.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
 import '../../models/links_model.dart';
-import '../../services/contacts_service.dart';
 import '../dialogs/dialog_tags.dart';
 
 ///--------------------------------------------------------------
@@ -200,14 +197,17 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
   @override
   Widget build(BuildContext context) {
     String currentID = Provider.of<String>(context);
-    Contact currentContact =
-        AllContactsServices().getContactfromID(context, currentID);
-    ForgeDates prevDate = LinkDateServices().getPrevDate(currentContact.id);
-    ForgeDates nextDate = LinkDateServices().getNextDate(currentContact.id);
+    ForgeLinks currentLink = LinkDateServices().getLinkfromid(currentID) ?? ForgeLinks(id: currentID);
+    ForgeDates prevDate = LinkDateServices().getPrevDate(currentID);
+    ForgeDates nextDate = LinkDateServices().getNextDate(currentID);
 
     String first_row = prevDate.linkid != null
         ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${prevDate.meetingDate!.difference(DateTime.now()).inDays} days ago)'
         : 'No previous connects available';
+
+    String second_row = (currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null)
+        ? 'Repeats every ${currentLink.recurringNum!} ${currentLink.recurringType!.toLowerCase()}'
+        : 'Does not repeat';
 
     String third_row = nextDate.linkid != null
         ? 'Next connect is in ${nextDate.meetingDate!.difference(DateTime.now()).inDays} days'
@@ -221,8 +221,8 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
             children: [
               LinkHeaderRowWidget(icon: Icons.event_outlined, text: first_row),
               const SizedBox(height: 12),
-              const LinkHeaderRowWidget(
-                  icon: Icons.repeat, text: 'Repeats every 3 months'),
+              LinkHeaderRowWidget(
+                  icon: Icons.repeat, text: second_row),
               const SizedBox(height: 12),
               LinkHeaderRowWidget(
                   icon: Icons.upcoming_outlined, text: third_row),
