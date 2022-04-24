@@ -27,37 +27,50 @@ class WidgetTag extends StatefulWidget {
 }
 
 class _WidgetTagState extends State<WidgetTag> {
-  LinkTag currentTag =
-      LinkTag(tagName: 'NO TAG', tagColor: Colors.grey.shade100.value);
+
+  // Initialize the currentTag with the no tag set value
+  LinkTag currentTag = LinkTag(tagName: 'NO TAG', tagColor: Colors.grey.shade100.value);
+
+  // Variable for the currentTagID. If null, then no tag is set
   int? currentTagID;
 
   @override
   Widget build(BuildContext context) {
+
+    // Retrieves the current Link from the link service
     ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.id);
 
     currentTagID = currentLink?.tagID;
 
     Box prefsBox = Hive.box(Constants.prefsBox);
-    List<LinkTag> tagsList =
-        prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
+    List<LinkTag> tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 
     if (currentTagID != null) {
+
+      // Cycles through the list of tags to find tagID that is the same as the tagID of the currentLink
       int foundindex =
           tagsList.indexWhere((element) => element.tagID == currentTagID);
+
+      // if found, then assigns the value of that tag to the currentTag;
       if (foundindex >= 0) {
         currentTag = tagsList[
             tagsList.indexWhere((element) => element.tagID == currentTagID)];
       }
     }
 
+
     return Material(
-      color: Color(currentTag.tagColor!),
+
+      // Checks if currentTag is null. If yes, returns grey, else returns the color
+      color: currentTagID == null ? Colors.grey.shade100 : Color(currentTag.tagColor!),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: InkWell(
         onTap: () {
           HapticFeedback.lightImpact();
 
           if (tagsList.isNotEmpty) {
+
+            // Shows bottom sheet if tagsList is not empty
             showModalBottomSheet(
                 isScrollControlled: true,
                 context: context,
@@ -71,14 +84,19 @@ class _WidgetTagState extends State<WidgetTag> {
                 builder: (context) {
                   return DialogTagSelector(currentID: widget.id);
                 }).then((_) => updateState());
-          } else {
+          }
+
+          else {
+
+            // If tagslist is empty, then navigates to the edit tags page
             Navigator.pushNamed(context, Constants.editTagsNavigate).then((value) => updateState());
+
           }
         },
         child: Padding(
           padding: const EdgeInsets.all(3.0),
           child: Text(
-            '# ${currentTag.tagName?.toUpperCase()}',
+            currentTagID == null ? 'NO TAG' : '# ${currentTag.tagName?.toUpperCase()}',
             style: const TextStyle(fontSize: 12, color: Constants.kBlackColor),
           ),
         ),

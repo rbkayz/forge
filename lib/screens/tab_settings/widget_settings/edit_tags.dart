@@ -140,7 +140,7 @@ class _TagsEditorState extends State<TagsEditor> {
                             for (int i = 0; i < linkswithTag.length; i++) {
                               ForgeLinks e = linkswithTag.elementAt(i);
                               e.tagID = null;
-                              linksBox.put(e.id, e);
+                              await linksBox.put(e.id, e);
                             }
 
                             setState(() {});
