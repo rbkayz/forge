@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_contacts/contact.dart';
-import 'package:forge/services/contacts_service.dart';
 import 'package:hive/hive.dart';
 import '../models/links_model.dart';
 import '../utilities/constants.dart';
@@ -98,15 +96,14 @@ class LinkDateServices {
 
   /// Toggle Checkbox
   void onTapCheckbox(bool? newValue, ForgeDates currentDate) async {
+
     ForgeLinks currentLink = linksBox.values
         .cast<ForgeLinks>()
         .where((element) => element.id == currentDate.linkid)
         .first;
 
-    currentLink.linkDates
-        .where((element) => element.hashCode == currentDate.hashCode)
-        .first
-        .isComplete = newValue;
+    currentLink.linkDates.where((element) => element.hashCode == currentDate.hashCode).first.isComplete = newValue;
+
 
     if (newValue == true) {
 
@@ -257,9 +254,12 @@ class LinkDateServices {
     if (linkExists && currentLink != null) {
 
       // Checks is all dates are completed
-      bool allCompleted = currentLink.linkDates.every((element) => element.isComplete = true);
+      bool allCompleted = currentLink.linkDates.every((element) {
+        return element.isComplete == true;
+      });
 
       if (allCompleted) {
+
 
         if (currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null) {
 

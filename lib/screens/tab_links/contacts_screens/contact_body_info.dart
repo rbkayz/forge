@@ -195,7 +195,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
 
                 return CustomListTile(
                   subTitle: (currentDate?.meetingType ?? '-').toUpperCase(),
-                  mainTitle: currentDate?.meetingDate != null ? DateFormat('d MMM y').format(currentDate!.meetingDate!) : '-',
+                  mainTitle: currentDate?.meetingDate != null ? DateFormat('d MMM').format(currentDate!.meetingDate!) : '-',
                   leadingIcon: const Icon(Icons.cake_outlined),
                   trailingIcon1: Icon(Icons.edit, color: Constants.kSecondaryColor,),
                   trailingIcon2: Icon(Icons.delete, color: Constants.kSecondaryColor,),
@@ -203,6 +203,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
                   },
                   onPressedTrail1: () {
 
+                    //TODO To fix birthday
                     showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: currentDate));
 
                   },

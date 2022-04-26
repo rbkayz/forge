@@ -148,9 +148,9 @@ class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
                 _setState(() {
 
                   // Changes the value of the checkbox and updates the box
-                  LinkDateServices()
-                      .onTapCheckbox(newValue, widget.date);
-                  widget.date.isComplete = newValue;
+                   LinkDateServices()
+                       .onTapCheckbox(newValue, widget.date);
+
                 });
 
               }
