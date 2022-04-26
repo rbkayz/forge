@@ -91,7 +91,7 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
 
                   SizedBox(height: 12,),
 
-                  WidgetSetMeetingType(TypeController: TypeController, currentType: currentType,),
+                  WidgetSetMeetingType(TypeController: TypeController, currentType: currentType, annual: widget.initDate?.annual,),
 
                   SizedBox(height: 12,),
 
@@ -166,11 +166,11 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
                                             .meetingType = newMeetingType;
                                       }
 
-                                      // If initdate doesn't exist, then creates a new ForgeDate, and then adds it. Typically used for contact screen
+                                      // If initdate exists, then creates a new ForgeDate, and then adds it. Typically used for contact screen
                                       else {
 
                                         ForgeDates newDate = ForgeDates(
-                                            meetingDate: newMeetingDate, meetingType: newMeetingType, linkid: widget.initDate!.linkid, isComplete: widget.initDate!.isComplete);
+                                            meetingDate: newMeetingDate, meetingType: newMeetingType, linkid: widget.initDate!.linkid, isComplete: widget.initDate!.isComplete, annual: widget.initDate!.annual);
 
                                         currentLink.linkDates.add(newDate);
 
@@ -414,10 +414,11 @@ class _WidgetPickDateAltState extends State<WidgetPickDateAlt> {
 
 
 class WidgetSetMeetingType extends StatefulWidget {
-  WidgetSetMeetingType({Key? key, required this.TypeController, this.currentType}) : super(key: key);
+  WidgetSetMeetingType({Key? key, required this.TypeController, this.currentType, this.annual}) : super(key: key);
 
   TextEditingController TypeController;
   String? currentType;
+  bool? annual;
 
   @override
   State<WidgetSetMeetingType> createState() => _WidgetSetMeetingTypeState();
@@ -438,7 +439,7 @@ class _WidgetSetMeetingTypeState extends State<WidgetSetMeetingType> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        hintText: "Meeting description",
+        hintText: widget.annual == true ? 'Birthday / Anniversary' : 'Meeting description',
         prefixIcon: Icon(Icons.note_add_outlined),
       ),
 

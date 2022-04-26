@@ -43,7 +43,7 @@ class ForgeLinks extends HiveObject {
 @HiveType(typeId: 1)
 class ForgeDates extends HiveObject {
 
-  ForgeDates({this.meetingDate, this.meetingType, this.isComplete, this.linkid});
+  ForgeDates({this.meetingDate, this.meetingType, this.isComplete, this.linkid, this.annual});
 
   @HiveField(0)
   DateTime? meetingDate;
@@ -57,12 +57,16 @@ class ForgeDates extends HiveObject {
   @HiveField(3)
   String? linkid;
 
+  @HiveField(4)
+  bool? annual;
+
   Map<String, dynamic> toMap(){
     return {
       "meetingDate": meetingDate,
       "meetingType": meetingType,
       "isComplete": isComplete,
       "linkid": linkid,
+      "annual": annual,
       // and so on
     };
   }

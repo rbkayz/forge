@@ -79,13 +79,14 @@ class ForgeDatesAdapter extends TypeAdapter<ForgeDates> {
       meetingType: fields[1] as String?,
       isComplete: fields[2] as bool?,
       linkid: fields[3] as String?,
+      annual: fields[4] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ForgeDates obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.meetingDate)
       ..writeByte(1)
@@ -93,7 +94,9 @@ class ForgeDatesAdapter extends TypeAdapter<ForgeDates> {
       ..writeByte(2)
       ..write(obj.isComplete)
       ..writeByte(3)
-      ..write(obj.linkid);
+      ..write(obj.linkid)
+      ..writeByte(4)
+      ..write(obj.annual);
   }
 
   @override

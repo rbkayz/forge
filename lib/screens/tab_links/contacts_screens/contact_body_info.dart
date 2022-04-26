@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
-
+import 'package:intl/intl.dart';
+import '../../../models/links_model.dart';
 import '../../../services/contacts_service.dart';
+import '../../dialogs/dialog_addnewlinkdate.dart';
 
 class ContactInfoTab extends StatefulWidget {
   ContactInfoTab({Key? key}) : super(key: key);
@@ -49,12 +52,25 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
   }
 
 
+  launchEmail(String currEmail) async {
+
+    String url = 'mailto:${currEmail}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
     String currentID = Provider.of<String>(context);
     
     currentContact = (currentContact == null) ? AllContactsServices().getContactfromID(context, currentID) : currentContact;
+    ForgeLinks? currentLink = LinkDateServices().getLinkfromid(currentID);
 
     return SingleChildScrollView(
       child: Column(
@@ -69,7 +85,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
               padding: EdgeInsets.zero,
               visualDensity: VisualDensity(horizontal: -4, vertical: -4),
               splashRadius: 16,
-              iconSize: 14,
+              iconSize: 16,
               icon: const Icon(Icons.edit,color: Constants.kSecondaryColor,),
               onPressed: () async {
 
@@ -134,17 +150,11 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
                   leadingIcon: const Icon(Icons.email_outlined),
                   trailingIcon1: null,
                   trailingIcon2: null,
-                  onPressedMain: () async {
-
-                    //TODO Implement email function
-
+                  onPressedMain: () {
+                    launchEmail(currentContactEmail.toLowerCase());
                   },
-                  onPressedTrail1: () {
-
-                  },
-                  onPressedTrail2: () {
-
-                  },
+                  onPressedTrail1: () {},
+                  onPressedTrail2: () {},
                 );
               },
             ),
@@ -158,15 +168,56 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
                 padding: EdgeInsets.zero,
                 visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                 splashRadius: 16,
-                iconSize: 14,
+                iconSize: 16,
                 icon: const Icon(Icons.add_alert_outlined,color: Constants.kSecondaryColor,),
-                onPressed: () async {
+                onPressed: () {
 
-                  //TODO add dates
+                  if(currentLink == null) {
+                    LinkDateServices().activateLink(context, currentID);
+                  }
+
+                  showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: ForgeDates(linkid: currentID, isComplete: false, annual: true)));
 
 
                 },
               ),
+            ),
+
+
+            currentLink?.linkDates.where((element) => element.annual == true) == null ? SizedBox.shrink() :
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: currentLink?.linkDates.where((element) => element.annual == true).length,
+              itemBuilder: (context, index) {
+
+                ForgeDates? currentDate = currentLink?.linkDates.where((element) => element.annual == true).elementAt(index);
+
+                return CustomListTile(
+                  subTitle: (currentDate?.meetingType ?? '-').toUpperCase(),
+                  mainTitle: currentDate?.meetingDate != null ? DateFormat('d MMM y').format(currentDate!.meetingDate!) : '-',
+                  leadingIcon: const Icon(Icons.cake_outlined),
+                  trailingIcon1: Icon(Icons.edit, color: Constants.kSecondaryColor,),
+                  trailingIcon2: Icon(Icons.delete, color: Constants.kSecondaryColor,),
+                  onPressedMain: () {
+                  },
+                  onPressedTrail1: () {
+
+                    showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: currentDate));
+
+                  },
+                  onPressedTrail2: () {
+
+                    if (currentLink != null ) {
+                      currentLink.linkDates.removeWhere((element) => element == currentDate);
+                      Box linksBox = Hive.box(Constants.linksBox);
+                      linksBox.put(currentLink.id, currentLink);
+                    }
+
+
+                  },
+                );
+              },
             ),
 
 

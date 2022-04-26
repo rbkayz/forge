@@ -26,7 +26,7 @@ class _TimelinePopupMenuState extends State<TimelinePopupMenu> {
         defaultValue: Constants.sortbyDate);
 
     return PopupMenuButton(
-        icon: Icon(Icons.menu),
+        icon: Icon(Icons.sort),
         onSelected: (val) {},
 
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
