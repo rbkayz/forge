@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/contact.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
-import 'package:libphonenumber/libphonenumber.dart';
 
 import '../../../services/contacts_service.dart';
 
-class ContactInfoTab extends StatelessWidget {
+class ContactInfoTab extends StatefulWidget {
   ContactInfoTab({Key? key}) : super(key: key);
 
+  @override
+  State<ContactInfoTab> createState() => _ContactInfoTabState();
+}
 
+class _ContactInfoTabState extends State<ContactInfoTab> {
   final linksBox = Hive.box(Constants.linksBox);
+  Contact? currentContact;
 
   launchDialer(String currPhone) async {
     String url = 'tel:$currPhone';
@@ -43,11 +48,13 @@ class ContactInfoTab extends StatelessWidget {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
 
     String currentID = Provider.of<String>(context);
-    Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
+    
+    currentContact = (currentContact == null) ? AllContactsServices().getContactfromID(context, currentID) : currentContact;
 
     return SingleChildScrollView(
       child: Column(
@@ -57,18 +64,35 @@ class ContactInfoTab extends StatelessWidget {
             /// PHONES
             ///--------------------------------------------------------------
 
-            const InfoDivider(divText: 'CONTACT'),
+            InfoDivider(divText: 'CONTACT',
+            editAddButton: IconButton(
+              padding: EdgeInsets.zero,
+              visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+              splashRadius: 16,
+              iconSize: 14,
+              icon: const Icon(Icons.edit,color: Constants.kSecondaryColor,),
+              onPressed: () async {
 
-            currentContact.phones.isEmpty ? SizedBox.shrink() : ListView.builder(
+                currentContact = await FlutterContacts.openExternalEdit(currentID);
+
+                setState(() {
+
+                });
+
+              },
+            ),
+            ),
+
+            currentContact!.phones.isEmpty ? SizedBox.shrink() : ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: currentContact.phones.isNotEmpty
-                    ? currentContact.phones.length
+                itemCount: currentContact!.phones.isNotEmpty
+                    ? currentContact!.phones.length
                     : 1,
                 itemBuilder: (context, index) {
-                  String currentContactPhone = currentContact.phones[index].number;
+                  String currentContactPhone = currentContact!.phones[index].number;
                   String? currentContactLabel = Constants
-                      .phoneLabelToString[currentContact.phones[index].label];
+                      .phoneLabelToString[currentContact!.phones[index].label];
                   return CustomListTile(
                     subTitle: (currentContactLabel ?? 'Mobile').toUpperCase(),
                     mainTitle: currentContactPhone,
@@ -95,22 +119,24 @@ class ContactInfoTab extends StatelessWidget {
             /// EMAIL
             ///--------------------------------------------------------------
 
-            currentContact.emails.isEmpty ? SizedBox.shrink() : ListView.builder(
+            currentContact!.emails.isEmpty ? SizedBox.shrink() : ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: currentContact.emails.isNotEmpty
-                  ? currentContact.emails.length
+              itemCount: currentContact!.emails.isNotEmpty
+                  ? currentContact!.emails.length
                   : 1,
               itemBuilder: (context, index) {
-                String currentContactEmail = currentContact.emails[index].address;
-                String? currentContactLabel = Constants.emailLabelToString[currentContact.emails[index].label];
+                String currentContactEmail = currentContact!.emails[index].address;
+                String? currentContactLabel = Constants.emailLabelToString[currentContact!.emails[index].label];
                 return CustomListTile(
                   subTitle: (currentContactLabel ?? 'Personal').toUpperCase(),
                   mainTitle: currentContactEmail.toLowerCase(),
                   leadingIcon: const Icon(Icons.email_outlined),
                   trailingIcon1: null,
                   trailingIcon2: null,
-                  onPressedMain: () {
+                  onPressedMain: () async {
+
+                    //TODO Implement email function
 
                   },
                   onPressedTrail1: () {
@@ -127,7 +153,21 @@ class ContactInfoTab extends StatelessWidget {
             /// Key Dates
             ///--------------------------------------------------------------
 
-            const InfoDivider(divText: 'DATES'),
+            InfoDivider(divText: 'DATES',
+              editAddButton: IconButton(
+                padding: EdgeInsets.zero,
+                visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                splashRadius: 16,
+                iconSize: 14,
+                icon: const Icon(Icons.add_alert_outlined,color: Constants.kSecondaryColor,),
+                onPressed: () async {
+
+                  //TODO add dates
+
+
+                },
+              ),
+            ),
 
 
 
@@ -201,14 +241,15 @@ class CustomListTile extends StatelessWidget {
 ///--------------------------------------------------------------
 
 class InfoDivider extends StatelessWidget {
-  const InfoDivider({Key? key, required this.divText}) : super(key: key);
+  InfoDivider({Key? key, required this.divText, this.editAddButton}) : super(key: key);
 
   final String divText;
+  final Widget? editAddButton;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 16, 25, 0),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -222,7 +263,9 @@ class InfoDivider extends StatelessWidget {
           Expanded(child: Divider(
             indent: 10,
             color: Colors.grey.shade200,
-          ))
+          )),
+
+          editAddButton ?? SizedBox.shrink(),
         ],
       ),
     );
