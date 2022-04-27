@@ -69,7 +69,7 @@ class _ContactNotesTabState extends State<ContactNotesTab> {
   Widget build(BuildContext context) {
 
     String currentID = Provider.of<String>(context);
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(currentID) ?? ForgeLinks(id: currentID);
+    ForgeLinks currentLink = LinkDateServices.getLinkfromid(currentID) ?? ForgeLinks(id: currentID);
 
     String currentNote = currentLink.note ?? '';
     DateTime? lastUpdatedNote = currentLink.lastUpdateNote;

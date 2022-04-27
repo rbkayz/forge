@@ -76,7 +76,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
               if (currentLink != null && currentLink.isActive) {
 
-                LinkDateServices().deactivateLink(widget.currentContact.id);
+                LinkDateServices.deactivateLink(widget.currentContact.id);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                     linkModNotification(false)
@@ -84,13 +84,13 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
               } else {
 
-                LinkDateServices().activateLink(context, widget.currentContact.id);
+                LinkDateServices.activateLink(context, widget.currentContact.id);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                     linkModNotification(true)
                 );
 
-                LinkDateServices().createNextMeeting(widget.currentContact.id);
+                LinkDateServices.createNextMeeting(widget.currentContact.id);
 
               }
 

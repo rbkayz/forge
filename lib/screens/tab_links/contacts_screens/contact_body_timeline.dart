@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/contact.dart';
 import 'package:forge/screens/tab_timeline/widget_timeline.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
@@ -8,7 +7,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../../models/links_model.dart';
-import '../../../services/contacts_service.dart';
 import '../../../services/listenables.dart';
 
 class ContactTimelineTab extends StatefulWidget {
@@ -27,7 +25,7 @@ class _ContactTimelineTabState extends State<ContactTimelineTab> {
   Widget build(BuildContext context) {
 
     String currentID = Provider.of<String>(context);
-    ForgeLinks? currentLink = LinkDateServices().getLinkfromid(currentID);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID);
 
     List<ForgeDates> linkDates = currentLink?.linkDates ?? [];
 

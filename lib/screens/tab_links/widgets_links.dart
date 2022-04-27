@@ -38,7 +38,7 @@ class _WidgetTagState extends State<WidgetTag> {
   Widget build(BuildContext context) {
 
     // Retrieves the current Link from the link service
-    ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.id);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(widget.id);
 
     currentTagID = currentLink?.tagID;
 
@@ -127,13 +127,13 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
 
   /// Function that updates the value in the next date box
   Future _changeDate() async {
-    if (LinkDateServices().isLinkActive(widget.id)) {
+    if (LinkDateServices.isLinkActive(widget.id)) {
       HapticFeedback.lightImpact();
       newDate = await DatePickerService().changeDate(context, widget.id);
     } else {
       HapticFeedback.lightImpact();
 
-      await LinkDateServices().activateLink(context, widget.id);
+      await LinkDateServices.activateLink(context, widget.id);
 
       newDate = await DatePickerService().changeDate(context, widget.id);
     }
@@ -141,7 +141,7 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
 
   @override
   Widget build(BuildContext context) {
-    ForgeDates nextDate = LinkDateServices().getNextDate(widget.id);
+    ForgeDates nextDate = LinkDateServices.getNextDate(widget.id);
 
     return Tooltip(
       message: 'Upcoming meeting date. Press to edit.',
@@ -215,9 +215,9 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
   @override
   Widget build(BuildContext context) {
     String currentID = Provider.of<String>(context);
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(currentID) ?? ForgeLinks(id: currentID);
-    ForgeDates prevDate = LinkDateServices().getPrevDate(currentID);
-    ForgeDates nextDate = LinkDateServices().getNextDate(currentID);
+    ForgeLinks currentLink = LinkDateServices.getLinkfromid(currentID) ?? ForgeLinks(id: currentID);
+    ForgeDates prevDate = LinkDateServices.getPrevDate(currentID);
+    ForgeDates nextDate = LinkDateServices.getNextDate(currentID);
 
     String first_row = prevDate.linkid != null
         ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${DateTime.now().difference(prevDate.meetingDate!).inDays} days ago)'

@@ -38,7 +38,7 @@ class _DialogSetRecurringState extends State<DialogSetRecurring> {
   @override
   void initState() {
 
-    ForgeLinks currentLink = LinkDateServices().getLinkfromid(widget.currentID) ?? ForgeLinks(id: widget.currentID);
+    ForgeLinks currentLink = LinkDateServices.getLinkfromid(widget.currentID) ?? ForgeLinks(id: widget.currentID);
 
     if (currentLink.recurringNum != null && currentLink.recurringType != null) {
       dropdownvalueNum = currentLink.recurringNum;
@@ -192,7 +192,7 @@ class _DialogSetRecurringState extends State<DialogSetRecurring> {
                             child: OutlinedButton(
                                 onPressed: () {
 
-                                  ForgeLinks currentLink = LinkDateServices().getLinkfromid(widget.currentID) ?? ForgeLinks(id: widget.currentID);
+                                  ForgeLinks currentLink = LinkDateServices.getLinkfromid(widget.currentID) ?? ForgeLinks(id: widget.currentID);
 
                                   currentLink.recurringEnabled = switchVal;
                                   currentLink.recurringNum = dropdownvalueNum;

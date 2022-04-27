@@ -47,7 +47,7 @@ class _TimelinePageState extends State<TimelinePage> {
         builder: (BuildContext context, Box links, Box prefs, Widget? child) {
 
           /// Receives a sorted list of meeting dates by parsing through each link
-          dates = LinkDateServices().sortAllDates(links.values, showAllDate: prefs.get(Constants.showAllDatesinTimeline, defaultValue: true));
+          dates = LinkDateServices.sortAllDates(links.values, showAllDate: prefs.get(Constants.showAllDatesinTimeline, defaultValue: true));
 
           /// Retrieves the list of contacts from the provider
           List<Contact>? contacts = Provider.of<List<Contact>?>(context);

@@ -26,7 +26,6 @@ class _LinksPageState extends State<LinksPage> {
   final linksBox = Hive.box(Constants.linksBox);
   final prefsBox = Hive.box(Constants.prefsBox);
   final contactsService = AllContactsServices();
-  final linksService = LinkDateServices();
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +45,8 @@ class _LinksPageState extends State<LinksPage> {
               {
                 sortedlinksValues.sort((a, b) {
 
-                  DateTime meetingDate1 = linksService.getNextDate(a.id).meetingDate ?? Constants().maxDate;
-                  DateTime meetingDate2 = linksService.getNextDate(b.id).meetingDate ?? Constants().maxDate;
+                  DateTime meetingDate1 = LinkDateServices.getNextDate(a.id).meetingDate ?? Constants().maxDate;
+                  DateTime meetingDate2 = LinkDateServices.getNextDate(b.id).meetingDate ?? Constants().maxDate;
 
                   return meetingDate1.compareTo(meetingDate2);
 
@@ -161,10 +160,8 @@ class _LinkCardState extends State<LinkCard> {
   @override
   Widget build(BuildContext context) {
 
-    ForgeDates prevDate = LinkDateServices().getPrevDate(widget.currentID);
+    ForgeDates prevDate = LinkDateServices.getPrevDate(widget.currentID);
     Contact currentContact = AllContactsServices().getContactfromID(context, widget.currentID);
-
-    Box linksBox = Hive.box(Constants.linksBox);
 
     //Get last connected date
     String lastConnected = prevDate.linkid != null

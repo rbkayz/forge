@@ -32,7 +32,7 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
     Initialization of values
     *****************************************************************/
 
-    ForgeLinks? currentLink = LinkDateServices().getLinkfromid(widget.currentID);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(widget.currentID);
     List<LinkTag> tagsList =
         prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 

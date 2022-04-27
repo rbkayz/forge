@@ -70,7 +70,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
     String currentID = Provider.of<String>(context);
     
     currentContact = (currentContact == null) ? AllContactsServices().getContactfromID(context, currentID) : currentContact;
-    ForgeLinks? currentLink = LinkDateServices().getLinkfromid(currentID);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID);
 
     return SingleChildScrollView(
       child: Column(
@@ -173,7 +173,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
                 onPressed: () {
 
                   if(currentLink == null) {
-                    LinkDateServices().activateLink(context, currentID);
+                    LinkDateServices.activateLink(context, currentID);
                   }
 
                   showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: ForgeDates(linkid: currentID, isComplete: false, annual: true)));

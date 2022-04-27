@@ -133,7 +133,7 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
 
                                   // Makes currentLink nullable, and then creates a link if it is null;
                                   if (currentLink == null) {
-                                    LinkDateServices().activateLink(context, currentContact.id);
+                                    LinkDateServices.activateLink(context, currentContact.id);
                                     currentLink = linksBox.get(currentContact.id);
                                   } else {
                                     currentLink.isActive = true;

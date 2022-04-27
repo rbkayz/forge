@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,30 +7,36 @@ import '../models/links_model.dart';
 import '../utilities/constants.dart';
 
 ///--------------------------------------------------------------
-/// Link Date Services Class
+/// LINK DATE SERVICES
+///
+/// Contains all the functions required to add, remove, modify
+/// [ForgeLinks] and [ForgeDates]
+///
 ///--------------------------------------------------------------
 
 class LinkDateServices {
-  final linksBox = Hive.box(Constants.linksBox);
-
-  List<ForgeDates> sortDates = [];
-  List<Map<String, dynamic>> mapListDates = [];
 
 
-  /// Deactivate a link
-  Future<void> deactivateLink(String id) async {
+  /// Deactivates a link
+  static Future<void> deactivateLink(String id) async {
+
+    final linksBox = Hive.box(Constants.linksBox);
+
     ForgeLinks currentLink = linksBox.get(id);
-
     currentLink.isActive = false;
 
     HapticFeedback.lightImpact();
 
     await linksBox.put(currentLink.linkKey, currentLink);
+
   }
 
 
-  /// Activate a link
-  Future<void> activateLink(BuildContext context, String id) async {
+  /// Activates a link
+  static Future<void> activateLink(BuildContext context, String id) async {
+
+    final linksBox = Hive.box(Constants.linksBox);
+
     bool isStored = linksBox.containsKey(id);
 
     ForgeLinks currentLink = isStored ? linksBox.get(id) : ForgeLinks(
@@ -41,7 +46,7 @@ class LinkDateServices {
 
     currentLink.isActive = true;
 
-    //Setting the linkDates to an empty list if it is null
+
     if (currentLink.linkDates.isEmpty) {
       currentLink.linkDates = [];
     }
@@ -52,7 +57,11 @@ class LinkDateServices {
 
 
   /// Cycles through each link and gets all dates, and sorts it
-  List<ForgeDates> sortAllDates(value, {bool showAllDate = true}) {
+  static List<ForgeDates> sortAllDates(value, {bool showAllDate = true}) {
+
+    List<ForgeDates> sortDates = [];
+
+    /// Iterates through list and adds all active dates to the [sortDates] list
     value.cast<ForgeLinks>().forEach((element) {
       if (element.isActive) {
         element.linkDates.forEach((e) {
@@ -61,8 +70,10 @@ class LinkDateServices {
       }
     });
 
+    /// sorts the list based on the meeting dates
     sortDates.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!));
 
+    /// Checks for the showAllDate toggle. Returns only incomplete dates if set to false, else returns all
     if (showAllDate == false) {
       sortDates = sortDates.where((element) => element.isComplete == false).toList();
     }
@@ -72,17 +83,21 @@ class LinkDateServices {
 
 
   /// Compare a map to the map of dates, and return a date
-  ForgeDates getDateFromMap(linklist, Map<String, dynamic> mapval) {
+  static ForgeDates getDateFromMap(linklist, Map<String, dynamic> mapval) {
+
     late ForgeDates foundDate;
-    sortDates = [];
+    List<ForgeDates> sortDates = [];
+
+    /// Iterates through list and adds all active dates to the [sortDates] list
     linklist.cast<ForgeLinks>().forEach((ForgeLinks element) {
       if (element.isActive) {
-        element.linkDates.forEach((e) {
+        for (var e in element.linkDates) {
           sortDates.add(e);
-        });
+        }
       }
     });
 
+    /// Searches for the date that matches the map of the date in the function parameter
     foundDate =
         sortDates
             .where((element) => mapEquals(element.toMap(), mapval))
@@ -93,12 +108,17 @@ class LinkDateServices {
 
 
   /// Toggle Checkbox
-  void onTapCheckbox(bool? newValue, ForgeDates currentDate) async {
+  static void onTapCheckbox(bool? newValue, ForgeDates currentDate) async {
+
+    final linksBox = Hive.box(Constants.linksBox);
+
+    /// finds the link based on id
     ForgeLinks currentLink = linksBox.values
         .cast<ForgeLinks>()
         .where((element) => element.id == currentDate.linkid)
         .first;
 
+    /// Sets the lin
     currentLink.linkDates
         .where((element) => element.hashCode == currentDate.hashCode)
         .first
@@ -106,7 +126,7 @@ class LinkDateServices {
 
 
     if (newValue == true) {
-      // Creates the next meeting date based on recurring criteria.
+      /// Creates the next meeting date based on recurring criteria.
       ForgeDates? newDate = createNextMeeting(currentLink.id);
 
       if (newDate != null) {
@@ -114,7 +134,7 @@ class LinkDateServices {
       }
 
 
-      // Creates the next annual date
+      /// Creates the next annual date e.g. birthday or anniversary
       if (currentDate.annual == true) {
         ForgeDates? newDate2 = createNextAnnualDate(currentLink.id, currentDate);
 
@@ -129,8 +149,12 @@ class LinkDateServices {
   }
 
 
-  /// Get Link from ID
-  ForgeLinks? getLinkfromid(String id) {
+
+  /// Get Link from ID. If not found, then returns null
+  static ForgeLinks? getLinkfromid(String id) {
+
+    final linksBox = Hive.box(Constants.linksBox);
+
     if (doesLinkExist(id)) {
       ForgeLinks foundLink = linksBox.values
           .cast<ForgeLinks>()
@@ -147,7 +171,10 @@ class LinkDateServices {
 
 
   /// Checks if a link exists
-  bool doesLinkExist(String id) {
+  static bool doesLinkExist(String id) {
+
+    final linksBox = Hive.box(Constants.linksBox);
+
     Iterable<ForgeLinks> foundLink = linksBox.values
         .cast<ForgeLinks>()
         .where((element) => element.id == id);
@@ -157,7 +184,10 @@ class LinkDateServices {
 
 
   /// Checks if link is active
-  bool isLinkActive(String id) {
+  static bool isLinkActive(String id) {
+
+    final linksBox = Hive.box(Constants.linksBox);
+
     Iterable<ForgeLinks> foundLink = linksBox.values
         .cast<ForgeLinks>()
         .where((element) => element.id == id);
@@ -171,13 +201,14 @@ class LinkDateServices {
 
 
   /// Get Next date that isn't complete
-  ForgeDates getNextDate(String id) {
-    // Checks if link exists
+  static ForgeDates getNextDate(String id) {
+
+    /// Checks if link exists
     bool linkExists = doesLinkExist(id);
 
     ForgeLinks? currentLink = getLinkfromid(id);
 
-    // Returns next date if link exists
+    /// Returns next date if link exists
     if (linkExists && currentLink != null) {
       List<ForgeDates> nextDateList = currentLink.linkDates
           .where((element) =>
@@ -198,7 +229,7 @@ class LinkDateServices {
       return nextDate;
     }
 
-    // Returns an empty forgedates if link doesn't exist
+    /// Returns an empty forgedates if link doesn't exist
     else {
       return ForgeDates();
     }
@@ -206,13 +237,14 @@ class LinkDateServices {
 
 
   /// Get Prev Date that is complete
-  ForgeDates getPrevDate(String id) {
-    // Checks if link exists
+  static ForgeDates getPrevDate(String id) {
+
+    /// Checks if link exists
     bool linkExists = doesLinkExist(id);
 
     ForgeLinks? currentLink = getLinkfromid(id);
 
-    // Returns prev date if link exists
+    /// Returns prev date if link exists
     if (linkExists && currentLink != null) {
       List<ForgeDates> prevDateList = currentLink.linkDates
           .where((element) =>
@@ -233,7 +265,7 @@ class LinkDateServices {
       return prevDate;
     }
 
-    // Returns an empty forgedates if link doesn't exist
+    /// Returns an empty forgedates if link doesn't exist
     else {
       return ForgeDates();
     }
@@ -241,30 +273,32 @@ class LinkDateServices {
 
 
   /// Create a new recurring meeting if recurring ones and no active one is left
-  ForgeDates? createNextMeeting(String id) {
-    // Checks if link exists
+  static ForgeDates? createNextMeeting(String id) {
+
+    /// Checks if link exists
     bool linkExists = doesLinkExist(id);
 
     int addDays;
 
     ForgeLinks? currentLink = getLinkfromid(id);
 
-    // Returns next date if link exists
+    /// Returns next date if link exists
     if (linkExists && currentLink != null) {
-      // Checks is all dates are completed
+
+      /// Checks is all dates are completed
       bool allCompleted = currentLink.linkDates.every((element) {
         return element.isComplete == true;
       });
 
-      // Returns true and proceeds only if all dates are completed
+      /// Returns true and proceeds only if all dates are completed
       if (allCompleted) {
         if (currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null) {
           List<ForgeDates> dates = currentLink.linkDates;
 
-          // Sorts the dates to get last date
+          /// Sorts the dates to get last date
           dates.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!));
 
-          // Computes number of days if months or weeks
+          /// Computes number of days if months or weeks
           if (currentLink.recurringType?.toLowerCase() == 'month(s)') {
             addDays = currentLink.recurringNum! * 30;
           } else {
@@ -284,18 +318,18 @@ class LinkDateServices {
 
 
   /// Create a new recurring meeting if recurring ones and no active one is left
-  ForgeDates? createNextAnnualDate(String id, ForgeDates currentDate) {
+  static ForgeDates? createNextAnnualDate(String id, ForgeDates currentDate) {
 
     // TODO FIX BIRTHDAY PRESS
 
-    // Checks if link exists
+    /// Checks if link exists
     bool linkExists = doesLinkExist(id);
 
     ForgeLinks? currentLink = getLinkfromid(id);
 
 
 
-    // Returns next date if link exists
+    /// Returns next date if link exists
     if (linkExists && currentLink != null) {
       currentDate.isComplete = false;
 
@@ -303,7 +337,7 @@ class LinkDateServices {
 
         int addyear = max(DateTime.now().year + 1, currentDate.meetingDate!.year + 1);
 
-        // Adds a year
+        /// Adds a year
         currentDate.meetingDate = DateTime(addyear, currentDate.meetingDate!.month, currentDate.meetingDate!.day);
 
         return currentDate;

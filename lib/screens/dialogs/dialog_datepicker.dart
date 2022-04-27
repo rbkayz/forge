@@ -11,8 +11,8 @@ class DatePickerService {
 
   Future<DateTime?> changeDate(BuildContext context, String id) async {
 
-    bool meetingExists = LinkDateServices().getNextDate(id).meetingDate != null;
-    DateTime initialDate = LinkDateServices().getNextDate(id).meetingDate ?? DateUtils.dateOnly(DateTime.now());
+    bool meetingExists = LinkDateServices.getNextDate(id).meetingDate != null;
+    DateTime initialDate = LinkDateServices.getNextDate(id).meetingDate ?? DateUtils.dateOnly(DateTime.now());
 
     final DateTime? newDate = await showDatePicker(
         context: context,
@@ -25,7 +25,7 @@ class DatePickerService {
     if (newDate != null && newDate != initialDate) {
 
       Box linksBox = Hive.box(Constants.linksBox);
-      ForgeLinks? currentLink = LinkDateServices().getLinkfromid(id);
+      ForgeLinks? currentLink = LinkDateServices.getLinkfromid(id);
 
       if (currentLink != null) {
 

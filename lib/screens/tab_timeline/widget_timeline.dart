@@ -148,7 +148,7 @@ class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
                 _setState(() {
 
                   // Changes the value of the checkbox and updates the box
-                   LinkDateServices()
+                   LinkDateServices
                        .onTapCheckbox(newValue, widget.date);
 
                 });
@@ -245,7 +245,7 @@ class WidgetDatePopupMenu extends StatelessWidget {
               onTap: () {
 
                 if (currentDate.linkid != null ) {
-                  ForgeLinks? currentLink = LinkDateServices().getLinkfromid(currentDate.linkid!);
+                  ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentDate.linkid!);
 
                   if (currentLink != null ) {
                     currentLink.linkDates.removeWhere((element) => element == currentDate);
