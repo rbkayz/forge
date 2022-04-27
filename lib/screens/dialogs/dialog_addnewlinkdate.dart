@@ -43,7 +43,6 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
   Widget build(BuildContext context) {
 
     /// Initialize values if an initial forgedates is provided
-
     if (widget.initDate != null && widget.initDate?.linkid != null) {
       Contact initContact = AllContactsServices().getContactfromID(context, widget.initDate!.linkid!);
       currentName = initContact.displayName;

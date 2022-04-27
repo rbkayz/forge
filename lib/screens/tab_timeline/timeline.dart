@@ -88,12 +88,12 @@ class _TimelinePageState extends State<TimelinePage> {
               separatorBuilder: (context, index) {
 
                 if (index == 0 && dates.isNotEmpty) {
-                  return DateDivider(divText: DateFormat('EEE, d MMM').format(dates[index].meetingDate!).toUpperCase());
+                  return DateDivider(divText: DateFormat('EEE, d MMM y').format(dates[index].meetingDate!).toUpperCase());
                 }
 
                 else if (index > 0 && index < dates.length) {
                   if (dates[index-1].meetingDate! != dates[index].meetingDate!) {
-                    return DateDivider(divText: DateFormat('EEE, d MMM').format(dates[index].meetingDate!).toUpperCase());
+                    return DateDivider(divText: DateFormat('EEE, d MMM y').format(dates[index].meetingDate!).toUpperCase());
                   }
 
                   else {return const SizedBox.shrink();}

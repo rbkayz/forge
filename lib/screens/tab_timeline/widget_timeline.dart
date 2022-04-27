@@ -168,7 +168,7 @@ class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
 
 Widget DateDivider ({required String divText}) {
 
-  bool isToday = DateFormat('EEE, d MMM').format(DateTime.now()).toUpperCase() == divText;
+  bool isToday = DateFormat('EEE, d MMM y').format(DateTime.now()).toUpperCase() == divText;
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(18, 5, 20, 0),

@@ -16,7 +16,6 @@ class LinkDateServices {
   List<Map<String, dynamic>> mapListDates = [];
 
 
-
   /// Deactivate a link
   Future<void> deactivateLink(String id) async {
     ForgeLinks currentLink = linksBox.get(id);
@@ -29,10 +28,8 @@ class LinkDateServices {
   }
 
 
-
   /// Activate a link
   Future<void> activateLink(BuildContext context, String id) async {
-
     bool isStored = linksBox.containsKey(id);
 
     ForgeLinks currentLink = isStored ? linksBox.get(id) : ForgeLinks(
@@ -52,8 +49,6 @@ class LinkDateServices {
   }
 
 
-
-
   /// Cycles through each link and gets all dates, and sorts it
   List<ForgeDates> sortAllDates(value, {bool showAllDate = true}) {
     value.cast<ForgeLinks>().forEach((element) {
@@ -71,7 +66,6 @@ class LinkDateServices {
     }
 
     return sortDates;
-
   }
 
 
@@ -88,7 +82,9 @@ class LinkDateServices {
     });
 
     foundDate =
-        sortDates.where((element) => mapEquals(element.toMap(), mapval)).first;
+        sortDates
+            .where((element) => mapEquals(element.toMap(), mapval))
+            .first;
 
     return foundDate;
   }
@@ -96,23 +92,35 @@ class LinkDateServices {
 
   /// Toggle Checkbox
   void onTapCheckbox(bool? newValue, ForgeDates currentDate) async {
-
     ForgeLinks currentLink = linksBox.values
         .cast<ForgeLinks>()
         .where((element) => element.id == currentDate.linkid)
         .first;
 
-    currentLink.linkDates.where((element) => element.hashCode == currentDate.hashCode).first.isComplete = newValue;
+    currentLink.linkDates
+        .where((element) => element.hashCode == currentDate.hashCode)
+        .first
+        .isComplete = newValue;
 
 
     if (newValue == true) {
-
+      // Creates the next meeting date based on recurring criteria.
       ForgeDates? newDate = createNextMeeting(currentLink.id);
 
       if (newDate != null) {
         currentLink.linkDates.add(newDate);
       }
 
+
+      // Creates the next annual date
+      if (currentDate.annual == true) {
+        ForgeDates? newDate2 = createNextAnnualDate(currentLink.id, currentDate);
+
+        if (newDate2 != null) {
+          currentLink.linkDates.removeWhere((element) => element.hashCode == currentDate.hashCode);
+          currentLink.linkDates.add(newDate2);
+        }
+      }
     }
 
     await linksBox.put(currentLink.linkKey, currentLink);
@@ -121,16 +129,14 @@ class LinkDateServices {
 
   /// Get Link from ID
   ForgeLinks? getLinkfromid(String id) {
-
     if (doesLinkExist(id)) {
+      ForgeLinks foundLink = linksBox.values
+          .cast<ForgeLinks>()
+          .where((element) => element.id == id)
+          .first;
 
-    ForgeLinks foundLink = linksBox.values
-        .cast<ForgeLinks>()
-        .where((element) => element.id == id)
-        .first;
-
-    return foundLink;
-  }
+      return foundLink;
+    }
 
     else {
       return null;
@@ -148,7 +154,6 @@ class LinkDateServices {
   }
 
 
-
   /// Checks if link is active
   bool isLinkActive(String id) {
     Iterable<ForgeLinks> foundLink = linksBox.values
@@ -160,14 +165,11 @@ class LinkDateServices {
     } else {
       return false;
     }
-
   }
-
 
 
   /// Get Next date that isn't complete
   ForgeDates getNextDate(String id) {
-
     // Checks if link exists
     bool linkExists = doesLinkExist(id);
 
@@ -175,22 +177,21 @@ class LinkDateServices {
 
     // Returns next date if link exists
     if (linkExists && currentLink != null) {
-
       List<ForgeDates> nextDateList = currentLink.linkDates
           .where((element) =>
-              element.isComplete == false &&
-              element.meetingDate!
-                      .compareTo(DateUtils.dateOnly(DateTime.now())) >=
-                  0)
+      element.isComplete == false &&
+          element.meetingDate!
+              .compareTo(DateUtils.dateOnly(DateTime.now())) >=
+              0)
           .toList();
 
       nextDateList.isNotEmpty
           ? nextDateList
-              .sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
+          .sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
           : null;
 
       ForgeDates nextDate =
-          nextDateList.isNotEmpty ? nextDateList.first : ForgeDates();
+      nextDateList.isNotEmpty ? nextDateList.first : ForgeDates();
 
       return nextDate;
     }
@@ -204,7 +205,6 @@ class LinkDateServices {
 
   /// Get Prev Date that is complete
   ForgeDates getPrevDate(String id) {
-
     // Checks if link exists
     bool linkExists = doesLinkExist(id);
 
@@ -212,22 +212,21 @@ class LinkDateServices {
 
     // Returns prev date if link exists
     if (linkExists && currentLink != null) {
-
       List<ForgeDates> prevDateList = currentLink.linkDates
           .where((element) =>
-              element.isComplete == true &&
-              element.meetingDate!
-                      .compareTo(DateUtils.dateOnly(DateTime.now())) <=
-                  0)
+      element.isComplete == true &&
+          element.meetingDate!
+              .compareTo(DateUtils.dateOnly(DateTime.now())) <=
+              0)
           .toList();
 
       prevDateList.isNotEmpty
           ? prevDateList
-              .sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
+          .sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
           : null;
 
       ForgeDates prevDate =
-          prevDateList.isNotEmpty ? prevDateList.last : ForgeDates();
+      prevDateList.isNotEmpty ? prevDateList.last : ForgeDates();
 
       return prevDate;
     }
@@ -239,10 +238,8 @@ class LinkDateServices {
   }
 
 
-
   /// Create a new recurring meeting if recurring ones and no active one is left
-  ForgeDates? createNextMeeting (String id) {
-
+  ForgeDates? createNextMeeting(String id) {
     // Checks if link exists
     bool linkExists = doesLinkExist(id);
 
@@ -252,53 +249,63 @@ class LinkDateServices {
 
     // Returns next date if link exists
     if (linkExists && currentLink != null) {
-
       // Checks is all dates are completed
       bool allCompleted = currentLink.linkDates.every((element) {
         return element.isComplete == true;
       });
 
+      // Returns true and proceeds only if all dates are completed
       if (allCompleted) {
-
-
         if (currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null) {
-
-
           List<ForgeDates> dates = currentLink.linkDates;
 
           // Sorts the dates to get last date
           dates.sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!));
 
-
           // Computes number of days if months or weeks
           if (currentLink.recurringType?.toLowerCase() == 'month(s)') {
-
             addDays = currentLink.recurringNum! * 30;
-
           } else {
-
             addDays = currentLink.recurringNum! * 7;
-
           }
 
-
-          ForgeDates newDate = ForgeDates(meetingDate: dates.last.meetingDate!.add(Duration(days: addDays)), meetingType: 'Recurring meeting', isComplete: false, linkid: currentLink.id);
+          ForgeDates newDate = ForgeDates(
+              meetingDate: dates.last.meetingDate!.add(Duration(days: addDays)), meetingType: 'Recurring meeting', isComplete: false, linkid: currentLink.id);
 
           return newDate;
-
         }
-
-
       }
-
-
     }
 
-
-
+    return null;
   }
 
 
+  /// Create a new recurring meeting if recurring ones and no active one is left
+  ForgeDates? createNextAnnualDate(String id, ForgeDates currentDate) {
 
+    // TODO FIX BIRTHDAY PRESS
+
+    // Checks if link exists
+    bool linkExists = doesLinkExist(id);
+
+    ForgeLinks? currentLink = getLinkfromid(id);
+
+    // Returns next date if link exists
+    if (linkExists && currentLink != null) {
+      currentDate.isComplete = false;
+
+      if (currentDate.meetingDate != null) {
+        // Adds a year
+        currentDate.meetingDate = DateTime(DateTime
+            .now()
+            .year + 1, currentDate.meetingDate!.month, currentDate.meetingDate!.day);
+
+        return currentDate;
+      }
+    }
+
+    return null;
+  }
 
 }
