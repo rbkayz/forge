@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -291,15 +293,18 @@ class LinkDateServices {
 
     ForgeLinks? currentLink = getLinkfromid(id);
 
+
+
     // Returns next date if link exists
     if (linkExists && currentLink != null) {
       currentDate.isComplete = false;
 
       if (currentDate.meetingDate != null) {
+
+        int addyear = max(DateTime.now().year + 1, currentDate.meetingDate!.year + 1);
+
         // Adds a year
-        currentDate.meetingDate = DateTime(DateTime
-            .now()
-            .year + 1, currentDate.meetingDate!.month, currentDate.meetingDate!.day);
+        currentDate.meetingDate = DateTime(addyear, currentDate.meetingDate!.month, currentDate.meetingDate!.day);
 
         return currentDate;
       }
