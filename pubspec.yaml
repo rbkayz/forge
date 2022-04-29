@@ -103,6 +103,10 @@ flutter:
     - family: Redressed
       fonts:
         - asset: assets/fonts/Redressed/Redressed-Regular.ttf
+
+    - family: Prompt
+      fonts:
+        - asset: assets/fonts/Prompt/Prompt-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

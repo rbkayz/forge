@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utilities/constants.dart';
 
@@ -46,7 +47,15 @@ class WidgetFAQs extends StatelessWidget {
       minLeadingWidth: 30,
       leading: const Icon(Icons.help_outline),
       title: const Text('FAQs'),
-      onTap: () {
+      onTap: () async {
+
+        String url = 'https://forgeapp.dev';
+        if (await canLaunch(url)) {
+        await launch(url);
+        } else {
+        throw 'Could not launch $url';
+        }
+
         }
     );
   }
@@ -68,7 +77,16 @@ class WidgetContactUs extends StatelessWidget {
         minLeadingWidth: 30,
         leading: const Icon(Icons.support_outlined),
         title: const Text('Contact Us'),
-        onTap: () {
+        onTap: () async {
+
+          String url = 'mailto:support@forgeapp.dev';
+          if (await canLaunch(url)) {
+          await launch(url);
+          } else {
+          throw 'Could not launch $url';
+          }
+
+
         }
     );
   }
@@ -89,7 +107,16 @@ class WidgetLegal extends StatelessWidget {
         minLeadingWidth: 30,
         leading: const Icon(Icons.policy_outlined),
         title: const Text('Terms and Privacy Policy'),
-        onTap: () {
+        onTap: () async {
+
+          String url = 'https://forgeapp.notion.site/Terms-and-Privacy-Policy-fcc30e94e14b4a9cb897ecd76d61a818';
+          if (await canLaunch(url)) {
+          await launch(url);
+          } else {
+          throw 'Could not launch $url';
+          }
+
+
         }
     );
   }

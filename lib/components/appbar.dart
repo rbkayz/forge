@@ -268,7 +268,7 @@ class AppBarScrolltoToday extends StatelessWidget {
 
         int indexval = dates.indexWhere((element) => element == nextDate);
 
-        itemController.scrollTo(index: indexval, duration: Duration(milliseconds: 500));
+        itemController.scrollTo(index: indexval+1, duration: Duration(milliseconds: 500),alignment: 0.05);
 
       },
     );

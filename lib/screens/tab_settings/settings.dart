@@ -7,8 +7,9 @@ import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'dart:async';
 import 'dart:io';
+
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -174,7 +175,17 @@ class WidgetFeatureRequest extends StatelessWidget {
       minLeadingWidth: 30,
       leading: const Icon(Icons.code),
       title: const Text('Request a feature'),
-      onTap: () {},
+      onTap: () async {
+
+        String url = 'https://forgeapp.dev';
+        if (await canLaunch(url)) {
+        await launch(url);
+        } else {
+        throw 'Could not launch $url';
+        }
+
+
+      },
     );
   }
 }
