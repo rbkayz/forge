@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forge/screens/tab_links/links.dart';
-import 'package:forge/screens/tab_settings/settings.dart';
-import 'package:forge/screens/tab_timeline/timeline.dart';
 
 enum TabName {timeline, links, settings}
 
@@ -17,11 +14,11 @@ const Map<TabName, IconData> tabIcon = {
   TabName.settings: Icons.settings,
 };
 
-const Map<TabName, Widget> tabPage = {
-  TabName.timeline: TimelinePage(),
-  TabName.links: LinksPage(),
-  TabName.settings: SettingsPage(),
-};
+// const Map<TabName, Widget> tabPage = {
+//   TabName.timeline: TimelinePage(),
+//   TabName.links: LinksPage(),
+//   TabName.settings: SettingsPage(),
+// };
 
 Map<TabName, GlobalKey> navHomeKeys = {
   TabName.timeline: GlobalKey(),

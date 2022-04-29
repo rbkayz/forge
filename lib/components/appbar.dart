@@ -7,9 +7,12 @@ import 'package:forge/components/toggle_links.dart';
 import 'package:forge/models/links_model.dart';
 import 'package:forge/screens/dialogs/dialog_addnewlinkdate.dart';
 import 'package:forge/screens/dialogs/dialog_popupmenu.dart';
+import 'package:forge/services/links_service.dart';
 import 'package:forge/services/router.dart';
 import 'package:forge/utilities/constants.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../screens/dialogs/dialog_setrecurringmeeting.dart';
 import '../services/contacts_service.dart';
@@ -230,8 +233,10 @@ class AppBarAddDate extends StatelessWidget {
 class AppBarScrolltoToday extends StatelessWidget {
 
   AppBarScrolltoToday({
-    Key? key,
+    Key? key, required this.itemController
   }) : super(key: key);
+
+  final ItemScrollController itemController;
 
   @override
   Widget build(BuildContext context) {
@@ -240,6 +245,30 @@ class AppBarScrolltoToday extends StatelessWidget {
       splashRadius: 20,
       icon: Icon(Icons.calendar_today),
       onPressed: () {
+
+        Box linksBox = Hive.box(Constants.linksBox);
+        Box prefsBox = Hive.box(Constants.prefsBox);
+
+        List<ForgeDates> dates = LinkDateServices.sortAllDates(linksBox.values, showAllDate: prefsBox.get(Constants.showAllDatesinTimeline, defaultValue: true));
+
+        List<ForgeDates> nextDateList = dates
+            .where((element) =>
+            element.meetingDate!
+                .compareTo(DateUtils.dateOnly(DateTime.now())) >=
+                0)
+            .toList();
+
+        nextDateList.isNotEmpty
+            ? nextDateList
+            .sort((a, b) => a.meetingDate!.compareTo(b.meetingDate!))
+            : null;
+
+        ForgeDates nextDate =
+        nextDateList.isNotEmpty ? nextDateList.first : ForgeDates();
+
+        int indexval = dates.indexWhere((element) => element == nextDate);
+
+        itemController.scrollTo(index: indexval, duration: Duration(milliseconds: 500));
 
       },
     );

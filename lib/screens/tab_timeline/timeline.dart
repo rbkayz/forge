@@ -14,7 +14,9 @@ import '../../services/listenables.dart';
 import '../../utilities/constants.dart';
 
 class TimelinePage extends StatefulWidget {
-  const TimelinePage({Key? key}) : super(key: key);
+  TimelinePage({Key? key, required this.itemController}) : super(key: key);
+
+  final ItemScrollController itemController;
 
   @override
   _TimelinePageState createState() => _TimelinePageState();
@@ -29,12 +31,6 @@ class _TimelinePageState extends State<TimelinePage> {
 
   late Contact currentContact;
 
-  final itemController = ItemScrollController();
-
-  Future scrollToItem() async {
-
-    itemController.scrollTo(index: 4, duration: Duration(milliseconds: 500));
-  }
 
 
   @override
@@ -69,7 +65,7 @@ class _TimelinePageState extends State<TimelinePage> {
               itemCount: dates.length + 2,
 
               /// Sets a scroll controller to scroll to any date
-              itemScrollController: itemController,
+              itemScrollController: widget.itemController,
 
               /// Builds a linkdate tile except at first and last index
               itemBuilder: (context, index) {
