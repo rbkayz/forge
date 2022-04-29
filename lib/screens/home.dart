@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     switch (activeTab) {
 
       case TabName.timeline: {
-        return ForgeAppBar(showOptions: true,showSearch: true, customWidget1: AppBarAddDate(),);
+        return ForgeAppBar(showOptions: true,showSearch: true, customWidget1: AppBarAddDate(),customWidget2: AppBarScrolltoToday(),);
       }
 
       case TabName.links: {

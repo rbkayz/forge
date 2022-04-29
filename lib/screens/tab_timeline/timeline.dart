@@ -33,7 +33,7 @@ class _TimelinePageState extends State<TimelinePage> {
 
   Future scrollToItem() async {
 
-    itemController.scrollTo(index: 1, duration: Duration(milliseconds: 500));
+    itemController.scrollTo(index: 4, duration: Duration(milliseconds: 500));
   }
 
 

@@ -226,6 +226,28 @@ class AppBarAddDate extends StatelessWidget {
 }
 
 
+/// Sets the add new link date option for the app bar
+class AppBarScrolltoToday extends StatelessWidget {
+
+  AppBarScrolltoToday({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      splashRadius: 20,
+      icon: Icon(Icons.calendar_today),
+      onPressed: () {
+
+      },
+    );
+  }
+}
+
+
+
 
 /// Sets the search button in the app bar
 class AppBarSearch extends StatelessWidget {
