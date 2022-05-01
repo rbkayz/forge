@@ -11,6 +11,8 @@ import 'dart:io';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../services/notifications_service.dart';
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -21,34 +23,36 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: const [
-          //Edit notifications
-          WidgetNotifications(),
+    return SingleChildScrollView(
+      child: Column(
+          children: const [
+            //Edit notifications
+            WidgetNotifications(),
 
-          //Edit tags
-          WidgetEditTags(),
+            //Edit tags
+            WidgetEditTags(),
 
-          //Feature Request
-          WidgetFeatureRequest(),
+            //Feature Request
+            WidgetFeatureRequest(),
 
-          //Review Us
-          WidgetReviewUs(),
+            //Review Us
+            WidgetReviewUs(),
 
-          //Share with a friend
-          WidgetShare(),
+            //Share with a friend
+            WidgetShare(),
 
-          //Help Center
-          WidgetHelpCenter(),
+            //Help Center
+            WidgetHelpCenter(),
 
-          //Logout
-          WidgetLogout(),
+            //Logout
+            WidgetLogout(),
 
-          // Center(
-          //   child: Image.asset(Constants.forgeHeaderLogo,width: 50,)
-          // ),
+            // Center(
+            //   child: Image.asset(Constants.forgeHeaderLogo,width: 50,)
+            // ),
 
-        ],
+          ],
+      ),
     );
   }
 
@@ -205,7 +209,16 @@ class WidgetNotifications extends StatelessWidget {
       minLeadingWidth: 30,
       leading: const Icon(Icons.notifications),
       title: const Text('Notifications'),
-      onTap: () {},
+      onTap: () async {
+
+        TimeOfDay? pickedSchedule = await pickSchedule(context);
+
+        if (pickedSchedule != null) {
+          await cancelScheduledNotifications();
+          await createScheduledNotification(pickedSchedule);
+        }
+
+      },
     );
   }
 }

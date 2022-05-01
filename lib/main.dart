@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,16 @@ void main() async {
   Hive.registerAdapter(ForgePrefsAdapter());
   Hive.registerAdapter(LinkTagAdapter());
 
-  /*
-  Initialize firebase and run app;
-  */
+  /// Initialize awesome notifications
+  await AwesomeNotifications().initialize('resource://drawable/forge_icon', [
+    NotificationChannel(
+      channelKey: 'Default',
+      channelName: 'Default',
+      importance: NotificationImportance.High, channelDescription: 'Daily Reminders',
+    ),
+  ],);
 
+  /// Initialize Firebase
   await Firebase.initializeApp();
 
   runApp(const ForgeApp());

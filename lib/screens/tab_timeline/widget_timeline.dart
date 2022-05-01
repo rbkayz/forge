@@ -125,8 +125,18 @@ class LinkDateCheckbox extends StatefulWidget {
 }
 
 class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
+
+
+  Color borderColor = Constants.kPrimaryColor;
+
   @override
   Widget build(BuildContext context) {
+
+    /// Sets it to purple if in time, red if overdue
+    if (widget.date.meetingDate != null) {
+      borderColor = widget.date.meetingDate!.compareTo(DateUtils.dateOnly(DateTime.now())) < 0 ? Constants.kErrorColor : Constants.kPrimaryColor;
+    }
+
     return SizedBox(
       height: 40,
       width: 40,
@@ -135,7 +145,7 @@ class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
         child: StatefulBuilder(
           builder: (context, _setState) => Checkbox(
 
-              side: const BorderSide(color: Constants.kPrimaryColor, width: 2),
+              side: BorderSide(color: borderColor, width: 2),
               activeColor: Constants.kSecondaryColor,
               value: widget.date.isComplete ?? false,
               materialTapTargetSize:

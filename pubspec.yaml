@@ -56,6 +56,9 @@ dependencies:
   scrollable_positioned_list: ^0.2.3
   share_plus: ^4.0.3
   file_picker: ^4.5.1
+  flutter_local_notifications:
+  timezone:
+  awesome_notifications: ^0.6.21
 
 dev_dependencies:
   flutter_test:
