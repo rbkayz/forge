@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+
+import '../utilities/constants.dart';
 
 class FirebaseAuthService {
 
@@ -43,5 +47,46 @@ class FirebaseAuthService {
   User? currentUserState() {
     return _auth.currentUser;
   }
+
+
+
+
+  /// Box Name getters
+
+  static String getLinksBox (BuildContext context) {
+
+    final currentUser = Provider.of<User?>(context, listen: false);
+
+    if (currentUser == null) {
+      return Constants.linksBox;
+    }
+
+    else {
+
+      final currentUserID = currentUser.uid;
+      return '$currentUserID-links';
+
+    }
+
+  }
+
+
+  static String getPrefsBox (BuildContext context) {
+
+    final currentUser = Provider.of<User?>(context, listen: false);
+
+    if (currentUser == null) {
+      return Constants.prefsBox;
+    }
+
+    else {
+
+      final currentUserID = currentUser.uid;
+      return '$currentUserID-prefs';
+
+    }
+
+  }
+
 
 }

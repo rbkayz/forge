@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import '../../../models/links_model.dart';
+import '../../../services/auth.dart';
 import '../../../services/contacts_service.dart';
 import '../../dialogs/dialog_addnewlinkdate.dart';
 
@@ -20,7 +21,7 @@ class ContactInfoTab extends StatefulWidget {
 }
 
 class _ContactInfoTabState extends State<ContactInfoTab> {
-  final linksBox = Hive.box(Constants.linksBox);
+
   Contact? currentContact;
 
   launchDialer(String currPhone) async {
@@ -70,7 +71,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
     String currentID = Provider.of<String>(context);
     
     currentContact = (currentContact == null) ? AllContactsServices().getContactfromID(context, currentID) : currentContact;
-    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID, context);
 
     return SingleChildScrollView(
       child: Column(
@@ -211,7 +212,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
 
                     if (currentLink != null ) {
                       currentLink.linkDates.removeWhere((element) => element == currentDate);
-                      Box linksBox = Hive.box(Constants.linksBox);
+                      Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
                       linksBox.put(currentLink.id, currentLink);
                     }
 

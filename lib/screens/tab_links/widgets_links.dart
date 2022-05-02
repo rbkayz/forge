@@ -11,6 +11,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../models/links_model.dart';
+import '../../services/auth.dart';
 import '../dialogs/dialog_tags.dart';
 
 ///--------------------------------------------------------------
@@ -38,11 +39,11 @@ class _WidgetTagState extends State<WidgetTag> {
   Widget build(BuildContext context) {
 
     // Retrieves the current Link from the link service
-    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(widget.id);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(widget.id, context);
 
     currentTagID = currentLink?.tagID;
 
-    Box prefsBox = Hive.box(Constants.prefsBox);
+    Box prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
     List<LinkTag> tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 
     if (currentTagID != null) {
@@ -127,7 +128,7 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
 
   /// Function that updates the value in the next date box
   Future _changeDate() async {
-    if (LinkDateServices.isLinkActive(widget.id)) {
+    if (LinkDateServices.isLinkActive(widget.id, context)) {
       HapticFeedback.lightImpact();
       newDate = await DatePickerService().changeDate(context, widget.id);
     } else {
@@ -141,7 +142,7 @@ class _NextConnectDateWidgetState extends State<NextConnectDateWidget> {
 
   @override
   Widget build(BuildContext context) {
-    ForgeDates nextDate = LinkDateServices.getNextDate(widget.id);
+    ForgeDates nextDate = LinkDateServices.getNextDate(widget.id, context);
 
     return Tooltip(
       message: 'Upcoming meeting date. Press to edit.',
@@ -215,9 +216,9 @@ class _LinkProgressBarState extends State<LinkProgressBar> {
   @override
   Widget build(BuildContext context) {
     String currentID = Provider.of<String>(context);
-    ForgeLinks currentLink = LinkDateServices.getLinkfromid(currentID) ?? ForgeLinks(id: currentID);
-    ForgeDates prevDate = LinkDateServices.getPrevDate(currentID);
-    ForgeDates nextDate = LinkDateServices.getNextDate(currentID);
+    ForgeLinks currentLink = LinkDateServices.getLinkfromid(currentID, context) ?? ForgeLinks(id: currentID);
+    ForgeDates prevDate = LinkDateServices.getPrevDate(currentID, context);
+    ForgeDates nextDate = LinkDateServices.getNextDate(currentID, context);
 
     String first_row = prevDate.linkid != null
         ? 'Last connected on ${DateFormat('d MMM yyyy').format(prevDate.meetingDate!)} (${DateTime.now().difference(prevDate.meetingDate!).inDays} days ago)'

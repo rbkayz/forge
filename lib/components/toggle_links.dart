@@ -8,6 +8,8 @@ import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../services/auth.dart';
+
 
 
 class ToggleLinks extends StatefulWidget {
@@ -21,7 +23,7 @@ class ToggleLinks extends StatefulWidget {
 
 class _ToggleLinksState extends State<ToggleLinks> {
 
-  final linksBox = Hive.box(Constants.linksBox);
+
 
 
   /// Add Snack Bar
@@ -66,6 +68,8 @@ class _ToggleLinksState extends State<ToggleLinks> {
   @override
   Widget build(BuildContext context) {
 
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+
       ForgeLinks? currentLink = linksBox.get(widget.currentContact.id);
 
       return ValueListenableBuilder(
@@ -76,7 +80,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
 
               if (currentLink != null && currentLink.isActive) {
 
-                LinkDateServices.deactivateLink(widget.currentContact.id);
+                LinkDateServices.deactivateLink(widget.currentContact.id, context);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                     linkModNotification(false)
@@ -90,7 +94,7 @@ class _ToggleLinksState extends State<ToggleLinks> {
                     linkModNotification(true)
                 );
 
-                LinkDateServices.createNextMeeting(widget.currentContact.id);
+                LinkDateServices.createNextMeeting(widget.currentContact.id, context);
 
               }
 

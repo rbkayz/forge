@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import '../models/links_model.dart';
-import '../utilities/constants.dart';
+import 'auth.dart';
 
 ///--------------------------------------------------------------
 /// LINK DATE SERVICES
@@ -18,9 +18,9 @@ class LinkDateServices {
 
 
   /// Deactivates a link
-  static Future<void> deactivateLink(String id) async {
+  static Future<void> deactivateLink(String id, BuildContext context) async {
 
-    final linksBox = Hive.box(Constants.linksBox);
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
     ForgeLinks currentLink = linksBox.get(id);
     currentLink.isActive = false;
@@ -35,7 +35,7 @@ class LinkDateServices {
   /// Activates a link
   static Future<void> activateLink(BuildContext context, String id) async {
 
-    final linksBox = Hive.box(Constants.linksBox);
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
     bool isStored = linksBox.containsKey(id);
 
@@ -108,9 +108,9 @@ class LinkDateServices {
 
 
   /// Toggle Checkbox
-  static void onTapCheckbox(bool? newValue, ForgeDates currentDate) async {
+  static void onTapCheckbox(bool? newValue, ForgeDates currentDate, BuildContext context) async {
 
-    final linksBox = Hive.box(Constants.linksBox);
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
     /// finds the link based on id
     ForgeLinks currentLink = linksBox.values
@@ -127,7 +127,7 @@ class LinkDateServices {
 
     if (newValue == true) {
       /// Creates the next meeting date based on recurring criteria.
-      ForgeDates? newDate = createNextMeeting(currentLink.id);
+      ForgeDates? newDate = createNextMeeting(currentLink.id, context);
 
       if (newDate != null) {
         currentLink.linkDates.add(newDate);
@@ -136,7 +136,7 @@ class LinkDateServices {
 
       /// Creates the next annual date e.g. birthday or anniversary
       if (currentDate.annual == true) {
-        ForgeDates? newDate2 = createNextAnnualDate(currentLink.id, currentDate);
+        ForgeDates? newDate2 = createNextAnnualDate(currentLink.id, currentDate, context);
 
         if (newDate2 != null) {
           currentLink.linkDates.removeWhere((element) => element.hashCode == currentDate.hashCode);
@@ -151,11 +151,11 @@ class LinkDateServices {
 
 
   /// Get Link from ID. If not found, then returns null
-  static ForgeLinks? getLinkfromid(String id) {
+  static ForgeLinks? getLinkfromid(String id, BuildContext context) {
 
-    final linksBox = Hive.box(Constants.linksBox);
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
-    if (doesLinkExist(id)) {
+    if (doesLinkExist(id, context)) {
       ForgeLinks foundLink = linksBox.values
           .cast<ForgeLinks>()
           .where((element) => element.id == id)
@@ -171,9 +171,9 @@ class LinkDateServices {
 
 
   /// Checks if a link exists
-  static bool doesLinkExist(String id) {
+  static bool doesLinkExist(String id, BuildContext context) {
 
-    final linksBox = Hive.box(Constants.linksBox);
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
     Iterable<ForgeLinks> foundLink = linksBox.values
         .cast<ForgeLinks>()
@@ -184,9 +184,9 @@ class LinkDateServices {
 
 
   /// Checks if link is active
-  static bool isLinkActive(String id) {
+  static bool isLinkActive(String id, BuildContext context) {
 
-    final linksBox = Hive.box(Constants.linksBox);
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
     Iterable<ForgeLinks> foundLink = linksBox.values
         .cast<ForgeLinks>()
@@ -201,12 +201,12 @@ class LinkDateServices {
 
 
   /// Get Next date that isn't complete
-  static ForgeDates getNextDate(String id) {
+  static ForgeDates getNextDate(String id, BuildContext context) {
 
     /// Checks if link exists
-    bool linkExists = doesLinkExist(id);
+    bool linkExists = doesLinkExist(id, context);
 
-    ForgeLinks? currentLink = getLinkfromid(id);
+    ForgeLinks? currentLink = getLinkfromid(id, context);
 
     /// Returns next date if link exists
     if (linkExists && currentLink != null) {
@@ -237,12 +237,12 @@ class LinkDateServices {
 
 
   /// Get Prev Date that is complete
-  static ForgeDates getPrevDate(String id) {
+  static ForgeDates getPrevDate(String id, BuildContext context) {
 
     /// Checks if link exists
-    bool linkExists = doesLinkExist(id);
+    bool linkExists = doesLinkExist(id, context);
 
-    ForgeLinks? currentLink = getLinkfromid(id);
+    ForgeLinks? currentLink = getLinkfromid(id, context);
 
     /// Returns prev date if link exists
     if (linkExists && currentLink != null) {
@@ -273,14 +273,14 @@ class LinkDateServices {
 
 
   /// Create a new recurring meeting if recurring ones and no active one is left
-  static ForgeDates? createNextMeeting(String id) {
+  static ForgeDates? createNextMeeting(String id, BuildContext context) {
 
     /// Checks if link exists
-    bool linkExists = doesLinkExist(id);
+    bool linkExists = doesLinkExist(id, context);
 
     int addDays;
 
-    ForgeLinks? currentLink = getLinkfromid(id);
+    ForgeLinks? currentLink = getLinkfromid(id, context);
 
     /// Returns next date if link exists
     if (linkExists && currentLink != null) {
@@ -318,14 +318,14 @@ class LinkDateServices {
 
 
   /// Create a new recurring meeting if recurring ones and no active one is left
-  static ForgeDates? createNextAnnualDate(String id, ForgeDates currentDate) {
+  static ForgeDates? createNextAnnualDate(String id, ForgeDates currentDate, BuildContext context) {
 
     // TODO FIX BIRTHDAY PRESS
 
     /// Checks if link exists
-    bool linkExists = doesLinkExist(id);
+    bool linkExists = doesLinkExist(id, context);
 
-    ForgeLinks? currentLink = getLinkfromid(id);
+    ForgeLinks? currentLink = getLinkfromid(id, context);
 
 
 

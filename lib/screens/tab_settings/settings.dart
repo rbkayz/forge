@@ -58,8 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    Hive.box(Constants.linksBox).close();
-    Hive.box(Constants.prefsBox).close();
+
     super.dispose();
   }
 }
@@ -82,6 +81,9 @@ class WidgetLogout extends StatelessWidget {
       onTap: () async {
         FirebaseAuthService auth = FirebaseAuthService();
         try {
+
+          Hive.box(FirebaseAuthService.getLinksBox(context)).close();
+          Hive.box(FirebaseAuthService.getPrefsBox(context)).close();
           await auth.signOutFromGoogle();
         } catch (e) {
           if (e is FirebaseAuthException) {

@@ -10,6 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../components/loader.dart';
+import '../../services/auth.dart';
 import '../../services/listenables.dart';
 import '../../utilities/constants.dart';
 
@@ -26,15 +27,15 @@ class _TimelinePageState extends State<TimelinePage> {
 
   List<ForgeDates> dates = [];
 
-  final linksBox = Hive.box(Constants.linksBox);
-  final prefsBox = Hive.box(Constants.prefsBox);
-
   late Contact currentContact;
 
 
 
   @override
   Widget build(BuildContext context) {
+
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+    final prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
 
     /// Listens to any changes in the box, and triggers a rebuild
     return ValueListenableBuilder2(

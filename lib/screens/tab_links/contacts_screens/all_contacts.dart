@@ -4,9 +4,7 @@ import 'package:forge/components/appbar.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/components/toggle_links.dart';
 import 'package:forge/utilities/constants.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-
 import '../widgets_links.dart';
 
 class AllContactsPage extends StatelessWidget {
@@ -57,11 +55,12 @@ class ContactListBuilder extends StatefulWidget {
 }
 
 class _ContactListBuilderState extends State<ContactListBuilder> {
-  final linksBox = Hive.box(Constants.linksBox);
+
 
 
   @override
   Widget build(BuildContext context) {
+
     return ListView.builder(
       shrinkWrap: true,
       itemCount: widget.contacts!.length,

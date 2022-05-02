@@ -3,6 +3,7 @@ import 'package:forge/services/links_service.dart';
 import 'package:hive/hive.dart';
 import '../../models/links_model.dart';
 import '../../models/prefs_model.dart';
+import '../../services/auth.dart';
 import '../../utilities/constants.dart';
 import '../tab_settings/widget_settings/edit_tags.dart';
 
@@ -20,8 +21,8 @@ class DialogTagSelector extends StatefulWidget {
 }
 
 class _DialogTagSelectorState extends State<DialogTagSelector> {
-  Box prefsBox = Hive.box(Constants.prefsBox);
-  Box linksBox = Hive.box(Constants.linksBox);
+
+
   LinkTag currentTag = LinkTag();
   int? _selectvalue;
 
@@ -32,7 +33,10 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
     Initialization of values
     *****************************************************************/
 
-    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(widget.currentID);
+    Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+    Box prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
+
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(widget.currentID, context);
     List<LinkTag> tagsList =
         prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 

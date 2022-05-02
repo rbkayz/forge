@@ -4,6 +4,7 @@ import 'package:forge/services/contacts_service.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:hive/hive.dart';
 import '../../models/links_model.dart';
+import '../../services/auth.dart';
 import '../../utilities/constants.dart';
 import '../dialogs/dialog_addnewlinkdate.dart';
 import 'package:intl/intl.dart';
@@ -159,7 +160,7 @@ class _LinkDateCheckboxState extends State<LinkDateCheckbox> {
 
                   // Changes the value of the checkbox and updates the box
                    LinkDateServices
-                       .onTapCheckbox(newValue, widget.date);
+                       .onTapCheckbox(newValue, widget.date, context);
 
                 });
 
@@ -255,11 +256,11 @@ class WidgetDatePopupMenu extends StatelessWidget {
               onTap: () {
 
                 if (currentDate.linkid != null ) {
-                  ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentDate.linkid!);
+                  ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentDate.linkid!, context);
 
                   if (currentLink != null ) {
                     currentLink.linkDates.removeWhere((element) => element == currentDate);
-                    Box linksBox = Hive.box(Constants.linksBox);
+                    Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
                     linksBox.put(currentLink.id, currentLink);
                   }
                 }

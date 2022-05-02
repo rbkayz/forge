@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../screens/dialogs/dialog_setrecurringmeeting.dart';
+import '../services/auth.dart';
 import '../services/contacts_service.dart';
 
 class ForgeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -246,8 +247,8 @@ class AppBarScrolltoToday extends StatelessWidget {
       icon: Icon(Icons.calendar_today),
       onPressed: () {
 
-        Box linksBox = Hive.box(Constants.linksBox);
-        Box prefsBox = Hive.box(Constants.prefsBox);
+        Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+        Box prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
 
         List<ForgeDates> dates = LinkDateServices.sortAllDates(linksBox.values, showAllDate: prefsBox.get(Constants.showAllDatesinTimeline, defaultValue: true));
 

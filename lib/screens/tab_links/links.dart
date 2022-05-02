@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import '../../services/auth.dart';
 import '../../services/contacts_service.dart';
 import '../../services/links_service.dart';
 import '../../services/listenables.dart';
@@ -23,12 +24,14 @@ class LinksPage extends StatefulWidget {
 }
 
 class _LinksPageState extends State<LinksPage> {
-  final linksBox = Hive.box(Constants.linksBox);
-  final prefsBox = Hive.box(Constants.prefsBox);
-  final contactsService = AllContactsServices();
 
   @override
   Widget build(BuildContext context) {
+
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+    final prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
+
+
     return Scaffold(
       body: ValueListenableBuilder2(
         first: linksBox.listenable(),
@@ -45,8 +48,8 @@ class _LinksPageState extends State<LinksPage> {
               {
                 sortedlinksValues.sort((a, b) {
 
-                  DateTime meetingDate1 = LinkDateServices.getNextDate(a.id).meetingDate ?? Constants().maxDate;
-                  DateTime meetingDate2 = LinkDateServices.getNextDate(b.id).meetingDate ?? Constants().maxDate;
+                  DateTime meetingDate1 = LinkDateServices.getNextDate(a.id, context).meetingDate ?? Constants().maxDate;
+                  DateTime meetingDate2 = LinkDateServices.getNextDate(b.id, context).meetingDate ?? Constants().maxDate;
 
                   return meetingDate1.compareTo(meetingDate2);
 
@@ -58,10 +61,10 @@ class _LinksPageState extends State<LinksPage> {
               List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
               if (contacts != null && contacts.isNotEmpty) {
-                sortedlinksValues.sort((a, b) => contactsService
+                sortedlinksValues.sort((a, b) => AllContactsServices()
                         .getContactfromID(context, a.id)
                         .displayName
-                        .compareTo(contactsService
+                        .compareTo(AllContactsServices()
                         .getContactfromID(context, b.id)
                         .displayName));
               }
@@ -160,7 +163,7 @@ class _LinkCardState extends State<LinkCard> {
   @override
   Widget build(BuildContext context) {
 
-    ForgeDates prevDate = LinkDateServices.getPrevDate(widget.currentID);
+    ForgeDates prevDate = LinkDateServices.getPrevDate(widget.currentID, context);
     Contact currentContact = AllContactsServices().getContactfromID(context, widget.currentID);
 
     //Get last connected date

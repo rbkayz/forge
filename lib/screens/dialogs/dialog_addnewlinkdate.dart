@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge/services/auth.dart';
 import 'package:forge/services/contacts_service.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:hive/hive.dart';
@@ -120,7 +121,7 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
 
                               if(_newLinkFormKey.currentState!.validate()) {
                                 
-                                Box linksBox = Hive.box(Constants.linksBox);
+                                Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
                                 List<Contact>? contacts = Provider.of<List<Contact>?>(context, listen: false);
 
                                 String currentDisplayName = NameController.text;

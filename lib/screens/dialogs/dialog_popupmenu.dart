@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
+import '../../services/auth.dart';
 import '../../utilities/constants.dart';
 
 ///--------------------------------------------------------------
@@ -16,10 +17,13 @@ class TimelinePopupMenu extends StatefulWidget {
 }
 
 class _TimelinePopupMenuState extends State<TimelinePopupMenu> {
-  Box prefsBox = Hive.box(Constants.prefsBox);
+
 
   @override
   Widget build(BuildContext context) {
+
+    Box prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
+
     bool showAllDates =
         prefsBox.get(Constants.showAllDatesinTimeline, defaultValue: true);
     String sortLinkMethod = prefsBox.get(Constants.sortLinkMethod,

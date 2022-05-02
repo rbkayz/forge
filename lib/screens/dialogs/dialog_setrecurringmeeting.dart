@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:hive/hive.dart';
 import '../../models/links_model.dart';
+import '../../services/auth.dart';
 import '../../utilities/constants.dart';
 
 
@@ -38,7 +39,7 @@ class _DialogSetRecurringState extends State<DialogSetRecurring> {
   @override
   void initState() {
 
-    ForgeLinks currentLink = LinkDateServices.getLinkfromid(widget.currentID) ?? ForgeLinks(id: widget.currentID);
+    ForgeLinks currentLink = LinkDateServices.getLinkfromid(widget.currentID, context) ?? ForgeLinks(id: widget.currentID);
 
     if (currentLink.recurringNum != null && currentLink.recurringType != null) {
       dropdownvalueNum = currentLink.recurringNum;
@@ -192,13 +193,13 @@ class _DialogSetRecurringState extends State<DialogSetRecurring> {
                             child: OutlinedButton(
                                 onPressed: () {
 
-                                  ForgeLinks currentLink = LinkDateServices.getLinkfromid(widget.currentID) ?? ForgeLinks(id: widget.currentID);
+                                  ForgeLinks currentLink = LinkDateServices.getLinkfromid(widget.currentID, context) ?? ForgeLinks(id: widget.currentID);
 
                                   currentLink.recurringEnabled = switchVal;
                                   currentLink.recurringNum = dropdownvalueNum;
                                   currentLink.recurringType = dropdownvalueType;
 
-                                  Box linksBox = Hive.box(Constants.linksBox);
+                                  Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
                                   linksBox.put(currentLink.id, currentLink);
 

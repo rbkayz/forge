@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/links_model.dart';
+import '../../../services/auth.dart';
 import '../../../services/links_service.dart';
 import '../../../utilities/constants.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +30,7 @@ class _ContactNotesTabState extends State<ContactNotesTab> {
     if(_notesController.text != currentLink.note) {
 
       currentLink.note = _notesController.text;
-      Box linksBox = Hive.box(Constants.linksBox);
+      Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
       currentLink.lastUpdateNote = DateUtils.dateOnly(DateTime.now());
       linksBox.put(currentLink.id, currentLink);
 
@@ -69,7 +70,7 @@ class _ContactNotesTabState extends State<ContactNotesTab> {
   Widget build(BuildContext context) {
 
     String currentID = Provider.of<String>(context);
-    ForgeLinks currentLink = LinkDateServices.getLinkfromid(currentID) ?? ForgeLinks(id: currentID);
+    ForgeLinks currentLink = LinkDateServices.getLinkfromid(currentID, context) ?? ForgeLinks(id: currentID);
 
     String currentNote = currentLink.note ?? '';
     DateTime? lastUpdatedNote = currentLink.lastUpdateNote;

@@ -5,6 +5,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_body_timeline.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_body_notes.dart';
 import 'package:forge/screens/tab_links/widgets_links.dart';
+import 'package:forge/services/auth.dart';
 import 'package:forge/services/contacts_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
@@ -25,8 +26,6 @@ class ContactDetail extends StatefulWidget {
 class _ContactDetailState extends State<ContactDetail> {
   late ScrollController contactController;
   bool _isScrolled = false;
-  final linksBox = Hive.box(Constants.linksBox);
-  final prefsBox = Hive.box(Constants.prefsBox);
 
   _scrollListener() {
     if (contactController.offset >= 60 && _isScrolled == false) {
@@ -55,6 +54,11 @@ class _ContactDetailState extends State<ContactDetail> {
 
   @override
   Widget build(BuildContext context) {
+
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+    final prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
+
+
     return Provider(
         create: (BuildContext context) => widget.currentID,
         child: ValueListenableBuilder2(

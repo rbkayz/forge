@@ -5,14 +5,15 @@ import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 
 import '../../models/links_model.dart';
+import '../../services/auth.dart';
 
 class DatePickerService {
 
 
   Future<DateTime?> changeDate(BuildContext context, String id) async {
 
-    bool meetingExists = LinkDateServices.getNextDate(id).meetingDate != null;
-    DateTime initialDate = LinkDateServices.getNextDate(id).meetingDate ?? DateUtils.dateOnly(DateTime.now());
+    bool meetingExists = LinkDateServices.getNextDate(id, context).meetingDate != null;
+    DateTime initialDate = LinkDateServices.getNextDate(id, context).meetingDate ?? DateUtils.dateOnly(DateTime.now());
 
     final DateTime? newDate = await showDatePicker(
         context: context,
@@ -24,8 +25,8 @@ class DatePickerService {
 
     if (newDate != null && newDate != initialDate) {
 
-      Box linksBox = Hive.box(Constants.linksBox);
-      ForgeLinks? currentLink = LinkDateServices.getLinkfromid(id);
+      Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+      ForgeLinks? currentLink = LinkDateServices.getLinkfromid(id, context);
 
       if (currentLink != null) {
 

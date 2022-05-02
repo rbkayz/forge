@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import '../../../components/appbar.dart';
 import '../../../models/links_model.dart';
 import '../../../models/prefs_model.dart';
+import '../../../services/auth.dart';
 import '../../../utilities/constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -20,12 +21,15 @@ class TagsEditor extends StatefulWidget {
 }
 
 class _TagsEditorState extends State<TagsEditor> {
-  final prefsBox = Hive.box(Constants.prefsBox);
+
   late List<LinkTag> tagsList;
   late LinkTag? newTag;
 
   @override
   Widget build(BuildContext context) {
+
+    final prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
+
     tagsList = prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 
     return Scaffold(
@@ -133,7 +137,7 @@ class _TagsEditorState extends State<TagsEditor> {
                           /// Function is called when deleting a tag. Bug still occurs that on deleting a tag, there is no update on the main screen tags
                           if (toDelete != null && toDelete == true) {
 
-                            Box linksBox = Hive.box(Constants.linksBox);
+                            Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
 
                             List<ForgeLinks> linkswithTag = linksBox.values.where((element) => element.tagID == currentTag.tagID).cast<ForgeLinks>().toList();
 
@@ -341,7 +345,7 @@ class _WidgetTagNameTextFieldState extends State<WidgetTagNameTextField> {
       return 'Tag name cannot be blank';
     }
 
-    Box prefsBox = Hive.box(Constants.prefsBox);
+    Box prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
     List<LinkTag> tagsList =
         prefsBox.get('tags', defaultValue: <LinkTag>[]).cast<LinkTag>();
 

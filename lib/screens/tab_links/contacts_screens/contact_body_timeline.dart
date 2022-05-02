@@ -7,6 +7,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../../models/links_model.dart';
+import '../../../services/auth.dart';
 import '../../../services/listenables.dart';
 
 class ContactTimelineTab extends StatefulWidget {
@@ -18,19 +19,21 @@ class ContactTimelineTab extends StatefulWidget {
 
 class _ContactTimelineTabState extends State<ContactTimelineTab> {
 
-  final linksBox = Hive.box(Constants.linksBox);
-  final prefsBox = Hive.box(Constants.prefsBox);
 
   @override
   Widget build(BuildContext context) {
 
+    final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
+    final prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
+
     String currentID = Provider.of<String>(context);
-    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID, context);
 
     List<ForgeDates> linkDates = currentLink?.linkDates ?? [];
 
 
     return ValueListenableBuilder2(
+
       first: linksBox.listenable(),
       second: prefsBox.listenable(),
       builder: (BuildContext context, a, b, Widget? child) {

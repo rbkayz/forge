@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -6,12 +5,11 @@ import 'package:forge/screens/standalone/error.dart';
 import 'package:forge/screens/standalone/login.dart';
 import 'package:forge/screens/standalone/navigator_page.dart';
 import 'package:forge/utilities/bottom_navigation_items.dart';
-import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-
 import '../components/appbar.dart';
 import '../components/bottom_navigation_bar.dart';
+import 'auth.dart';
 import 'contacts_service.dart';
 
 class Wrapper extends StatefulWidget {
@@ -40,14 +38,14 @@ class _WrapperState extends State<Wrapper> {
 
 
   /// Opens the links box, where all the links objects are stored
-  Future<bool> openLinksBox () async {
-    await Hive.openBox(Constants.linksBox);
+  Future<bool> openLinksBox (BuildContext context) async {
+    await Hive.openBox(FirebaseAuthService.getLinksBox(context));
     return true;
   }
 
   /// Opens the preferences box, where all common settings e.g. tags, notifications are stored
   Future<bool> openPreferencesBox () async {
-    await Hive.openBox(Constants.prefsBox);
+    await Hive.openBox(FirebaseAuthService.getPrefsBox(context));
     return true;
   }
 
@@ -73,7 +71,7 @@ class _WrapperState extends State<Wrapper> {
         child: FutureBuilder(
 
           /// Calls two future functions which opens two boxes
-          future: Future.wait({openLinksBox(),openPreferencesBox()}),
+          future: Future.wait({openLinksBox(context),openPreferencesBox()}),
 
           builder: (BuildContext context,
               AsyncSnapshot<List<bool>> snapshot) {
