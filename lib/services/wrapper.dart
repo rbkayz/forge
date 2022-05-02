@@ -6,11 +6,13 @@ import 'package:forge/screens/standalone/login.dart';
 import 'package:forge/screens/standalone/navigator_page.dart';
 import 'package:forge/utilities/bottom_navigation_items.dart';
 import 'package:hive/hive.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:provider/provider.dart';
 import '../components/appbar.dart';
 import '../components/bottom_navigation_bar.dart';
 import 'auth.dart';
 import 'contacts_service.dart';
+import 'mixpanel_service.dart';
 
 class Wrapper extends StatefulWidget {
   Wrapper({Key? key}) : super(key: key);
@@ -22,18 +24,20 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
 
-  /*
-  Manages the overall navigation between LoginScreen and Home based on the
-  login status of the user (receives via the StreamProvider in the root widget)
+  /// Manages the overall navigation between LoginScreen and Home based on the
+  /// login status of the user (receives via the StreamProvider in the root widget)
 
-  Wrapper uses the AllContactsProvider class to receive a result from a
-  future function (getAllContacts). Passes this into a FutureProvider which
-  is then available across the widget tree.
-   */
+  /// Wrapper uses the AllContactsProvider class to receive a result from a
+  /// future function (getAllContacts). Passes this into a FutureProvider which
+  /// is then available across the widget tree.
+
+
+  late final Mixpanel _mixpanel;
 
   @override
   void initState() {
     super.initState();
+    _initMixpanel();
   }
 
 
@@ -47,6 +51,11 @@ class _WrapperState extends State<Wrapper> {
   Future<bool> openPreferencesBox () async {
     await Hive.openBox(FirebaseAuthService.getPrefsBox(context));
     return true;
+  }
+
+  /// Initializer for Mixpanel
+  Future<void> _initMixpanel() async {
+    _mixpanel = await MixpanelManager.init();
   }
 
 
@@ -86,6 +95,9 @@ class _WrapperState extends State<Wrapper> {
 
               /// Navigates to the Navigator Page
               else {
+
+                _mixpanel.identify(currentUser.uid);
+                _mixpanel.getPeople().set('\$email', currentUser.email);
                 return const NavigatorPage();
               }
 

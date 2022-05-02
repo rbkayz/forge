@@ -59,6 +59,7 @@ dependencies:
   flutter_local_notifications:
   timezone:
   awesome_notifications: ^0.6.21
+  mixpanel_flutter: ^1.4.6
 
 dev_dependencies:
   flutter_test:
