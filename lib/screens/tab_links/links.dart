@@ -24,57 +24,54 @@ class LinksPage extends StatefulWidget {
 }
 
 class _LinksPageState extends State<LinksPage> {
-
   @override
   Widget build(BuildContext context) {
-
     final linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
     final prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
-
 
     return Scaffold(
       body: ValueListenableBuilder2(
         first: linksBox.listenable(),
         second: prefsBox.listenable(),
         builder: (BuildContext context, Box links, Box prefs, Widget? child) {
-
           String sortLinkMethod = prefs.get(Constants.sortLinkMethod, defaultValue: Constants.sortbyDate);
           List<ForgeLinks> sortedlinksValues = links.toMap().values.cast<ForgeLinks>().where((element) => element.isActive).toList();
 
-
-          switch(sortLinkMethod) {
-
+          switch (sortLinkMethod) {
             case Constants.sortbyDate:
               {
                 sortedlinksValues.sort((a, b) {
-
                   DateTime meetingDate1 = LinkDateServices.getNextDate(a.id, context).meetingDate ?? Constants().maxDate;
                   DateTime meetingDate2 = LinkDateServices.getNextDate(b.id, context).meetingDate ?? Constants().maxDate;
 
                   return meetingDate1.compareTo(meetingDate2);
-
                 });
-              } break;
-
-            case Constants.sortbyName: {
-
-              List<Contact>? contacts = Provider.of<List<Contact>?>(context);
-
-              if (contacts != null && contacts.isNotEmpty) {
-                sortedlinksValues.sort((a, b) => AllContactsServices()
-                        .getContactfromID(context, a.id)
-                        .displayName
-                        .compareTo(AllContactsServices()
-                        .getContactfromID(context, b.id)
-                        .displayName));
               }
+              break;
 
-            } break;
+            case Constants.sortbyName:
+              {
+                List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
-        }
+                if (contacts != null && contacts.isNotEmpty) {
+                  sortedlinksValues.sort((a, b) => AllContactsServices()
+                      .getContactfromID(context, a.id)
+                      .displayName
+                      .compareTo(AllContactsServices().getContactfromID(context, b.id).displayName));
+                }
+              }
+              break;
+          }
 
-
-          return LinkListView(linksValues: sortedlinksValues);
+          return linksBox.values.isEmpty
+              ? const Center(
+                  child: Text(
+                    'Click on the person icon on the top bar to get started\n \n Select contacts you wish to stay connected with',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Constants.kSecondaryColor),
+                  ),
+                )
+              : LinkListView(linksValues: sortedlinksValues);
         },
       ),
     );
@@ -95,21 +92,19 @@ class LinkListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     /// Retrieves the list of contacts from the provider
     List<Contact>? contacts = Provider.of<List<Contact>?>(context);
 
-
     return (contacts == null || contacts.isEmpty)
 
-          /// Returns a loading screen if contacts is empty
+        /// Returns a loading screen if contacts is empty
         ? const Center(
             child: ForgeSpinKitRipple(
             size: 100,
             color: Constants.kPrimaryColor,
           ))
 
-          /// Listview that builds a list of cards separated with a grey divider
+        /// Listview that builds a list of cards separated with a grey divider
         : ListView.separated(
             separatorBuilder: (BuildContext context, int index) => Divider(
               color: Colors.grey.shade400,
@@ -120,20 +115,13 @@ class LinkListView extends StatelessWidget {
             shrinkWrap: true,
             itemCount: linksValues.length,
             itemBuilder: (context, index) {
-
               ForgeLinks currentLink = linksValues.elementAt(index);
 
               /// Retrieves a contact. Returns an empty contact if contacts is empty
-              Contact? currentContact = (contacts.isEmpty)
-                  ? Contact()
-                  : contacts
-                      .where((element) => element.id == currentLink.id)
-                      .single;
+              Contact? currentContact = (contacts.isEmpty) ? Contact() : contacts.where((element) => element.id == currentLink.id).single;
 
               /// Returns a linkcard is link is active, else an empty box
-              return currentLink.isActive
-                  ? LinkCard(currentID: currentContact.id)
-                  : const SizedBox.shrink();
+              return currentLink.isActive ? LinkCard(currentID: currentContact.id) : const SizedBox.shrink();
             },
           );
   }
@@ -162,7 +150,6 @@ class _LinkCardState extends State<LinkCard> {
 
   @override
   Widget build(BuildContext context) {
-
     ForgeDates prevDate = LinkDateServices.getPrevDate(widget.currentID, context);
     Contact currentContact = AllContactsServices().getContactfromID(context, widget.currentID);
 
@@ -173,26 +160,21 @@ class _LinkCardState extends State<LinkCard> {
 
     return currentContact.id == ''
 
-          /// Returns an empty box if contact id is blank
+        /// Returns an empty box if contact id is blank
         ? const SizedBox.shrink()
 
-          /// Calls a Gesture detector on Tap
+        /// Calls a Gesture detector on Tap
         : GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
               HapticFeedback.lightImpact();
-              Navigator.pushNamed(context, Constants.contactDetailNavigate,
-                  arguments: widget.currentID);
+              Navigator.pushNamed(context, Constants.contactDetailNavigate, arguments: widget.currentID);
             },
-
             child: Padding(
-
               padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
-
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Expanded(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,10 +190,7 @@ class _LinkCardState extends State<LinkCard> {
                           children: [
                             Text(
                               currentContact.displayName,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Constants.kBlackColor,
-                                  fontWeight: FontWeight.w500),
+                              style: const TextStyle(fontSize: 16, color: Constants.kBlackColor, fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(
                               height: 3,
@@ -219,21 +198,22 @@ class _LinkCardState extends State<LinkCard> {
                             Text(
                               lastConnected,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Constants.kSecondaryColor),
+                              style: const TextStyle(fontSize: 14, color: Constants.kSecondaryColor),
                             ),
                             const SizedBox(
                               height: 6,
                             ),
-                            WidgetTag(id: currentContact.id,),
+                            WidgetTag(
+                              id: currentContact.id,
+                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
-
-                  NextConnectDateWidget(id: currentContact.id,),
+                  NextConnectDateWidget(
+                    id: currentContact.id,
+                  ),
                 ],
               ),
             ),

@@ -64,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: 'to build better relationships',
+                    text: 'to build better connections',
                     style: TextStyle(
                       color: Constants.kBlackColor,
                       fontWeight: FontWeight.bold,
@@ -79,9 +79,9 @@ class LoginScreen extends StatelessWidget {
 
               //Subtitle box
               SizedBox(
-                width: size.width * 0.6,
+                width: size.width * 0.75,
                 child: const Text(
-                  '10k+ people use forge to keep in touch with their network ',
+                  'Thousands of people use forge to keep in touch with their friends, colleagues and mentors ',
                   textAlign: TextAlign.center,
                   style:
                       TextStyle(color: Constants.kSecondaryColor, fontSize: 14),
@@ -128,6 +128,7 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
 
               //onPressed functionality sets loading and signs into Firebase
               onPressed: () async {
+                HapticFeedback.lightImpact();
                 setState(() {
                   isLoading = true;
                 });

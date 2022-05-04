@@ -4,6 +4,8 @@ import 'package:forge/components/bottom_navigation_bar.dart';
 import 'package:forge/screens/tab_links/links.dart';
 import 'package:forge/screens/tab_settings/settings.dart';
 import 'package:forge/screens/tab_timeline/timeline.dart';
+import 'package:forge/services/auth.dart';
+import 'package:hive/hive.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../utilities/bottom_navigation_items.dart';
 
@@ -16,9 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  /// Sets the active tab at start of app
-  TabName activeTab = TabName.timeline;
-
+  TabName activeTab = TabName.links;
 
   /// Item scroll controller for timeline
   final itemController = ItemScrollController();
@@ -59,6 +59,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return WillPopScope(
 
       onWillPop: _onPop,

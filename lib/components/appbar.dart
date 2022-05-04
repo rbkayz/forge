@@ -69,6 +69,7 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     String currentID = Provider.of<String>(context);
     Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID, context);
 
     return AppBar(
       leading: const AppBarBackButton(),
@@ -83,7 +84,7 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           visualDensity: VisualDensity.compact,
           splashRadius: 20,
-          icon: Icon(Icons.repeat),
+          icon: Icon(Icons.repeat, color: (currentLink?.recurringEnabled ?? false) ? Constants.kPrimaryColor : Constants.kSecondaryColor,),
           onPressed: () {
             showDialog(useRootNavigator: false, context: context, builder: (context) => DialogSetRecurring(currentID: currentID,));
           },
@@ -95,7 +96,7 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           visualDensity: VisualDensity.compact,
           splashRadius: 20,
-          icon: Icon(Icons.add_task_outlined),
+          icon: Icon(Icons.add_task_outlined, color: (currentLink?.isActive ?? false) ? Constants.kPrimaryColor : Constants.kSecondaryColor),
           onPressed: () {
             showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: ForgeDates(linkid: currentContact.id, isComplete: false),));
             },

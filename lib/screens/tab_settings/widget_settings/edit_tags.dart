@@ -274,6 +274,7 @@ class _DialogAddEditTagState extends State<DialogAddEditTag> {
                         padding: const EdgeInsets.all(8.0),
                         child: OutlinedButton(
                             onPressed: () {
+                              HapticFeedback.lightImpact();
                               Navigator.pop(context);
                             },
                             child: const Text('Cancel'),
@@ -297,6 +298,8 @@ class _DialogAddEditTagState extends State<DialogAddEditTag> {
                                       tagColors.first.value;
                               widget.newTag.tagID = widget.initialTag?.tagID ??
                                   widget.newTag.hashCode;
+
+                              HapticFeedback.lightImpact();
 
                               Navigator.pop(context, widget.newTag);
                             }

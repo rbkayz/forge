@@ -174,19 +174,18 @@ int createUniqueId() {
 
 
 
-Future<TimeOfDay?> pickSchedule(BuildContext context,) async {
+Future<TimeOfDay?> pickSchedule(BuildContext context, TimeOfDay? initialTime) async {
 
   TimeOfDay? timeOfDay;
 
   timeOfDay = await showTimePicker(
         context: context,
         initialEntryMode: TimePickerEntryMode.dial,
-        initialTime: const TimeOfDay(hour: 9, minute: 0),
+        initialTime: initialTime ?? TimeOfDay(hour: 9, minute: 0),
     useRootNavigator: false,
     confirmText: 'CONFIRM',
     cancelText: 'CANCEL',
-    helpText: 'PICK A DAILY REMINDER TIME'
-
+    helpText: 'SET A DAILY REMINDER TIME'
         );
 
   return timeOfDay;

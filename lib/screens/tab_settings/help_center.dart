@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utilities/constants.dart';
 
@@ -49,9 +50,9 @@ class WidgetFAQs extends StatelessWidget {
       title: const Text('FAQs'),
       onTap: () async {
 
-        String url = 'https://forgeapp.dev';
-        if (await canLaunch(url)) {
-        await launch(url);
+        String url = 'https://forgeapp.net';
+        if (await canLaunchUrlString(url)) {
+        await launchUrlString(url);
         } else {
         throw 'Could not launch $url';
         }
@@ -79,9 +80,9 @@ class WidgetContactUs extends StatelessWidget {
         title: const Text('Contact Us'),
         onTap: () async {
 
-          String url = 'mailto:support@forgeapp.dev';
-          if (await canLaunch(url)) {
-          await launch(url);
+          String url = 'mailto:admin@forgeapp.net?subject=Support%20Request';
+          if (await canLaunchUrlString(url)) {
+          await launchUrlString(url);
           } else {
           throw 'Could not launch $url';
           }
@@ -110,8 +111,8 @@ class WidgetLegal extends StatelessWidget {
         onTap: () async {
 
           String url = 'https://forgeapp.notion.site/Terms-and-Privacy-Policy-fcc30e94e14b4a9cb897ecd76d61a818';
-          if (await canLaunch(url)) {
-          await launch(url);
+          if (await canLaunchUrlString(url)) {
+          await launchUrlString(url);
           } else {
           throw 'Could not launch $url';
           }

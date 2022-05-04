@@ -1,4 +1,4 @@
-package com.forge.forge
+package net.forgeapp
 
 import io.flutter.embedding.android.FlutterActivity
 

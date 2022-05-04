@@ -8,8 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io';
-
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../services/notifications_service.dart';
 
@@ -183,9 +182,9 @@ class WidgetFeatureRequest extends StatelessWidget {
       title: const Text('Request a feature'),
       onTap: () async {
 
-        String url = 'https://forgeapp.dev';
-        if (await canLaunch(url)) {
-        await launch(url);
+        String url = 'mailto:admin@forgeapp.net?subject=Feature%20Request';
+        if (await canLaunchUrlString(url)) {
+        await launchUrlString(url);
         } else {
         throw 'Could not launch $url';
         }
@@ -213,10 +212,17 @@ class WidgetNotifications extends StatelessWidget {
       title: const Text('Notifications'),
       onTap: () async {
 
-        TimeOfDay? pickedSchedule = await pickSchedule(context);
+        final prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
+        final now = DateTime.now();
+        DateTime? initialDateTime = await prefsBox.get(Constants.notificationTime);
+        TimeOfDay initialTime = TimeOfDay.fromDateTime(initialDateTime ?? DateTime(now.year, now.month, now.day,9, 0));
+
+        TimeOfDay? pickedSchedule = await pickSchedule(context, initialTime);
 
         if (pickedSchedule != null) {
+
           await cancelScheduledNotifications();
+          await prefsBox.put(Constants.notificationTime, DateTime(now.year, now.month, now.day, pickedSchedule.hour, pickedSchedule.minute));
           await createScheduledNotification(pickedSchedule);
         }
 

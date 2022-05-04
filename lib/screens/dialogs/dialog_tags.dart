@@ -71,10 +71,13 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
                   ),
                   TextButton(
                       onPressed: () {
+                        currentLink.tagID = null;
+                        linksBox.put(currentLink.linkKey, currentLink);
+
                         Navigator.pop(context);
                       },
                       child: const Text(
-                        'Cancel',
+                        'Delete Tag',
                         style: TextStyle(
                             fontSize: 12, color: Constants.kSecondaryColor),
                       ))
@@ -98,9 +101,11 @@ class _DialogTagSelectorState extends State<DialogTagSelector> {
                       trailing: Radio(groupValue: _selectvalue, value: index, onChanged: (int? value) {
 
                         setState(() {
+
                           _selectvalue = value!;
                           currentLink.tagID = tagsList[value].tagID;
                           linksBox.put(currentLink.linkKey, currentLink);
+
                         });
 
                         Navigator.pop(context);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/services/contacts_service.dart';
 import 'package:forge/services/links_service.dart';
@@ -148,6 +149,7 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
                                     ForgeDates newDate = ForgeDates(
                                         meetingDate: newMeetingDate, meetingType: newMeetingType, linkid: currentContact.id, isComplete: false);
 
+                                    HapticFeedback.lightImpact();
                                     currentLink!.linkDates.add(newDate);
 
                                   } else {
@@ -181,6 +183,7 @@ class _DialogAddNewLinkDateState extends State<DialogAddNewLinkDate> {
                                   
                                   linksBox.put(currentLink!.id, currentLink);
 
+                                  HapticFeedback.lightImpact();
                                   Navigator.pop(context);
 
                                 }

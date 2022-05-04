@@ -46,6 +46,7 @@ class Constants {
   static const sortLinkMethod = 'sortLinkMethod'; //key
   static const sortbyName = 'Name';
   static const sortbyDate = 'Date';
+  static const notificationTime = 'notificationTime';
   final maxDate = DateTime(2030, 12, 31);
   final minDate = DateTime(2020, 1, 1);
 
