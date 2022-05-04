@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/contact.dart';
 import 'package:forge/screens/tab_timeline/widget_timeline.dart';
+import 'package:forge/services/contacts_service.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
@@ -28,6 +31,7 @@ class _ContactTimelineTabState extends State<ContactTimelineTab> {
 
     String currentID = Provider.of<String>(context);
     ForgeLinks? currentLink = LinkDateServices.getLinkfromid(currentID, context);
+    Contact currentContact = AllContactsServices().getContactfromID(context, currentID);
 
     List<ForgeDates> linkDates = currentLink?.linkDates ?? [];
 
@@ -44,7 +48,21 @@ class _ContactTimelineTabState extends State<ContactTimelineTab> {
           return meetingDate1.compareTo(meetingDate2);
         });
 
-        return ListView.builder(
+        return linkDates.isEmpty ? Center(child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: [
+              const TextSpan(text: 'Click on ', style: TextStyle(color: Constants.kSecondaryColor)),
+              const WidgetSpan(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 2.0),
+                  child: Icon(Icons.add_task_outlined, color: Constants.kSecondaryColor,),
+                ),
+              ),
+              TextSpan(text: ' to add a new catch-up \nwith ${currentContact.displayName}', style: TextStyle(color: Constants.kSecondaryColor)),
+            ],
+          ),
+        )): ListView.builder(
           itemCount: linkDates.length,
           itemBuilder: (context, index) {
 

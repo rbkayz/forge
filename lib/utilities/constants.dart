@@ -25,6 +25,7 @@ class Constants {
   static const errorImage = 'assets/images/error.png';
   static const repeatImage = 'assets/images/RepeatIcon.png';
   static const calendarImage = 'assets/images/calendar_container.png';
+  static const shareImage = 'assets/images/share-app-asset.png';
 
   //navigate
   static const signInNavigate = '/sign-in';

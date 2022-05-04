@@ -243,7 +243,7 @@ class WidgetShare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String sharetext = 'Hey there! Forge has been helping me keep in touch with friends better. Check it out at forge.com';
+    String sharetext = 'Hey there! forge has been helping me keep in touch with friends better. Check it out at forgeapp.net';
 
 
     return ListTile(
@@ -256,7 +256,7 @@ class WidgetShare extends StatelessWidget {
 
         //TODO change the forge image
 
-        ByteData imagebyte = await rootBundle.load(Constants.forgeHeaderLogo);
+        ByteData imagebyte = await rootBundle.load(Constants.shareImage);
         final temp = await getTemporaryDirectory();
         final path = '${temp.path}/forge.jpg';
         File(path).writeAsBytesSync(imagebyte.buffer.asUint8List());

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forge/components/appbar.dart';
 import 'package:forge/components/bottom_navigation_bar.dart';
 import 'package:forge/screens/tab_links/links.dart';
 import 'package:forge/screens/tab_settings/settings.dart';
 import 'package:forge/screens/tab_timeline/timeline.dart';
-import 'package:forge/services/auth.dart';
-import 'package:hive/hive.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../utilities/bottom_navigation_items.dart';
 
@@ -25,6 +24,7 @@ class _HomeState extends State<Home> {
 
   /// Function that sets the selected tab as the active tab, and calls rebuild
   void _selectTab(TabName tab){
+    HapticFeedback.lightImpact();
     setState(() {
       activeTab = tab;
     });

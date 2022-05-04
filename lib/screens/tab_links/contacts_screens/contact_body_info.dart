@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:forge/services/links_service.dart';
 import 'package:forge/utilities/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../models/links_model.dart';
 import '../../../services/auth.dart';
 import '../../../services/contacts_service.dart';
@@ -27,8 +28,8 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
   launchDialer(String currPhone) async {
     String url = 'tel:$currPhone';
 
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -36,8 +37,8 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
 
   launchWhatsapp(String currPhone) async {
     String url = 'whatsapp://send?phone=$currPhone';
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -45,8 +46,8 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
 
   launchSMS(String currPhone) async {
     String url = 'sms:$currPhone';
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -56,8 +57,8 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
   launchEmail(String currEmail) async {
 
     String url = 'mailto:${currEmail}';
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -90,6 +91,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
               icon: const Icon(Icons.edit,color: Constants.kSecondaryColor,),
               onPressed: () async {
 
+                HapticFeedback.lightImpact();
                 currentContact = await FlutterContacts.openExternalEdit(currentID);
 
                 setState(() {
@@ -173,6 +175,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
                 icon: const Icon(Icons.add_alert_outlined,color: Constants.kSecondaryColor,),
                 onPressed: () {
 
+                  HapticFeedback.lightImpact();
                   if(currentLink == null) {
                     LinkDateServices.activateLink(context, currentID);
                   }
@@ -203,6 +206,7 @@ class _ContactInfoTabState extends State<ContactInfoTab> {
                   onPressedMain: () {
                   },
                   onPressedTrail1: () {
+
 
                     //TODO To fix birthday
                     showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: currentDate));

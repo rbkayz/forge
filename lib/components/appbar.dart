@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:forge/components/search.dart';
 import 'package:forge/components/toggle_links.dart';
@@ -86,6 +87,7 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
           splashRadius: 20,
           icon: Icon(Icons.repeat, color: (currentLink?.recurringEnabled ?? false) ? Constants.kPrimaryColor : Constants.kSecondaryColor,),
           onPressed: () {
+            HapticFeedback.lightImpact();
             showDialog(useRootNavigator: false, context: context, builder: (context) => DialogSetRecurring(currentID: currentID,));
           },
         ),
@@ -98,6 +100,7 @@ class ContactAppBar extends StatelessWidget implements PreferredSizeWidget {
           splashRadius: 20,
           icon: Icon(Icons.add_task_outlined, color: (currentLink?.isActive ?? false) ? Constants.kPrimaryColor : Constants.kSecondaryColor),
           onPressed: () {
+            HapticFeedback.lightImpact();
             showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate(initDate: ForgeDates(linkid: currentContact.id, isComplete: false),));
             },
         ),
@@ -137,6 +140,7 @@ class AppBarBackButton extends StatelessWidget {
         color: Constants.kPrimaryColor,
       ),
       onPressed: () {
+        HapticFeedback.lightImpact();
         Navigator.pop(context,true);
       },
     );
@@ -203,6 +207,7 @@ class AppBarAddLink extends StatelessWidget {
       splashRadius: 20,
       icon: Icon(Icons.person_add_alt_outlined),
       onPressed: () {
+        HapticFeedback.lightImpact();
         NavigatorKeys.homeKey.currentState!.pushNamed(Constants.allContactsNavigate);
       },
     );
@@ -224,6 +229,7 @@ class AppBarAddDate extends StatelessWidget {
       splashRadius: 20,
       icon: Icon(Icons.add_task_outlined),
       onPressed: () {
+        HapticFeedback.lightImpact();
         showDialog(useRootNavigator: false, context: context, builder: (context) => DialogAddNewLinkDate());
       },
     );
@@ -247,6 +253,8 @@ class AppBarScrolltoToday extends StatelessWidget {
       splashRadius: 20,
       icon: Icon(Icons.calendar_today),
       onPressed: () {
+
+        HapticFeedback.lightImpact();
 
         Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
         Box prefsBox = Hive.box(FirebaseAuthService.getPrefsBox(context));
@@ -297,6 +305,7 @@ class AppBarSearch extends StatelessWidget {
       splashRadius: 20,
       icon: Icon(Icons.search),
       onPressed: () {
+        HapticFeedback.lightImpact();
         showSearch(context: context, delegate: DataSearch(contacts: contacts));
       },
     );

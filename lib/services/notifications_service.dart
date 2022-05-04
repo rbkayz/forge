@@ -144,6 +144,7 @@ Future<void> createStaticNotification() async {
 Future<void> createScheduledNotification(TimeOfDay? schedule) async {
 
 
+
   //TODO add details on notification text
 
   if(schedule != null ) {
@@ -151,8 +152,8 @@ Future<void> createScheduledNotification(TimeOfDay? schedule) async {
       content: NotificationContent(
         id: createUniqueId(),
         channelKey: 'Default',
-        title: 'Hello World',
-        body: 'Scheduled Notifications',
+        title: 'Daily Reminder',
+        body: 'You have upcoming catch-ups with your friends. Click here to review',
         notificationLayout: NotificationLayout.Default,
       ),
       schedule: NotificationCalendar(
