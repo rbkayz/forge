@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:forge/components/appbar.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utilities/constants.dart';
@@ -47,7 +46,7 @@ class WidgetFAQs extends StatelessWidget {
     return ListTile(
       minLeadingWidth: 30,
       leading: const Icon(Icons.help_outline),
-      title: const Text('FAQs'),
+      title: const Text('FAQs / More info'),
       onTap: () async {
 
         String url = 'https://forgeapp.net';
