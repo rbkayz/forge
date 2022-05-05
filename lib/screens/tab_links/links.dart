@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_contacts/contact.dart';
@@ -15,6 +16,7 @@ import '../../services/contacts_service.dart';
 import '../../services/links_service.dart';
 import '../../services/listenables.dart';
 import '../../utilities/constants.dart';
+import '../dialogs/dialog_setrecurringmeeting.dart';
 
 class LinksPage extends StatefulWidget {
   const LinksPage({Key? key}) : super(key: key);
@@ -152,11 +154,22 @@ class _LinkCardState extends State<LinkCard> {
   Widget build(BuildContext context) {
     ForgeDates prevDate = LinkDateServices.getPrevDate(widget.currentID, context);
     Contact currentContact = AllContactsServices().getContactfromID(context, widget.currentID);
+    ForgeLinks? currentLink = LinkDateServices.getLinkfromid(widget.currentID, context);
 
     //Get last connected date
     String lastConnected = prevDate.linkid != null
         ? 'Last connected on ${DateFormat('d MMM').format(prevDate.meetingDate!)} (${DateTime.now().difference(prevDate.meetingDate!).inDays} days ago)'
         : 'No previous meetings available';
+
+    // Is repeat On
+    Color repeatOn = (currentLink != null && currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null)
+        ? Constants.kPrimaryColor
+        : Constants.kSecondaryColor;
+
+    // Is repeat On
+    String strRepeatOn = (currentLink != null && currentLink.recurringEnabled == true && currentLink.recurringNum != null && currentLink.recurringType != null)
+        ? 'ON'
+        : 'OFF';
 
     return currentContact.id == ''
 
@@ -179,8 +192,34 @@ class _LinkCardState extends State<LinkCard> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ContactCircleAvatar(
-                          currentContact: currentContact,
+                        Column(
+                          children: [
+
+                            ContactCircleAvatar(
+                              currentContact: currentContact,
+                            ),
+
+                            const SizedBox(
+                              height: 6,
+                            ),
+
+                            Material(
+                              child: InkWell(
+                                onTap: () {
+                                  HapticFeedback.lightImpact();
+                                  showDialog(useRootNavigator: false, context: context, builder: (context) => DialogSetRecurring(currentID: widget.currentID,));
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.repeat, size: 14, color: repeatOn,),
+                                    Text(strRepeatOn, style: TextStyle(fontSize: 12, color: repeatOn),)
+                                  ],
+                                ),
+                              ),
+                            )
+
+
+                          ],
                         ),
                         const SizedBox(
                           width: 8,
@@ -190,6 +229,7 @@ class _LinkCardState extends State<LinkCard> {
                           children: [
                             Text(
                               currentContact.displayName,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(fontSize: 16, color: Constants.kBlackColor, fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(
@@ -201,11 +241,12 @@ class _LinkCardState extends State<LinkCard> {
                               style: const TextStyle(fontSize: 14, color: Constants.kSecondaryColor),
                             ),
                             const SizedBox(
-                              height: 6,
+                              height: 5,
                             ),
                             WidgetTag(
                               id: currentContact.id,
                             ),
+
                           ],
                         ),
                       ],

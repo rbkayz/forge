@@ -143,9 +143,9 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
                   }
                 }
 
-                setState(() {
-                  isLoading = false;
-                });
+                // setState(() {
+                //   isLoading = false;
+                // });
               },
 
               //GoogleSignInLogo in accordance to google guidelines
