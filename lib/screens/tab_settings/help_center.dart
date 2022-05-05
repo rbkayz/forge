@@ -46,7 +46,7 @@ class WidgetFAQs extends StatelessWidget {
     return ListTile(
       minLeadingWidth: 30,
       leading: const Icon(Icons.help_outline),
-      title: const Text('FAQs / More info'),
+      title: const Text('FAQs'),
       onTap: () async {
 
         String url = 'https://forgeapp.net';
