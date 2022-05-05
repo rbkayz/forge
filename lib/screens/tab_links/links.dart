@@ -204,6 +204,8 @@ class _LinkCardState extends State<LinkCard> {
                             ),
 
                             Material(
+                              color: Constants.kWhiteColor,
+                              shadowColor: Constants.kWhiteColor,
                               child: InkWell(
                                 onTap: () {
                                   HapticFeedback.lightImpact();
