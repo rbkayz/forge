@@ -60,6 +60,7 @@ dependencies:
   timezone:
   awesome_notifications: ^0.6.21
   mixpanel_flutter: ^1.4.6
+  store_redirect: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -7,6 +7,7 @@ import 'package:forge/utilities/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:store_redirect/store_redirect.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -137,7 +138,7 @@ class WidgetReviewUs extends StatelessWidget {
       leading: const Icon(Icons.star),
       title: const Text('Review us'),
       onTap: () {
-        //https://pub.dev/packages/in_app_review
+        StoreRedirect.redirect(androidAppId: 'net.forgeapp');
       },
     );
   }
