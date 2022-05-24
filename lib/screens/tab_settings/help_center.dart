@@ -108,7 +108,7 @@ class WidgetLegal extends StatelessWidget {
         title: const Text('Terms and Privacy Policy'),
         onTap: () async {
 
-          String url = 'https://forgeapp.notion.site/Terms-and-Privacy-Policy-fcc30e94e14b4a9cb897ecd76d61a818';
+          String url = 'https://www.forgeapp.net/terms-and-privacy-policy';
           if (await canLaunchUrlString(url)) {
           await launchUrlString(url);
           } else {

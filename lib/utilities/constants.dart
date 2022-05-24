@@ -32,6 +32,7 @@ class Constants {
   static const homeNavigate = '/home';
   static const wrapperNavigate = '/wrapper';
   static const contactDetailNavigate = 'contact-detail-navigate';
+  static const NavigatorNavigate = '/navigator';
   static const errorNavigate = '/error';
   static const allContactsNavigate = '/home/all-contacts';
   static const helpCenterNavigate = '/home/settings/help-center';
@@ -48,6 +49,7 @@ class Constants {
   static const sortbyName = 'Name';
   static const sortbyDate = 'Date';
   static const notificationTime = 'notificationTime';
+  static const permissionGranted = 'permissionGranted';
   final maxDate = DateTime(2030, 12, 31);
   final minDate = DateTime(2020, 1, 1);
 

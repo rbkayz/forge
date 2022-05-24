@@ -5,7 +5,7 @@ part 'prefs_model.g.dart';
 @HiveType(typeId: 2)
 class ForgePrefs extends HiveObject {
 
-  ForgePrefs({this.tagsList = const [], this.showAllDatesinTimeline = true, this.sortLinkMethod = 'byName', this.notificationTime});
+  ForgePrefs({this.tagsList = const [], this.showAllDatesinTimeline = true, this.sortLinkMethod = 'byName', this.notificationTime, this.permissionGranted = false});
 
   @HiveField(0)
   List<LinkTag> tagsList;
@@ -18,6 +18,9 @@ class ForgePrefs extends HiveObject {
 
   @HiveField(3)
   DateTime? notificationTime;
+
+  @HiveField(4)
+  bool? permissionGranted;
 
 }
 

@@ -23,7 +23,7 @@ class DatePickerService {
         helpText: meetingExists ? 'CHANGE DATE' : 'SET NEW MEETING DATE',
     );
 
-    if (newDate != null && newDate != initialDate) {
+    if (newDate != null) {
 
       Box linksBox = Hive.box(FirebaseAuthService.getLinksBox(context));
       ForgeLinks? currentLink = LinkDateServices.getLinkfromid(id, context);

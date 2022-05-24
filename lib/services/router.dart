@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge/screens/standalone/navigator_page.dart';
 import 'package:forge/screens/tab_links/contacts_screens/all_contacts.dart';
 import 'package:forge/screens/standalone/error.dart';
 import 'package:forge/screens/tab_links/contacts_screens/contact_header.dart';
@@ -28,6 +29,9 @@ class RouteGenerator {
 
       case Constants.errorNavigate:
         return MaterialPageRoute(builder: (context) => const ForgeError());
+
+      case Constants.NavigatorNavigate:
+        return MaterialPageRoute(builder: (context) => const NavigatorPage());
 
       default:
         return MaterialPageRoute(

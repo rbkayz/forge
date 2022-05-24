@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:forge/components/loader.dart';
 import 'package:forge/services/auth.dart';
 import 'package:forge/utilities/constants.dart';
@@ -135,7 +136,41 @@ class _ForgeGoogleSignInState extends State<ForgeGoogleSignIn> {
 
                 FirebaseAuthService auth = FirebaseAuthService();
                 try {
-                  await auth.signInWithGoogle();
+
+                  await showDialog(context: context, builder: (context) => AlertDialog(
+                    title: const Text(
+                      'Contacts Usage Policy',
+                      style:
+                      TextStyle(color: Constants.kBlackColor),
+                    ),
+                    content: const Text(
+                        'forge requests access to your contacts to make it easy for you to manage relationships. Please click accept, and allow contacts (next screen) to proceed'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+
+                            setState(() {
+                              isLoading = false;
+                            });
+
+                          },
+                          child: const Text('Decline',
+                              style: TextStyle(
+                                  color: Constants.kErrorColor))),
+                      TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await FlutterContacts.requestPermission();
+                            await auth.signInWithGoogle();
+                          },
+                          child: const Text(
+                            'Accept',
+                            style: TextStyle(
+                                color: Constants.kPrimaryColor),
+                          )),
+                    ],
+                  ));
 
                 } catch (e) {
                   if (e is FirebaseAuthException) {

@@ -161,6 +161,8 @@ Future<void> createScheduledNotification(TimeOfDay? schedule) async {
         minute: schedule.minute,
         second: 0,
         millisecond: 0,
+        allowWhileIdle: true,
+        repeats: true,
       ),
     );
   }
